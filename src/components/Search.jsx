@@ -1,6 +1,8 @@
-import React from "react";
+import {useState, React} from "react";
 
-export default function Search() {
+export default function Search(props) {
+  const [query, setQuery] = useState("");
+ 
   return (
     <div className="container">
       <form className="d-flex" role="search">
@@ -9,8 +11,10 @@ export default function Search() {
           type="search"
           placeholder="Search"
           aria-label="Search"
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
         />
-        <button className="btn" type="submit">
+        <button className="btn" type="submit" onClick={(e) => props.setQuery(query)}>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="16"
