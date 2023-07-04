@@ -1,19 +1,45 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Search from "../components/Search";
 import Item from "../components/Item";
 import items from "../data/items";
+// import axios from 'axios';
 
 export function Home() {
   const [query, setQuery] = useState("");
   const [searchParam] = useState(["name", "price", "description"]);
 
-  const searchedItems = items.filter((item) => {
-    return searchParam.some((newItem) => {
-      return (
-        item[newItem].toString().toLowerCase().indexOf(query.toLowerCase()) > -1
-      );
-    });
-  });
+  const [searchedItems, setSearchedItems] = useState([]);
+
+  // // Fetching data from local MySQL database
+  // useEffect(() => {
+  //   fetch('http://localhost:3001/api/data')
+  //   .then(response => response.json())
+  //   .then(response => {
+  //     setSearchedItems(response)
+  //   })
+  //   .catch(error => {
+  //     console.error('Error fetching data:', error);
+  //   });
+
+  //   setSearchedItems(searchedItems.filter((item) => {
+  //     return searchParam.some((newItem) => {
+  //       return (
+  //         item[newItem].toString().toLowerCase().indexOf(query.toLowerCase()) > -1
+  //       );
+  //     });
+  //   }));
+  // }, []);
+  
+  useEffect(() => {
+    setSearchedItems(items.filter((item) => {
+      return searchParam.some((newItem) => {
+        return (
+          item[newItem].toString().toLowerCase().indexOf(query.toLowerCase()) > -1
+        );
+      });
+    }));
+  })
+
   return (
     <>
       <Search setQuery={setQuery} />
