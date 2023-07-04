@@ -1,11 +1,14 @@
-import {useState, React} from "react";
+import { useState, React } from "react";
 
 export default function Search(props) {
   const [query, setQuery] = useState("");
- 
+  const handleSubmit = (e) => {
+    e.preventDefault();
+  };
+
   return (
     <div className="container">
-      <form className="d-flex" role="search">
+      <form className="d-flex" role="search" onSubmit={handleSubmit}>
         <input
           className="form-control me-2"
           type="search"
@@ -14,7 +17,11 @@ export default function Search(props) {
           value={query}
           onChange={(e) => setQuery(e.target.value)}
         />
-        <button className="btn" type="submit" onClick={(e) => props.setQuery(query)}>
+        <button
+          className="btn"
+          type="submit"
+          onClick={(e) => props.setQuery(query)}
+        >
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="16"
