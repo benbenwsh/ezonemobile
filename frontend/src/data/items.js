@@ -1,5 +1,6 @@
 const item = [
   {
+    id: 1,
     name: "Plastic pallets",
     price: "$50.00 USD",
     image:
@@ -7,6 +8,7 @@ const item = [
     description: "Approximately 20 plastic pallets as per the photo",
   },
   {
+    id: 2,
     name: "Genie S80 Manlift",
     price: "$2,500.00 USD",
     image:
@@ -15,6 +17,7 @@ const item = [
       "Genie S80 Manlift.. Estimated Dimension ( L x W x H): 37'x8.21'x8.21'. ",
   },
   {
+    id: 3,
     name: "10 Rolls Ea. Total Cotton String 12-Ply NEW",
     price: "$25.00 USD",
     image:
@@ -23,6 +26,7 @@ const item = [
       "10 Rolls Ea. Total Cotton String 12-Ply. NEW, unopened, and still in manufacturer packaging. You will receive 10",
   },
   {
+    id: 4,
     name: "Baby Supplies",
     image:
       "https://webassets.lqdt1.com/assets/photos/19612/19612_1374_1.jpg?cb=230628121036&h=480&webp=true",

@@ -1,10 +1,9 @@
-import { useState, React } from "react";
-import Nav from "./Nav";
-import Search from "./Search";
-import Item from "./Item";
-import items from "../items";
+import React, { useState } from "react";
+import Search from "../components/Search";
+import Item from "../components/Item";
+import items from "../data/items";
 
-export default function () {
+export function Home() {
   const [query, setQuery] = useState("");
   const [searchParam] = useState(["name", "price", "description"]);
 
@@ -15,12 +14,8 @@ export default function () {
       );
     });
   });
-
   return (
-    <div>
-      {/* navigation bar */}
-      <Nav />
-      {/* search bar */}
+    <>
       <Search setQuery={setQuery} />
       <div className="container my-3">
         <div className="row gy-3">
@@ -29,6 +24,7 @@ export default function () {
             return (
               <div className="col-md-6 col-lg-4 col-xl-3">
                 <Item
+                  key={item.id}
                   name={item.name}
                   price={item.price}
                   image={item.image}
@@ -39,6 +35,6 @@ export default function () {
           })}
         </div>
       </div>
-    </div>
+    </>
   );
 }

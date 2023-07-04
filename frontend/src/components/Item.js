@@ -9,7 +9,7 @@ export default function Item(props) {
         <p className="card-text">Price: {props.price}</p>
         <h5 className="card-title">Description</h5>
         <p className="card-text">{props.description}</p>
-        <a href="#" class="btn btn-primary mt-auto">
+        <a href="#" className="btn btn-primary mt-auto">
           More
         </a>
       </div>

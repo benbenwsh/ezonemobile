@@ -1,5 +1,9 @@
-.nav-icon {
+.navbar-icon {
   max-height: 50px;
+}
+
+.navbar-bg-color {
+  background-color: #f8f9fa;
 }
 
 .card-img-top {
