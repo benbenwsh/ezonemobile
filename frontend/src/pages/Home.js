@@ -25,6 +25,7 @@ export function Home() {
               <div className="col-md-6 col-lg-4 col-xl-3">
                 <Item
                   key={item.id}
+                  id={item.id}
                   name={item.name}
                   price={item.price}
                   image={item.image}
