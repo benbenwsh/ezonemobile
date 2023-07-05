@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Search from "../components/Search";
 import Item from "../components/Item";
 // import items from "../data/items";
@@ -32,7 +32,7 @@ export function Home() {
         );
       });
     }));
-  })
+  }, [items, query, searchParam])
 
   return (
     <>
