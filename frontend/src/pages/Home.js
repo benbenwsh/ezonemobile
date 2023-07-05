@@ -1,19 +1,39 @@
 import React, { useState } from "react";
 import Search from "../components/Search";
 import Item from "../components/Item";
-import items from "../data/items";
+// import items from "../data/items";
+// import axios from 'axios';
 
 export function Home() {
   const [query, setQuery] = useState("");
   const [searchParam] = useState(["name", "price", "description"]);
+  
+  const [items, setItems] = useState([]);
+  const [searchedItems, setSearchedItems] = useState([]);
 
-  const searchedItems = items.filter((item) => {
-    return searchParam.some((newItem) => {
-      return (
-        item[newItem].toString().toLowerCase().indexOf(query.toLowerCase()) > -1
-      );
+  // Fetching data from remote MySQL database
+  useEffect(() => {
+    fetch('http://localhost:3001/api/data')
+    .then(response => response.json())
+    .then(response => {
+      setItems(response)
+    })
+    .catch(error => {
+      console.error('Error fetching data:', error);
     });
-  });
+  }, []);
+ 
+  // Filtering data
+  useEffect(() => {
+    setSearchedItems(items.filter((item) => {
+      return searchParam.some((newItem) => {
+        return (
+          item[newItem].toString().toLowerCase().indexOf(query.toLowerCase()) > -1
+        );
+      });
+    }));
+  })
+
   return (
     <>
       <Search setQuery={setQuery} />
