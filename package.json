@@ -1,0 +1,14 @@
+{
+  "name": "surplus",
+  "version": "1.0.0",
+  "description": "Website for buying and selling construction surplus materials",
+  "main": "index.js",
+  "scripts": {
+    "start": "npm run start-frontend & npm run start-backend",
+    "start-frontend": "cd frontend && npm start",
+    "start-backend": "cd backend && node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC"
+}
