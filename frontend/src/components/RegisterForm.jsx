@@ -1,4 +1,4 @@
-import { useRef, React } from "react";
+import { useRef, React, useState } from "react";
 import { Link } from "react-router-dom";
 import FormInput from "./FormInput";
 import Button from "./Button";
@@ -60,6 +60,27 @@ export default function RegisterForm() {
     }
   };
 
+  // disable login btn when input validation is not meet
+
+  const [formValues, setFormValues] = useState({
+    fName: "",
+    lName: "",
+    email: "",
+    verifyEmail: "",
+    password: "",
+    country: "",
+    city: "",
+    state: "",
+    address: "",
+    chkTerm: false,
+  });
+
+  const handleInputChange = (e) => {};
+
+  const isfNameValid = () => {};
+
+  const isDisabled = true;
+
   return (
     <>
       <div className="container text-center form-max-width">
@@ -80,6 +101,7 @@ export default function RegisterForm() {
                   name="fName"
                   inputRef={firstNameRef}
                   maxLength={maxLengths.firstName}
+                  onChange={handleInputChange}
                 />
               </div>
               <div className="col-12 col-sm-6 mb-3">
@@ -89,6 +111,7 @@ export default function RegisterForm() {
                   name="lName"
                   inputRef={lastNameRef}
                   maxLength={maxLengths.lastName}
+                  onChange={handleInputChange}
                 />
               </div>
             </div>
@@ -100,6 +123,7 @@ export default function RegisterForm() {
                   name="email"
                   inputRef={emailRef}
                   maxLength={maxLengths.email}
+                  onChange={handleInputChange}
                 />
               </div>
             </div>
@@ -110,6 +134,7 @@ export default function RegisterForm() {
                   placeholder="Verify Email"
                   name="verifyEmail"
                   maxLength={maxLengths.email}
+                  onChange={handleInputChange}
                 />
               </div>
             </div>
@@ -121,13 +146,13 @@ export default function RegisterForm() {
                   name="password"
                   inputRef={passwordRef}
                   maxLength={maxLengths.password}
+                  onChange={handleInputChange}
                 />
               </div>
             </div>
             <div className="row gy-3">
               <div className="col-6 col-md-4">
-                {/* <FormInput type="text" placeholder="Country" name="country" inputRef={countryRef} maxLength={maxLengths.country}/> */}
-                <CountryDropDownList />
+                <CountryDropDownList onChange={handleInputChange} />
               </div>
               <div className="col-6 col-md-4">
                 <FormInput
@@ -136,6 +161,7 @@ export default function RegisterForm() {
                   name="city"
                   inputRef={cityRef}
                   maxLength={maxLengths.city}
+                  onChange={handleInputChange}
                 />
               </div>
               <div className="col-12 col-sm-12 col-md-4 mb-3">
@@ -145,6 +171,7 @@ export default function RegisterForm() {
                   name="state"
                   inputRef={stateRef}
                   maxLength={maxLengths.state}
+                  onChange={handleInputChange}
                 />
               </div>
             </div>
@@ -156,6 +183,7 @@ export default function RegisterForm() {
                   name="address"
                   inputRef={addressRef}
                   maxLength={maxLengths.address}
+                  onChange={handleInputChange}
                 />
               </div>
             </div>
@@ -165,6 +193,7 @@ export default function RegisterForm() {
                 type="checkbox"
                 value=""
                 id="term"
+                onChange={handleInputChange}
               />
               <label
                 className="form-check-label text-body-tertiary term-label"
@@ -181,6 +210,7 @@ export default function RegisterForm() {
                 className="btn-success"
                 btnName="Sign up"
                 handler={SignUpButtonClicked}
+                disabled={isDisabled}
               />
             </div>
           </form>

@@ -43,16 +43,15 @@ export default function () {
     }
   };
 
-  // disable login btn when input box is empty
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  // disable login btn when email and password validation is not meet
+  const [formValues, setFormValues] = useState({
+    email: "",
+    password: "",
+  });
 
-  const handleEmailChange = (e) => {
-    setEmail(e.target.value);
-  };
-
-  const handlePasswordChange = (e) => {
-    setPassword(e.target.value);
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormValues({ ...formValues, [name]: value });
   };
 
   const isEmailValid = (email) => {
@@ -64,7 +63,9 @@ export default function () {
     return password.length >= 8 && password.length <= 128;
   };
 
-  const isDisabled = !(isEmailValid(email) && isPasswordValid(password));
+  const isDisabled = !(
+    isEmailValid(formValues.email) && isPasswordValid(formValues.password)
+  );
 
   return (
     <div className="container text-center form-max-width">
@@ -78,7 +79,7 @@ export default function () {
                 placeholder="Email"
                 name="email"
                 inputRef={emailRef}
-                onChange={handleEmailChange}
+                onChange={handleInputChange}
                 maxLength={maxLengths.email}
               />
             </div>
@@ -90,7 +91,7 @@ export default function () {
                 placeholder="Password"
                 name="password"
                 inputRef={passwordRef}
-                onChange={handlePasswordChange}
+                onChange={handleInputChange}
                 maxLength={maxLengths.password}
               />
             </div>

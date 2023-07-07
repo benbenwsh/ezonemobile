@@ -248,7 +248,7 @@ export default function CountryDropDownList(props) {
   ];
 
   return (
-    <select class="form-select">
+    <select class="form-select" onChange={props.onChange}>
       <option selected>Country</option>
       {countries.map((country) => (
         <option key={country.code} value={country.code}>
