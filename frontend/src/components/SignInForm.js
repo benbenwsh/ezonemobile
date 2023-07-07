@@ -1,4 +1,4 @@
-import {useRef, React} from "react";
+import {useState, useRef, React} from "react";
 import InputBox from "./InputBox";
 import Button from "./Button";
 import CheckBox from "./CheckBox";
@@ -6,6 +6,7 @@ import CheckBox from "./CheckBox";
 export default function SignInForm() {
   const emailRef = useRef(null);
   const passwordRef = useRef(null);
+  const [errorMessage, setErrorMessage] = useState('');
 
   const LoginButtonClicked = (async (e) => {
     e.preventDefault();
@@ -23,17 +24,15 @@ export default function SignInForm() {
       });
 
       if (response.ok) {
-        const data = await response.json();
-        if (data.success) {
-          console.log('Sign-in successful');
-        } else {
-          console.error('Sign-in failed');
-        }
+        console.log('Login successful');
+
       } else {
-        throw new Error('Request failed with status ' + response.status);
+        const errorData = await response.json();
+        setErrorMessage(errorData.message);
+
       }
     } catch (error) {
-      console.error('Error occurred during sign-in: ', error);
+      console.error('Error occurred during login: ', error);
     }
   })
   

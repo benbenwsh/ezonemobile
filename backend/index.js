@@ -36,7 +36,6 @@ app.post('/api/register', (req, res) => {
         console.error('Error inserting user:', error);
         res.status(500).json({ error: 'Failed to register user' });
       } else {
-        console.log('User registered successfully');
         res.status(200).json({ message: 'User registered successfully' });
       }
     }
@@ -52,15 +51,14 @@ app.post('/api/login', (req, res) => {
       if (error) {
         console.error('Error executing SELECT:', error);
         res.status(500).json({ error: 'Internal server error' });
+
       } else {
-        // email must be the primary key
-        assert.ok(result.length < 2, 'There are two or more passwords associating to an email.');
-        const response = {
-          success: result.length !== 0 && result[0].password === password
-        };
-      
-        // Set the response status code and content type
-        res.status(200).json(response);
+        if (result.length !== 0 && result[0].password === password) {
+          res.status(200).json({ message: 'Login successful' });
+
+        } else {
+          res.status(404).json({ error: 'Incorrect email or password.' });
+        }
         // Scenarios
         // 1. There is no one with that username
         // 2. There is someone with that username

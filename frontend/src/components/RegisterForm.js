@@ -29,7 +29,7 @@ export default function SignInForm() {
       if (response.ok) {
         console.log('Register successful');
       } else {
-        console.log('Register failed');
+        console.error('Register failed');
       }
     } catch (error) {
       console.error('Error occurred during register', error);
