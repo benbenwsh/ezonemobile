@@ -1,11 +1,44 @@
-import React from "react";
+import {useRef, React} from "react";
 import FormInput from "./FormInput";
 import Button from "./Button";
 
 export default function RegisterForm() {
+  const firstNameRef = useRef(null);
+  const lastNameRef = useRef(null);
+  const emailRef = useRef(null);
+  const passwordRef = useRef(null);
+  
   const descriptionStyle = {
     fontFamily: "'Varela Round', sans-serif",
   };
+
+  const RegisterButtonClicked = (async (e) => {
+    e.preventDefault();
+
+    const firstName = firstNameRef.current.value;
+    const lastName = lastNameRef.current.value;
+    const email = emailRef.current.value;
+    const password = passwordRef.current.value;
+
+    try {
+      const response = await fetch('http://localhost:3001/api/register', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ firstName, lastName, email, password })
+      });
+
+      if (response.ok) {
+        console.log('Register successful');
+      } else {
+        console.error('Register failed');
+      }
+    } catch (error) {
+      console.error('Error occurred during register', error);
+    }
+  })
+
   return (
     <>
       <div className="container text-center form-max-width">
@@ -20,10 +53,10 @@ export default function RegisterForm() {
           <form>
             <div className="row gy-3">
               <div className="col-12 col-sm-6">
-                <FormInput type="text" placeholder="First name" name="fName" />
+                <FormInput type="text" placeholder="First name" name="fName" inputRef={firstNameRef}/>
               </div>
               <div className="col-12 col-sm-6 mb-3">
-                <FormInput type="text" placeholder="Last name" name="lName" />
+                <FormInput type="text" placeholder="Last name" name="lName" inputRef={lastNameRef}/>
               </div>
             </div>
             <div className="row gy-3 mb-3">
