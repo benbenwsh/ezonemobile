@@ -5,13 +5,13 @@ export default function Navbar() {
   return (
     <nav className="navbar navbar-expand-lg bg-body-tertiary sticky-top">
       <div className="container-fluid">
-        <a className="navbar-brand" href="#">
+        <Link className="navbar-brand" to="/">
           <img
             src="https://fotama.com/storage/images/logo.png?v=e41ce8ee65494ea841e86412513e9035"
             className="navbar-icon"
             alt="icon"
           ></img>
-        </a>
+        </Link>
         <button
           className="navbar-toggler"
           type="button"
