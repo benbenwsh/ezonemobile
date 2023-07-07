@@ -6,6 +6,7 @@ export default function InputBox(props) {
       <input
         type="text"
         id={props.label}
+        ref={props.inputRef}
         className="form-control"
         placeholder={props.label}
       />

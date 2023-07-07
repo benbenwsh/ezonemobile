@@ -11,16 +11,21 @@ export function Home() {
   const [items, setItems] = useState([]);
   const [searchedItems, setSearchedItems] = useState([]);
 
+  const fetchItemsData = (async () => {
+    try {
+      const response = await fetch('http://localhost:3001/api/data');
+      if (response.ok) {
+        setItems(await response.json());
+      } else {
+        throw new Error('Request failed with status ' + response.status);
+      }
+    } catch (error) {
+      console.error('Error fetching data: ', error);
+    }
+  })
   // Fetching data from remote MySQL database
   useEffect(() => {
-    fetch('http://localhost:3001/api/data')
-    .then(response => response.json())
-    .then(response => {
-      setItems(response)
-    })
-    .catch(error => {
-      console.error('Error fetching data:', error);
-    });
+    fetchItemsData();
   }, []);
  
   // Filtering data

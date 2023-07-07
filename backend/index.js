@@ -3,8 +3,10 @@ const app = express();
 const path = require('path');
 const mysql = require('mysql2');
 const cors = require('cors');
+const assert = require('assert')
 
 app.use(cors());
+app.use(express.json()); 
 
 const connection = mysql.createConnection({
   host: '172.16.1.2',
@@ -12,32 +14,6 @@ const connection = mysql.createConnection({
   password: 'fotama',
   database: 'test',
 });
-
-// // Code for Testing
-// connection.connect((err) => {
-//   if (err) {
-//     console.error('Error connecting to MySQL:', err);
-//     return;
-//   }
-//   console.log('Connected to MySQL server');
-// });
-
-// connection.query('SELECT * FROM item', (err, results) => {
-//   if (err) {
-//     console.error('Error executing query:', err);
-//     return;
-//   }
-//   console.log('Query results:', results);
-// });
-
-// connection.end((err) => {
-//   if (err) {
-//     console.error('Error closing connection:', err);
-//     return;
-//   }
-//   console.log('Connection closed');
-// });
-
 
 app.get('/api/data', (req, res) => {
   connection.query("SELECT * FROM item", (error, result) => {
@@ -47,6 +23,50 @@ app.get('/api/data', (req, res) => {
     } else {
       res.json(result);
     }
+  });
+});
+
+app.post('/api/register', (req, res) => {
+  const { firstName, lastName, email, password } = req.body;
+  connection.query(
+    'INSERT INTO users (first_name, last_name, email, password) VALUES (?, ?, ?, ?)',
+    [firstName, lastName, email, password],
+    (error, results) => {
+      if (error) {
+        console.error('Error inserting user:', error);
+        res.status(500).json({ error: 'Failed to register user' });
+      } else {
+        console.log('User registered successfully');
+        res.status(200).json({ message: 'User registered successfully' });
+      }
+    }
+  );
+});
+
+app.post('/api/login', (req, res) => {
+  const { email, password } = req.body;
+  connection.query(
+    'SELECT password FROM users WHERE email = ?', 
+    [email],
+    (error, result) => {
+      if (error) {
+        console.error('Error executing SELECT:', error);
+        res.status(500).json({ error: 'Internal server error' });
+      } else {
+        // email must be the primary key
+        assert.ok(result.length < 2, 'There are two or more passwords associating to an email.');
+        const response = {
+          success: result.length !== 0 && result[0].password === password
+        };
+      
+        // Set the response status code and content type
+        res.status(200).json(response);
+        // Scenarios
+        // 1. There is no one with that username
+        // 2. There is someone with that username
+        // 2a. The password matches that in the database
+        // 2b. The password does not match
+      }
   });
 });
 
