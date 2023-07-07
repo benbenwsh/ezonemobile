@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import FormInput from "./FormInput";
 import Button from "./Button";
 import { maxLengths } from "../config";
+import CountryDropDownList from "./CountryDropDownList";
 
 export default function RegisterForm() {
   // Use enum or object
@@ -73,41 +74,89 @@ export default function RegisterForm() {
           <form action="#" method="POST">
             <div className="row gy-3">
               <div className="col-12 col-sm-6">
-                <FormInput type="text" placeholder="First name" name="fName" inputRef={firstNameRef} maxLength={maxLengths.firstName}/>
+                <FormInput
+                  type="text"
+                  placeholder="First name"
+                  name="fName"
+                  inputRef={firstNameRef}
+                  maxLength={maxLengths.firstName}
+                />
               </div>
               <div className="col-12 col-sm-6 mb-3">
-                <FormInput type="text" placeholder="Last name" name="lName" inputRef={lastNameRef} maxLength={maxLengths.lastName}/>
+                <FormInput
+                  type="text"
+                  placeholder="Last name"
+                  name="lName"
+                  inputRef={lastNameRef}
+                  maxLength={maxLengths.lastName}
+                />
               </div>
             </div>
             <div className="row gy-3 mb-3">
               <div className="col-12">
-                <FormInput type="email" placeholder="Email" name="email" inputRef={emailRef} maxLength={maxLengths.email}/>
+                <FormInput
+                  type="email"
+                  placeholder="Email"
+                  name="email"
+                  inputRef={emailRef}
+                  maxLength={maxLengths.email}
+                />
               </div>
             </div>
             <div className="row gy-3 mb-3">
               <div className="col-12">
-                <FormInput type="email" placeholder="Verify Email" name="verifyEmail" maxLength={maxLengths.email}/>
+                <FormInput
+                  type="email"
+                  placeholder="Verify Email"
+                  name="verifyEmail"
+                  maxLength={maxLengths.email}
+                />
               </div>
             </div>
             <div className="row gy-3 mb-3">
               <div className="col-12">
-                <FormInput type="password" placeholder="Password" name="password" inputRef={passwordRef} maxLength={maxLengths.password}/>
+                <FormInput
+                  type="password"
+                  placeholder="Password"
+                  name="password"
+                  inputRef={passwordRef}
+                  maxLength={maxLengths.password}
+                />
               </div>
             </div>
             <div className="row gy-3">
               <div className="col-6 col-md-4">
-                <FormInput type="text" placeholder="Country" name="country" inputRef={countryRef} maxLength={maxLengths.country}/>
+                {/* <FormInput type="text" placeholder="Country" name="country" inputRef={countryRef} maxLength={maxLengths.country}/> */}
+                <CountryDropDownList />
               </div>
               <div className="col-6 col-md-4">
-                <FormInput type="text" placeholder="City" name="city" inputRef={cityRef} maxLength={maxLengths.city}/>
+                <FormInput
+                  type="text"
+                  placeholder="City"
+                  name="city"
+                  inputRef={cityRef}
+                  maxLength={maxLengths.city}
+                />
               </div>
               <div className="col-12 col-sm-12 col-md-4 mb-3">
-                <FormInput type="text" placeholder="State" name="state" inputRef={stateRef} maxLength={maxLengths.state}/>
+                <FormInput
+                  type="text"
+                  placeholder="State"
+                  name="state"
+                  inputRef={stateRef}
+                  maxLength={maxLengths.state}
+                />
               </div>
             </div>
             <div className="row gy-3 mb-3">
               <div className="col-12">
-                <FormInput type="text" placeholder="Address" name="address" inputRef={addressRef} maxLength={maxLengths.address}/>
+                <FormInput
+                  type="text"
+                  placeholder="Address"
+                  name="address"
+                  inputRef={addressRef}
+                  maxLength={maxLengths.address}
+                />
               </div>
             </div>
             <div className="form-check d-flex justify-content-center mb-4">
