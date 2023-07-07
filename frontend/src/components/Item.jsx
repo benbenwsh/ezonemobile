@@ -10,7 +10,7 @@ export default function Item(props) {
         <p className="card-text">Price: {props.price}</p>
         <h5 className="card-title">Description</h5>
         <p className="card-text">{props.description}</p>
-        <Link to={`/${props.id}`} className="btn btn-primary mt-auto">
+        <Link to={`/shop/${props.id}`} className="btn btn-primary mt-auto">
           More
         </Link>
       </div>
