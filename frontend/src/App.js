@@ -7,6 +7,7 @@ import { ItemDetail } from "./pages/ItemDetail";
 import { Help } from "./pages/Help";
 import { About } from "./pages/About";
 import Navbar from "./components/Navbar";
+import Footer from "./components/Footer";
 
 export default function App() {
   return (
@@ -21,6 +22,7 @@ export default function App() {
         <Route path="/help" element={<Help />} />
         <Route path="/about" element={<About />} />
       </Routes>
+      <Footer />
     </>
   );
 }
