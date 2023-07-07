@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import FormInput from "./FormInput";
 import CheckBox from "./CheckBox";
 import Button from "./Button";
+import { maxLengths } from "../config";
 
 export default function () {
   const emailRef = useRef(null);
@@ -19,6 +20,9 @@ export default function () {
     const email = emailRef.current.value;
     const password = passwordRef.current.value;
 
+    // Client-side validation
+
+    // Server-side validation
     try {
       const response = await fetch("http://localhost:3001/api/login", {
         method: "POST",
@@ -46,22 +50,12 @@ export default function () {
         <form action="#" method="POST">
           <div className="row gy-3 mb-3">
             <div className="col-12">
-              <FormInput
-                type="email"
-                placeholder="Email"
-                name="email"
-                inputRef={emailRef}
-              />
+                <FormInput type="email" placeholder="Email" name="email" inputRef={emailRef} maxLength={maxLengths.email}/>
             </div>
           </div>
           <div className="row gy-3 mb-3">
             <div className="col-12">
-              <FormInput
-                type="password"
-                placeholder="Password"
-                name="password"
-                inputRef={passwordRef}
-              />
+                <FormInput type="password" placeholder="Password" name="password" inputRef={passwordRef} maxLength={maxLengths.password}/>
             </div>
           </div>
           <CheckBox chkName="rememberLogin" chkMsg="Remember me" />

@@ -8,6 +8,7 @@ export default function FormInput(props) {
       placeholder={props.placeholder}
       name={props.name}
       ref={props.inputRef}
+      maxLength={props.maxLength}
       required
     />
   );
