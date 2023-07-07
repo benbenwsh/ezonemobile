@@ -9,10 +9,12 @@ export default function CheckBox(props) {
         value=""
         id={props.chkName}
         ref={props.inputRef}
-        checked
       />
-      <label className="form-check-label" for={props.chkName}>
-        {props.msg}
+      <label
+        className={`form-check-label ${props.className}`}
+        for={props.chkName}
+      >
+        {props.chkMsg}
       </label>
     </div>
   );

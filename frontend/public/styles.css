@@ -3,6 +3,11 @@
   max-height: 50px;
 }
 
+/* register form term */
+.term-label {
+  font-size: 0.8em;
+}
+
 /* product item style */
 .card-img-top {
   width: 100%;
