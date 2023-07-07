@@ -2,7 +2,7 @@ import React from "react";
 
 export default function Button(props) {
   return (
-    <button type="submit" className="btn btn-primary btn-block mb-4">
+    <button type="submit" className={`btn btn-block mb-4  ${props.className}`}>
       {props.btnName}
     </button>
   );

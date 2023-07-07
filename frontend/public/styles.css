@@ -1,13 +1,22 @@
+/* navbar style */
 .navbar-icon {
   max-height: 50px;
 }
 
-.navbar-bg-color {
-  background-color: #f8f9fa;
-}
-
+/* product item style */
 .card-img-top {
   width: 100%;
   height: 200px;
   object-fit: cover;
+}
+
+/* footer style */
+.footer-bg-color {
+  background-color: #f8f9fa;
+}
+
+@media (min-width: 768px) {
+  .form-max-width {
+    max-width: 540px;
+  }
 }
