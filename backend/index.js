@@ -26,11 +26,11 @@ app.get('/api/data', (req, res) => {
   });
 });
 
-app.post('/api/register', (req, res) => {
-  const { firstName, lastName, email, password } = req.body;
+app.post('/api/signup', (req, res) => {
+  const { firstName, lastName, email, password, country, city, state, address } = req.body;
   connection.query(
-    'INSERT INTO users (first_name, last_name, email, password) VALUES (?, ?, ?, ?)',
-    [firstName, lastName, email, password],
+    'INSERT INTO users (first_name, last_name, email, password, country, city, state, address) VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
+    [firstName, lastName, email, password, country, city, state, address],
     (error, results) => {
       if (error) {
         console.error('Error inserting user:', error);

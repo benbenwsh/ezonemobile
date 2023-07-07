@@ -7,35 +7,43 @@ export default function RegisterForm() {
   const lastNameRef = useRef(null);
   const emailRef = useRef(null);
   const passwordRef = useRef(null);
+  const countryRef = useRef(null);
+  const cityRef = useRef(null);
+  const stateRef = useRef(null);
+  const addressRef = useRef(null);
   
   const descriptionStyle = {
     fontFamily: "'Varela Round', sans-serif",
   };
 
-  const RegisterButtonClicked = (async (e) => {
+  const SignUpButtonClicked = (async (e) => {
     e.preventDefault();
 
     const firstName = firstNameRef.current.value;
     const lastName = lastNameRef.current.value;
     const email = emailRef.current.value;
     const password = passwordRef.current.value;
+    const country = countryRef.current.value;
+    const city = cityRef.current.value;
+    const state = stateRef.current.value;
+    const address = addressRef.current.value;
 
     try {
-      const response = await fetch('http://localhost:3001/api/register', {
+      const response = await fetch('http://localhost:3001/api/signup', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ firstName, lastName, email, password })
+        body: JSON.stringify({ firstName, lastName, email, password, country, city, state, address })
       });
 
       if (response.ok) {
-        console.log('Register successful');
+        console.log('Sign up successful');
       } else {
-        console.error('Register failed');
+        console.error('Sign up failed');
       }
     } catch (error) {
-      console.error('Error occurred during register', error);
+      console.error('Error occurred during sign up', error);
     }
   })
 
@@ -61,7 +69,7 @@ export default function RegisterForm() {
             </div>
             <div className="row gy-3 mb-3">
               <div className="col-12">
-                <FormInput type="email" placeholder="Email" name="email" />
+                <FormInput type="email" placeholder="Email" name="email" inputRef={emailRef}/>
               </div>
             </div>
             <div className="row gy-3 mb-3">
@@ -79,28 +87,29 @@ export default function RegisterForm() {
                   type="password"
                   placeholder="Password"
                   name="password"
+                  inputRef={passwordRef}
                 />
               </div>
             </div>
             <div className="row gy-3">
               <div className="col-6 col-md-4">
-                <FormInput type="text" placeholder="Country" name="country" />
+                <FormInput type="text" placeholder="Country" name="country" inputRef={countryRef}/>
               </div>
               <div className="col-6 col-md-4">
-                <FormInput type="text" placeholder="City" name="city" />
+                <FormInput type="text" placeholder="City" name="city" inputRef={cityRef}/>
               </div>
               <div className="col-12 col-sm-12 col-md-4 mb-3">
-                <FormInput type="text" placeholder="State" name="state" />
+                <FormInput type="text" placeholder="State" name="state" inputRef={stateRef}/>
               </div>
             </div>
             <div className="row gy-3 mb-3">
               <div className="col-12">
-                <FormInput type="text" placeholder="Address" name="address" />
+                <FormInput type="text" placeholder="Address" name="address" inputRef={addressRef}/>
               </div>
             </div>
             <div className="text-end">
               <Button className="btn-outline-warning me-2" btnName="Reset" />
-              <Button className="btn-success" btnName="Sign up" />
+              <Button className="btn-success" btnName="Sign up" handler={SignUpButtonClicked}/>
             </div>
           </form>
         </div>
