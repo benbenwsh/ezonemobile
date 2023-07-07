@@ -39,6 +39,29 @@ export default function () {
     }
   };
 
+  // disable login btn when input box is empty
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const handleEmailChange = (e) => {
+    setEmail(e.target.value);
+  };
+
+  const handlePasswordChange = (e) => {
+    setPassword(e.target.value);
+  };
+
+  const isEmailValid = (email) => {
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailPattern.test(email);
+  };
+
+  const isPasswordValid = (password) => {
+    return password.length >= 8 && password.length <= 128;
+  };
+
+  const isDisabled = !(isEmailValid(email) && isPasswordValid(password));
+
   return (
     <div className="container text-center form-max-width">
       <h1 className="my-5 display-3 fw-bold">Sign In</h1>
@@ -51,6 +74,7 @@ export default function () {
                 placeholder="Email"
                 name="email"
                 inputRef={emailRef}
+                onChange={handleEmailChange}
               />
             </div>
           </div>
@@ -61,6 +85,7 @@ export default function () {
                 placeholder="Password"
                 name="password"
                 inputRef={passwordRef}
+                onChange={handlePasswordChange}
               />
             </div>
           </div>
@@ -71,9 +96,12 @@ export default function () {
             </Link>
           </p>
           <Button
+            type="submit"
             className="btn-warning text-light"
             btnName="Login"
             handler={LoginButtonClicked}
+            id="login-btn"
+            disabled={isDisabled}
           />
         </form>
         <span>Don't have an account? </span>

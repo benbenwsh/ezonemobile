@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 
 export default function FormInput(props) {
   return (
@@ -8,6 +8,7 @@ export default function FormInput(props) {
       placeholder={props.placeholder}
       name={props.name}
       ref={props.inputRef}
+      onChange={props.onChange}
       required
     />
   );
