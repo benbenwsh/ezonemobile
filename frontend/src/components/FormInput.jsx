@@ -9,6 +9,7 @@ export default function FormInput(props) {
       name={props.name}
       ref={props.inputRef}
       onChange={props.onChange}
+      maxLength={props.maxLength}
       required
     />
   );

@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import FormInput from "./FormInput";
 import CheckBox from "./CheckBox";
 import Button from "./Button";
+import { maxLengths } from "../config";
 
 export default function () {
   const emailRef = useRef(null);
@@ -19,6 +20,9 @@ export default function () {
     const email = emailRef.current.value;
     const password = passwordRef.current.value;
 
+    // Client-side validation
+
+    // Server-side validation
     try {
       const response = await fetch("http://localhost:3001/api/login", {
         method: "POST",
@@ -75,6 +79,7 @@ export default function () {
                 name="email"
                 inputRef={emailRef}
                 onChange={handleEmailChange}
+                maxLength={maxLengths.email}
               />
             </div>
           </div>
@@ -86,6 +91,7 @@ export default function () {
                 name="password"
                 inputRef={passwordRef}
                 onChange={handlePasswordChange}
+                maxLength={maxLengths.password}
               />
             </div>
           </div>
