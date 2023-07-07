@@ -8,6 +8,7 @@ export default function CheckBox(props) {
         type="checkbox"
         value=""
         id={props.chkName}
+        ref={props.inputRef}
         checked
       />
       <label className="form-check-label" for={props.chkName}>
