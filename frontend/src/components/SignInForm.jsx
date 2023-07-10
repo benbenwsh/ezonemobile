@@ -6,6 +6,7 @@ import Button from "./Button";
 import { maxLengths } from "../config";
 import NotificationSuccess from "./NotificationSuccess";
 import NotificationError from "./NotificationError";
+import Modal from "../components/Modal";
 
 export default function SignInForm() {
   const emailRef = useRef(null);
@@ -14,10 +15,6 @@ export default function SignInForm() {
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
-
-  const textDecorationNone = {
-    textDecoration: "none",
-  };
 
   const LoginButtonClicked = async (e) => {
     e.preventDefault();
@@ -107,9 +104,12 @@ export default function SignInForm() {
           </div>
           <CheckBox chkName="rememberLogin" chkMsg="Remember me" />
           <p>
-            <Link className="text-body-tertiary" style={textDecorationNone}>
-              Forgot password?
-            </Link>
+            <Modal
+              className="text-body-tertiary text-decoration-none "
+              display="Forgot username or password?"
+              title="Forgot username or password"
+              content="Please contact xxx@gmail.com"
+            />
           </p>
           <Button
             type="submit"
@@ -121,7 +121,7 @@ export default function SignInForm() {
           />
         </form>
         <span>Don't have an account? </span>
-        <Link to="/register" style={textDecorationNone}>
+        <Link to="/register" className="text-decoration-none">
           Sign up
         </Link>
       </div>

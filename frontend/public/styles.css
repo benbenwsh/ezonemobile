@@ -3,6 +3,11 @@
   max-height: 50px;
 }
 
+/* sign in form style */
+.text-decoration-none {
+  text-decoration: none;
+}
+
 /* register form term */
 .term-label {
   font-size: 0.8em;

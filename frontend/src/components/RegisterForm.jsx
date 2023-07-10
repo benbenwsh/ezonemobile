@@ -6,6 +6,7 @@ import { maxLengths } from "../config";
 import CountrySelector from "./CountrySelector";
 import NotificationSuccess from "./NotificationSuccess";
 import NotificationError from "./NotificationError";
+import Modal from "./Modal";
 
 export default function RegisterForm() {
   // Use enum or object
@@ -275,8 +276,19 @@ export default function RegisterForm() {
                 for="term"
               >
                 By logging in, you agree to the{" "}
-                <Link className="text-dark">Terms of Service</Link> and{" "}
-                <Link className="text-dark">Privacy Policy</Link>
+                <Modal
+                  className="text-dark"
+                  display="Terms of Service"
+                  title="Terms of Service"
+                  content="fake content"
+                />{" "}
+                and{" "}
+                <Modal
+                  className="text-dark"
+                  display="Privacy Policy"
+                  title="Privacy Policy"
+                  content="fake content"
+                />
               </label>
             </div>
             <div className="text-end">
