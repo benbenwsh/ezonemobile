@@ -6,16 +6,21 @@ import CountrySelector from "./CountrySelector";
 import NotificationSuccess from "./NotificationSuccess";
 import NotificationError from "./NotificationError";
 import Modal from "./Modal";
+import ValidationRules from "../validation-rules"
 
 export default function RegisterForm() {
-  // Use enum or object
-  const firstNameRef = useRef(null);
-  const lastNameRef = useRef(null);
-  const emailRef = useRef(null);
-  const passwordRef = useRef(null);
-  const cityRef = useRef(null);
-  const stateRef = useRef(null);
-  const addressRef = useRef(null);
+  const [formValues, setFormValues] = useState({
+    fName: "",
+    lName: "",
+    email: "",
+    verifyEmail: "",
+    password: "",
+    country: "",
+    city: "",
+    state: "",
+    address: "",
+    chkTerm: false
+  });
 
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState(false);
@@ -28,31 +33,14 @@ export default function RegisterForm() {
   const SignUpButtonClicked = async (e) => {
     e.preventDefault();
 
-    const firstName = firstNameRef.current.value;
-    const lastName = lastNameRef.current.value;
-    const email = emailRef.current.value;
-    const password = passwordRef.current.value;
-    const city = cityRef.current.value;
-    const state = stateRef.current.value;
-    const address = addressRef.current.value;
-
-
+    const { verifyEmail, ...formValuesToSubmit } = formValues;
     try {
       const response = await fetch("http://localhost:3001/api/signup", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({
-          firstName,
-          lastName,
-          email,
-          password,
-          country,
-          city,
-          state,
-          address,
-        }),
+        body: JSON.stringify(formValuesToSubmit),
       });
 
       if (response.ok) {
@@ -73,85 +61,31 @@ export default function RegisterForm() {
 
   // disable login btn when input validation is not meet
   // handle all the form input expect country and chkTerm
-  const [formValues, setFormValues] = useState({
-    fName: "",
-    lName: "",
-    email: "",
-    verifyEmail: "",
-    password: "",
-    city: "",
-    state: "",
-    address: "",
-  });
 
-  const handleInputChange = (e) => {
+  const handleStringInputChange = (e) => {
     const { name, value } = e.target;
     setFormValues({ ...formValues, [name]: value });
   };
 
-  // handle countrySelector
-  const [country, setCountry] = useState("Country");
-  const handleCountrySelectorChange = (e) => {
-    setCountry(e.target.value);
-  };
+  // // handle countrySelector
+  // const [country, setCountry] = useState("Country");
+  // const handleCountrySelectorChange = (e) => {
+  //   setCountry(e.target.value);
+  // };
 
   // handle the check box
-  const [chkTerm, setChkTerm] = useState(false);
   const handleChkTerm = (e) => {
-    setChkTerm(!chkTerm);
-  };
-
-  // the validation rule
-  // checking the first name and last name
-  const isNameValid = (fName, lName) => {
-    return (
-      fName.length > 1 &&
-      fName.length < 50 &&
-      lName.length > 1 &&
-      lName.length < 50
-    );
-  };
-
-  // checking the email and the verify email if the same
-  const isEmailValid = (email, verifyEmail) => {
-    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailPattern.test(email) && email === verifyEmail;
-  };
-
-  // checking the password
-  const isPasswordValid = (password) => {
-    return password.length >= 8 && password.length <= 128;
-  };
-
-  // checking the if selected valid country
-  const isCountryValid = (country) => {
-    console.log(country!== "Country");
-    return country !== "Country";
-  };
-
-  // city, state and address are same validation rule
-  const isAddressValid = (city, state, address) => {
-    return (
-      city.length >= 1 &&
-      city.length <= 128 &&
-      state.length >= 1 &&
-      state.length <= 128 &&
-      address.length >= 1 &&
-      address.length <= 128
-    );
-  };
-
-  const isTermChecked = (chkTerm) => {
-    return chkTerm;
+    setFormValues({ ...formValues, chkTerm: !formValues.chkTerm});
   };
 
   const isDisabled = !(
-    isNameValid(formValues.fName, formValues.lName) &&
-    isEmailValid(formValues.email, formValues.verifyEmail) &&
-    isPasswordValid(formValues.password) &&
-    isCountryValid(country) &&
-    isAddressValid(formValues.city, formValues.state, formValues.address) &&
-    isTermChecked(chkTerm)
+    ValidationRules.isNameValid(formValues.fName, formValues.lName) &&
+    ValidationRules.isEmailValid(formValues.email) &&
+    ValidationRules.isVerifyEmailValid(formValues.email, formValues.verifyEmail) && 
+    ValidationRules.isPasswordValid(formValues.password) &&
+    ValidationRules.isCountryValid(formValues.country) &&
+    ValidationRules.isAddressValid(formValues.city, formValues.state, formValues.address) &&
+    ValidationRules.isTermChecked(formValues.chkTerm)
   );
 
   return (
@@ -174,9 +108,8 @@ export default function RegisterForm() {
                   type="text"
                   placeholder="First name"
                   name="fName"
-                  inputRef={firstNameRef}
                   maxLength={maxLengths.firstName}
-                  onChange={handleInputChange}
+                  onChange={handleStringInputChange}
                 />
               </div>
               <div className="col-12 col-sm-6 mb-3">
@@ -184,9 +117,8 @@ export default function RegisterForm() {
                   type="text"
                   placeholder="Last name"
                   name="lName"
-                  inputRef={lastNameRef}
                   maxLength={maxLengths.lastName}
-                  onChange={handleInputChange}
+                  onChange={handleStringInputChange}
                 />
               </div>
             </div>
@@ -196,9 +128,8 @@ export default function RegisterForm() {
                   type="email"
                   placeholder="Email"
                   name="email"
-                  inputRef={emailRef}
                   maxLength={maxLengths.email}
-                  onChange={handleInputChange}
+                  onChange={handleStringInputChange}
                 />
               </div>
             </div>
@@ -209,7 +140,7 @@ export default function RegisterForm() {
                   placeholder="Verify Email"
                   name="verifyEmail"
                   maxLength={maxLengths.email}
-                  onChange={handleInputChange}
+                  onChange={handleStringInputChange}
                 />
               </div>
             </div>
@@ -219,24 +150,22 @@ export default function RegisterForm() {
                   type="password"
                   placeholder="Password"
                   name="password"
-                  inputRef={passwordRef}
                   maxLength={maxLengths.password}
-                  onChange={handleInputChange}
+                  onChange={handleStringInputChange}
                 />
               </div>
             </div>
             <div className="row gy-3">
               <div className="col-6 col-md-4">
-                <CountrySelector onChange={handleCountrySelectorChange} />
+                <CountrySelector onChange={handleStringInputChange} />
               </div>
               <div className="col-6 col-md-4">
                 <FormInput
                   type="text"
                   placeholder="City"
                   name="city"
-                  inputRef={cityRef}
                   maxLength={maxLengths.city}
-                  onChange={handleInputChange}
+                  onChange={handleStringInputChange}
                 />
               </div>
               <div className="col-12 col-sm-12 col-md-4 mb-3">
@@ -244,9 +173,8 @@ export default function RegisterForm() {
                   type="text"
                   placeholder="State"
                   name="state"
-                  inputRef={stateRef}
                   maxLength={maxLengths.state}
-                  onChange={handleInputChange}
+                  onChange={handleStringInputChange}
                 />
               </div>
             </div>
@@ -256,9 +184,8 @@ export default function RegisterForm() {
                   type="text"
                   placeholder="Address"
                   name="address"
-                  inputRef={addressRef}
                   maxLength={maxLengths.address}
-                  onChange={handleInputChange}
+                  onChange={handleStringInputChange}
                 />
               </div>
             </div>
@@ -266,6 +193,7 @@ export default function RegisterForm() {
               <input
                 className="form-check-input me-2"
                 type="checkbox"
+                name="chkTerm"
                 value=""
                 id="term"
                 onChange={handleChkTerm}
