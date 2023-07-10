@@ -6,6 +6,7 @@ import Button from "./Button";
 import { maxLengths } from "../config";
 import LoginSuccess from "./LoginSuccess";
 import LoginError from "./LoginError";
+import ForgotAcPopup from "../components/ForgotAcPopup";
 
 export default function SignInForm() {
   const emailRef = useRef(null);
@@ -13,10 +14,6 @@ export default function SignInForm() {
   const [errorMessage, setErrorMessage] = useState("");
   const [loginSuccess, setLoginSuccess] = useState(false);
   const [loginError, setLoginError] = useState(false);
-
-  const textDecorationNone = {
-    textDecoration: "none",
-  };
 
   const LoginButtonClicked = async (e) => {
     e.preventDefault();
@@ -76,8 +73,15 @@ export default function SignInForm() {
 
   return (
     <div className="container text-center form-max-width">
-      <LoginSuccess loginSuccess={loginSuccess} setLoginSuccess={setLoginSuccess}/>
-      <LoginError loginError={loginError} setLoginError={setLoginError} errorMessage={errorMessage}/>
+      <LoginSuccess
+        loginSuccess={loginSuccess}
+        setLoginSuccess={setLoginSuccess}
+      />
+      <LoginError
+        loginError={loginError}
+        setLoginError={setLoginError}
+        errorMessage={errorMessage}
+      />
       <h1 className="my-5 display-3 fw-bold">Sign In</h1>
       <div className="mx-4 mx-md-0">
         <form action="#" method="POST">
@@ -107,9 +111,10 @@ export default function SignInForm() {
           </div>
           <CheckBox chkName="rememberLogin" chkMsg="Remember me" />
           <p>
-            <Link className="text-body-tertiary" style={textDecorationNone}>
+            {/* <Link className="text-body-tertiary" style={textDecorationNone}>
               Forgot password?
-            </Link>
+            </Link> */}
+            <ForgotAcPopup />
           </p>
           <Button
             type="submit"
@@ -121,7 +126,7 @@ export default function SignInForm() {
           />
         </form>
         <span>Don't have an account? </span>
-        <Link to="/register" style={textDecorationNone}>
+        <Link to="/register" className="text-decoration-none">
           Sign up
         </Link>
       </div>
