@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import FormInput from "./FormInput";
 import Button from "./Button";
 import { maxLengths } from "../config";
-import CountryDropDownList from "./CountryDropDownList";
+import CountrySelector from "./CountrySelector";
 
 export default function RegisterForm() {
   // Use enum or object
@@ -61,25 +61,74 @@ export default function RegisterForm() {
   };
 
   // disable login btn when input validation is not meet
-
+  // handle all the form input expect country and chkTerm
   const [formValues, setFormValues] = useState({
     fName: "",
     lName: "",
     email: "",
     verifyEmail: "",
     password: "",
-    country: "",
     city: "",
     state: "",
     address: "",
-    chkTerm: false,
   });
 
-  const handleInputChange = (e) => {};
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormValues({ ...formValues, [name]: value });
+  };
 
-  const isfNameValid = () => {};
+  const [chkTerm, setChkTerm] = useState(false);
 
-  const isDisabled = true;
+  const handleChkTerm = () => {
+    setChkTerm(!chkTerm);
+  };
+
+  // the validation rule
+  // checking the first name and last name
+  const isNameValid = (fName, lName) => {
+    return (
+      fName.length > 1 &&
+      fName.length < 50 &&
+      lName.length > 1 &&
+      lName.length < 50
+    );
+  };
+
+  // checking the email and the verify email if the same
+  const isEmailValid = (email, verifyEmail) => {
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailPattern.test(email) && email === verifyEmail;
+  };
+
+  // checking the password
+  const isPasswordValid = (password) => {
+    return password.length >= 8 && password.length <= 128;
+  };
+
+  // city, state and address are same validation rule
+  const isAddressValid = (city, state, address) => {
+    return (
+      city.length >= 1 &&
+      city.length <= 128 &&
+      state.length >= 1 &&
+      state.length <= 128 &&
+      address.length >= 1 &&
+      address.length <= 128
+    );
+  };
+
+  const isTermCheck = (chkTerm) => {
+    return chkTerm;
+  };
+
+  const isDisabled = !(
+    isNameValid(formValues.fName, formValues.lName) &&
+    isEmailValid(formValues.email, formValues.verifyEmail) &&
+    isPasswordValid(formValues.password) &&
+    isAddressValid(formValues.city, formValues.state, formValues.address) &&
+    isTermCheck(chkTerm)
+  );
 
   return (
     <>
@@ -152,7 +201,7 @@ export default function RegisterForm() {
             </div>
             <div className="row gy-3">
               <div className="col-6 col-md-4">
-                <CountryDropDownList onChange={handleInputChange} />
+                <CountrySelector />
               </div>
               <div className="col-6 col-md-4">
                 <FormInput
@@ -193,7 +242,7 @@ export default function RegisterForm() {
                 type="checkbox"
                 value=""
                 id="term"
-                onChange={handleInputChange}
+                onChange={handleChkTerm}
               />
               <label
                 className="form-check-label text-body-tertiary term-label"
