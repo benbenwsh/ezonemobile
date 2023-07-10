@@ -2,7 +2,7 @@ import {useEffect, useCallback, React} from "react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-export default function LoginError(props) {
+export default function NotificationError(props) {
   const notify = useCallback(() =>
     toast.error(props.errorMessage, {
       position: "top-center",
@@ -16,8 +16,8 @@ export default function LoginError(props) {
     }), [props.errorMessage]);
 
   useEffect(() => {
-    if (props.loginError) {
-      props.setLoginError(false);
+    if (props.error) {
+      props.setError(false);
       notify();
     }
   }, [props, notify])

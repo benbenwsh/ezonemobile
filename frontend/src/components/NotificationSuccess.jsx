@@ -2,9 +2,9 @@ import {useEffect, useCallback, React} from "react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-export default function LoginSuccess(props) {
+export default function NotificationSuccess(props) {
   const notify = useCallback(() =>
-    toast.success("Login successful!", {
+    toast.success(props.successMessage, {
       position: "top-center",
       autoClose: 5000,
       hideProgressBar: false,
@@ -13,11 +13,11 @@ export default function LoginSuccess(props) {
       draggable: true,
       progress: undefined,
       theme: "light",
-    }), []);
+    }), [props.successMessage]);
 
   useEffect(() => {
-    if (props.loginSuccess) {
-      props.setLoginSuccess(false);
+    if (props.success) {
+      props.setSuccess(false);
       notify();
     }
   }, [props, notify])
