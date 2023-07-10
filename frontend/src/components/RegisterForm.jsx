@@ -3,6 +3,8 @@ import FormInput from "./FormInput";
 import GenericButton from "./GenericButton";
 import { maxLengths } from "../config";
 import CountrySelector from "./CountrySelector";
+import NotificationSuccess from "./NotificationSuccess";
+import NotificationError from "./NotificationError";
 import Modal from "./Modal";
 
 export default function RegisterForm() {
@@ -11,10 +13,13 @@ export default function RegisterForm() {
   const lastNameRef = useRef(null);
   const emailRef = useRef(null);
   const passwordRef = useRef(null);
-  const countryRef = useRef(null);
   const cityRef = useRef(null);
   const stateRef = useRef(null);
   const addressRef = useRef(null);
+
+  const [success, setSuccess] = useState(false);
+  const [error, setError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
 
   const descriptionStyle = {
     fontFamily: "'Varela Round', sans-serif",
@@ -27,10 +32,10 @@ export default function RegisterForm() {
     const lastName = lastNameRef.current.value;
     const email = emailRef.current.value;
     const password = passwordRef.current.value;
-    const country = countryRef.current.value;
     const city = cityRef.current.value;
     const state = stateRef.current.value;
     const address = addressRef.current.value;
+
 
     try {
       const response = await fetch("http://localhost:3001/api/signup", {
@@ -52,8 +57,14 @@ export default function RegisterForm() {
 
       if (response.ok) {
         console.log("Sign up successful");
+        setSuccess(true);
+
       } else {
         console.error("Sign up failed");
+        const errorData = await response.json();
+        setErrorMessage(errorData.error);
+        setError(true);
+
       }
     } catch (error) {
       console.error("Error occurred during sign up", error);
@@ -114,6 +125,7 @@ export default function RegisterForm() {
 
   // checking the if selected valid country
   const isCountryValid = (country) => {
+    console.log(country!== "Country");
     return country !== "Country";
   };
 
@@ -144,6 +156,8 @@ export default function RegisterForm() {
 
   return (
     <>
+      <NotificationSuccess success={success} setSuccess={setSuccess} successMessage="Sign Up Successful!"/>
+      <NotificationError error={error} setError={setError} errorMessage={errorMessage}/>
       <div className="container text-center form-max-width">
         <h1 className="mt-5 mb-4 display-3 fw-bold">
           The best offer <br />
