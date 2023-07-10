@@ -2,11 +2,45 @@ const express = require('express');
 const app = express();
 const path = require('path');
 const mysql = require('mysql2');
+// const sql = require('mssql');
 const cors = require('cors');
 const assert = require('assert');
 
 app.use(cors());
 app.use(express.json());
+
+// const config = {
+//   user: 'your_username',
+//   password: 'your_password',
+//   server: 'your_server_address',
+//   database: 'your_database_name',
+//   options: {
+//     encrypt: true // if using Azure SQL Server
+//   }
+// };
+
+// sql.connect(config, err => {
+//   if (err) {
+//     console.error('Error connecting to SQL Server:', err);
+//   } else {
+//     console.log('Connected to SQL Server');
+//     // Perform database operations
+//   }
+// });
+
+// const request = new sql.Request();
+// const query = 'SELECT * FROM your_table';
+
+// request.query(query, (err, result) => {
+//   if (err) {
+//     console.error('Error executing query:', err);
+//   } else {
+//     console.log('Query result:', result);
+//     // Process the result
+//   }
+// });
+
+// sql.close();
 
 const connection = mysql.createConnection({
   host: '172.16.1.2',
