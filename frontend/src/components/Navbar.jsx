@@ -8,8 +8,8 @@ export default function Navbar() {
         <Link className="navbar-brand" to="/">
           <img
             src="https://fotama.com/storage/images/logo.png?v=e41ce8ee65494ea841e86412513e9035"
-            className="navbar-icon"
             alt="icon"
+            style={{ maxHeight: "50px" }}
           ></img>
         </Link>
         <button

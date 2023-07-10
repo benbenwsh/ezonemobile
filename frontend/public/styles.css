@@ -1,6 +1,6 @@
-/* navbar style */
-.navbar-icon {
-  max-height: 50px;
+/* item details style */
+.carousel-inner {
+  max-height: 500px;
 }
 
 /* sign in form style */
@@ -26,7 +26,13 @@
 }
 
 @media (min-width: 768px) {
+  /* sign in form and registeration form style */
   .form-max-width {
     max-width: 540px;
+  }
+
+  /* item detail page style */
+  .item-detail-container-max-width {
+    max-width: 720px;
   }
 }

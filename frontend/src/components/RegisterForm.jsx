@@ -1,7 +1,6 @@
 import { useRef, React, useState } from "react";
-import { Link } from "react-router-dom";
 import FormInput from "./FormInput";
-import Button from "./Button";
+import GenericButton from "./GenericButton";
 import { maxLengths } from "../config";
 import CountrySelector from "./CountrySelector";
 import Modal from "./Modal";
@@ -278,8 +277,11 @@ export default function RegisterForm() {
               </label>
             </div>
             <div className="text-end">
-              <Button className="btn-outline-warning me-2" btnName="Reset" />
-              <Button
+              <GenericButton
+                className="btn-outline-warning me-2"
+                btnName="Reset"
+              />
+              <GenericButton
                 className="btn-success"
                 btnName="Sign up"
                 handler={SignUpButtonClicked}

@@ -17,7 +17,7 @@ export default function ForgotAcPopup(props) {
 
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
-          <Modal.Title> {props.title}</Modal.Title>
+          <Modal.Title>{props.title}</Modal.Title>
         </Modal.Header>
         <Modal.Body> {props.content}</Modal.Body>
         <Modal.Footer>

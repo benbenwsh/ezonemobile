@@ -2,7 +2,7 @@ import { useRef, useState, React } from "react";
 import { Link } from "react-router-dom";
 import FormInput from "./FormInput";
 import CheckBox from "./CheckBox";
-import Button from "./Button";
+import GenericButton from "./GenericButton";
 import { maxLengths } from "../config";
 import LoginSuccess from "./LoginSuccess";
 import LoginError from "./LoginError";
@@ -118,7 +118,7 @@ export default function SignInForm() {
               content="Please contact xxx@gmail.com"
             />
           </p>
-          <Button
+          <GenericButton
             type="submit"
             className="btn-warning text-light"
             btnName="Login"
