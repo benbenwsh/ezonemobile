@@ -1,9 +1,9 @@
-import React from "react";
+import {useEffect, useCallback, React} from "react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-export default function LoginSuccess() {
-  const notify = () =>
+export default function LoginSuccess(props) {
+  const notify = useCallback(() =>
     toast.success("Login successful!", {
       position: "top-center",
       autoClose: 5000,
@@ -13,11 +13,17 @@ export default function LoginSuccess() {
       draggable: true,
       progress: undefined,
       theme: "light",
-    });
+    }), []);
+
+  useEffect(() => {
+    if (props.loginSuccess) {
+      props.setLoginSuccess(false);
+      notify();
+    }
+  }, [props, notify])
 
   return (
     <div>
-      <button onClick={notify}>Login success</button>
       <ToastContainer />
     </div>
   );

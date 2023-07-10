@@ -4,11 +4,15 @@ import FormInput from "./FormInput";
 import CheckBox from "./CheckBox";
 import Button from "./Button";
 import { maxLengths } from "../config";
+import LoginSuccess from "./LoginSuccess";
+import LoginError from "./LoginError";
 
-export default function () {
+export default function SignInForm() {
   const emailRef = useRef(null);
   const passwordRef = useRef(null);
   const [errorMessage, setErrorMessage] = useState("");
+  const [loginSuccess, setLoginSuccess] = useState(false);
+  const [loginError, setLoginError] = useState(false);
 
   const textDecorationNone = {
     textDecoration: "none",
@@ -34,9 +38,12 @@ export default function () {
 
       if (response.ok) {
         console.log("Login successful");
+        setLoginSuccess(true);
       } else {
         const errorData = await response.json();
-        setErrorMessage(errorData.message);
+        console.log("heere" + errorData.error);
+        setErrorMessage(errorData.error);
+        setLoginError(true);
       }
     } catch (error) {
       console.error("Error occurred during login: ", error);
@@ -69,6 +76,8 @@ export default function () {
 
   return (
     <div className="container text-center form-max-width">
+      <LoginSuccess loginSuccess={loginSuccess} setLoginSuccess={setLoginSuccess}/>
+      <LoginError loginError={loginError} setLoginError={setLoginError} errorMessage={errorMessage}/>
       <h1 className="my-5 display-3 fw-bold">Sign In</h1>
       <div className="mx-4 mx-md-0">
         <form action="#" method="POST">

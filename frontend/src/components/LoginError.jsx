@@ -1,10 +1,10 @@
-import React from "react";
+import {useEffect, useCallback, React} from "react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-export default function LoginError() {
-  const notify = () =>
-    toast.error("Wrong username or password!", {
+export default function LoginError(props) {
+  const notify = useCallback(() =>
+    toast.error(props.errorMessage, {
       position: "top-center",
       autoClose: 5000,
       hideProgressBar: false,
@@ -13,11 +13,17 @@ export default function LoginError() {
       draggable: true,
       progress: undefined,
       theme: "light",
-    });
+    }), [props.errorMessage]);
+
+  useEffect(() => {
+    if (props.loginError) {
+      props.setLoginError(false);
+      notify();
+    }
+  }, [props, notify])
 
   return (
     <div>
-      <button onClick={notify}>Login error!</button>
       <ToastContainer />
     </div>
   );
