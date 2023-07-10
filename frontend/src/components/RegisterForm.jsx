@@ -78,9 +78,15 @@ export default function RegisterForm() {
     setFormValues({ ...formValues, [name]: value });
   };
 
-  const [chkTerm, setChkTerm] = useState(false);
+  // handle countrySelector
+  const [country, setCountry] = useState("Country");
+  const handleCountrySelectorChange = (e) => {
+    setCountry(e.target.value);
+  };
 
-  const handleChkTerm = () => {
+  // handle the check box
+  const [chkTerm, setChkTerm] = useState(false);
+  const handleChkTerm = (e) => {
     setChkTerm(!chkTerm);
   };
 
@@ -106,6 +112,11 @@ export default function RegisterForm() {
     return password.length >= 8 && password.length <= 128;
   };
 
+  // checking the if selected valid country
+  const isCountryValid = (country) => {
+    return country !== "Country";
+  };
+
   // city, state and address are same validation rule
   const isAddressValid = (city, state, address) => {
     return (
@@ -118,7 +129,7 @@ export default function RegisterForm() {
     );
   };
 
-  const isTermCheck = (chkTerm) => {
+  const isTermChecked = (chkTerm) => {
     return chkTerm;
   };
 
@@ -126,8 +137,9 @@ export default function RegisterForm() {
     isNameValid(formValues.fName, formValues.lName) &&
     isEmailValid(formValues.email, formValues.verifyEmail) &&
     isPasswordValid(formValues.password) &&
+    isCountryValid(country) &&
     isAddressValid(formValues.city, formValues.state, formValues.address) &&
-    isTermCheck(chkTerm)
+    isTermChecked(chkTerm)
   );
 
   return (
@@ -201,7 +213,7 @@ export default function RegisterForm() {
             </div>
             <div className="row gy-3">
               <div className="col-6 col-md-4">
-                <CountrySelector />
+                <CountrySelector onChange={handleCountrySelectorChange} />
               </div>
               <div className="col-6 col-md-4">
                 <FormInput
