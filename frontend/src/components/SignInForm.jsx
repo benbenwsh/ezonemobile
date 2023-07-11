@@ -17,7 +17,7 @@ export default function SignInForm() {
   const [errorMessage, setErrorMessage] = useState("");
 
   const LoginButtonClicked = async (e) => {
-    e.preventDefault();
+    // e.preventDefault();
 
     const email = emailRef.current.value;
     const password = passwordRef.current.value;
@@ -73,11 +73,19 @@ export default function SignInForm() {
 
   return (
     <div className="container text-center form-max-width">
-      <NotificationSuccess success={success} setSuccess={setSuccess} successMessage="Sign In Successful!"/>
-      <NotificationError error={error} setError={setError} errorMessage={errorMessage}/>
+      <NotificationSuccess
+        success={success}
+        setSuccess={setSuccess}
+        successMessage="Sign In Successful!"
+      />
+      <NotificationError
+        error={error}
+        setError={setError}
+        errorMessage={errorMessage}
+      />
       <h1 className="my-5 display-3 fw-bold">Sign In</h1>
       <div className="mx-4 mx-md-0">
-        <form action="#" method="POST">
+        <form action="/upload" method="POST">
           <div className="row gy-3 mb-3">
             <div className="col-12">
               <FormInput
@@ -113,7 +121,7 @@ export default function SignInForm() {
           </p>
           <GenericButton
             type="submit"
-            className="btn-warning text-light"
+            className="btn-warning text-light mb-4"
             btnName="Login"
             handler={LoginButtonClicked}
             id="login-btn"

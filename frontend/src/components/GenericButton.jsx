@@ -4,7 +4,7 @@ export default function GenericButton(props) {
   return (
     <button
       type={props.type}
-      className={`btn btn-block mb-4  ${props.className}`}
+      className={`btn btn-block ${props.className}`}
       onClick={props.handler}
       id={props.btnId}
       disabled={props.disabled}

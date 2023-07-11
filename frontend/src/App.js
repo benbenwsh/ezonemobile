@@ -4,6 +4,7 @@ import { SignIn } from "./pages/SignIn";
 import { Register } from "./pages/Register";
 import { Shop } from "./pages/Shop";
 import { ItemDetail } from "./pages/ItemDetail";
+import { Upload } from "./pages/Upload";
 import { Help } from "./pages/Help";
 import { About } from "./pages/About";
 import Navbar from "./components/Navbar";
@@ -19,6 +20,7 @@ export default function App() {
         <Route path="/register" element={<Register />} />
         <Route path="/shop" element={<Shop />} />
         <Route path="/shop/:id" element={<ItemDetail />} />
+        <Route path="/upload" element={<Upload />} />
         <Route path="/help" element={<Help />} />
         <Route path="/about" element={<About />} />
       </Routes>

@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 export default function Navbar() {
   return (
     <nav className="navbar navbar-expand-lg bg-body-tertiary sticky-top">
-      <div className="container-fluid">
+      <div className="container">
         <Link className="navbar-brand" to="/">
           <img
             src="https://fotama.com/storage/images/logo.png?v=e41ce8ee65494ea841e86412513e9035"
