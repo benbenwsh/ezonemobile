@@ -1,14 +1,14 @@
 import { useState, React } from "react";
 import { Link } from "react-router-dom";
-import FormInput from "./FormInput";
-import CheckBox from "./CheckBox";
-import GenericButton from "./GenericButton";
-import { maxLengths } from "../config";
-import NotificationSuccess from "./NotificationSuccess";
-import NotificationError from "./NotificationError";
+import FormInput from "../FormInput";
+import CheckBox from "../CheckBox";
+import GenericButton from "../GenericButton";
+import { maxLengths } from "../../config";
+import NotificationSuccess from "../NotificationSuccess";
+import NotificationError from "../NotificationError";
 import Modal from "../Modal";
-import { logInWithEmailAndPassword } from "../firebase";
-import ValidationRules from "../validation-rules"
+import { logInWithEmailAndPassword } from "../../firebase";
+import ValidationRules from "../../validation-rules"
 import "./SignInForm.css";
 
 export default function SignInForm() {
@@ -81,7 +81,6 @@ export default function SignInForm() {
               type="password"
               placeholder="Password"
               name="password"
-              inputRef={passwordRef}
               onChange={handleInputChange}
               maxLength={maxLengths.password}
             />

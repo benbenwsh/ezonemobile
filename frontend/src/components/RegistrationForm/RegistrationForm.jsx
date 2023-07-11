@@ -7,6 +7,7 @@ import NotificationSuccess from "../NotificationSuccess";
 import NotificationError from "../NotificationError";
 import Modal from "../Modal";
 import ValidationRules from "../../validation-rules";
+import { registerWithEmailAndPassword } from "../../firebase";
 import "./RegistrationForm.css";
 
 export default function RegisterForm() {
