@@ -19,7 +19,9 @@ export default function ImageDropZone() {
   });
 
   const acceptedFileItems = images.map((file) => (
-    <li key={file.path}>{file.path}</li>
+    <li key={file.path}>
+      {file.path} - {file.size} bytes
+    </li>
   ));
 
   return (

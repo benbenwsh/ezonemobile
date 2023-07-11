@@ -1,13 +1,12 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import "./Footer.css";
 
 export default function Footer() {
   let date = new Date();
   let currentYear = date.getFullYear();
   return (
     <>
-      <footer className="py-3 mt-5 footer-bg-color ">
+      <footer className="py-3 mt-5 bg-body-tertiary">
         <ul className="nav justify-content-center border-bottom pb-3 mb-3">
           <li className="nav-item">
             <Link className="nav-link px-2 text-muted" to="/">
