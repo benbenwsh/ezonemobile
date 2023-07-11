@@ -1,10 +1,5 @@
-<<<<<<< HEAD
-import React from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import Carousel from "../components/DisplayItemDetails/Carousel";
-=======
-import {useState, useEffect, useCallback, React} from "react";
-import Carousel from "../components/Carousel";
->>>>>>> refs/remotes/origin/main
 import { useParams } from "react-router-dom";
 import TechnicalDetailsTable from "../components/DisplayItemDetails/TechnicalDetailsTable";
 import ItemDescription from "../components/DisplayItemDetails/ItemDescription";
@@ -20,12 +15,12 @@ export function ItemDetail() {
       if (response.ok) {
         setItem((await response.json())[0]);
       } else {
-        throw new Error('Request failed with status ' + response.status);
+        throw new Error("Request failed with status " + response.status);
       }
     } catch (error) {
-      console.error('Error fetching data: ', error);
+      console.error("Error fetching data: ", error);
     }
-  }, [id, item])
+  }, [id, item]);
 
   // Fetching data from remote MySQL database
   useEffect(() => {
@@ -39,7 +34,12 @@ export function ItemDetail() {
           <Carousel />
         </div>
         <div className="col-12 col-md-6">
-          <ItemDescription id={id} name={item.name} location={item.location} description={item.description}/>
+          <ItemDescription
+            id={id}
+            name={item.name}
+            location={item.location}
+            description={item.description}
+          />
         </div>
       </div>
 
