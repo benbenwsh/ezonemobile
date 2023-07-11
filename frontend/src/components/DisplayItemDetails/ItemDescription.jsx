@@ -4,9 +4,9 @@ import GenericButton from "../GenericButton";
 export default function ItemDescription(props) {
   return (
     <>
-      <h1>Product Name</h1>
-      <p>Location of material</p>
-      <h3>Product description</h3>
+      <h1>{props.name}</h1>
+      <p>{props.location}</p>
+      <h3>{props.description}</h3>
       <p>Item detail {props.id}</p>
       <GenericButton
         btnName="Offer"

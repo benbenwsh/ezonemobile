@@ -62,6 +62,22 @@ app.get('/api/data', (req, res) => {
   });
 });
 
+app.get('/api/item', (req, res) => {
+  console.log(req.query);
+  const { id } = req.query;
+  console.log(id);
+  connection.query(`SELECT * FROM item WHERE id = '${id}'`,
+  (error, result) => {
+    if (error) {
+      console.error('Error executing SELECT:', error);
+      res.status(500).json({ error: 'Internal server error' });
+    } else {
+      res.json(result);
+      console.log(result);
+    }
+  });
+});
+
 function hashEmail(email) {
   const hashedEmail = crypto
     .createHash('sha256')
@@ -98,9 +114,7 @@ app.post('/api/signup', (req, res) => {
     res.status(404).json({ error: 'Invalid Registration' });
   } else {
     connection.query(
-      `
-      INSERT INTO users (first_name, last_name, email, password, country, city, state, address, chk_term, hash) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
-      `,
+      'INSERT INTO users (first_name, last_name, email, password, country, city, state, address, chk_term, hash) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);',
       [fName, lName, validatedEmail, password, country, city, state, address, chkTerm, hashEmail(validatedEmail)],
       (error, results) => {
         if (error) {
