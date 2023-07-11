@@ -63,9 +63,7 @@ app.get('/api/data', (req, res) => {
 });
 
 app.get('/api/item', (req, res) => {
-  console.log(req.query);
   const { id } = req.query;
-  console.log(id);
   connection.query(`SELECT * FROM item WHERE id = '${id}'`,
   (error, result) => {
     if (error) {

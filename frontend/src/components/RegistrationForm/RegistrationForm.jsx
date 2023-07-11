@@ -1,4 +1,4 @@
-import { useRef, React, useState } from "react";
+import { React, useState } from "react";
 import FormInput from "../FormInput";
 import GenericButton from "../GenericButton";
 import { maxLengths } from "../../config";
@@ -33,44 +33,38 @@ export default function RegisterForm() {
 
   const SignUpButtonClicked = async (e) => {
     e.preventDefault();
-
-    const { verifyEmail, ...formValuesToSubmit } = formValues;
     try {
-      const response = await fetch("http://localhost:3001/api/signup", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formValuesToSubmit),
-      });
-
-      if (response.ok) {
-        console.log("Sign up successful");
+      const response = await registerWithEmailAndPassword(
+        formValues.email, 
+        formValues.password, 
+        formValues.fName, 
+        formValues.lName, 
+        formValues.country, 
+        formValues.city,
+        formValues.state,
+        formValues.address,
+        formValues.chkTerm
+      )
+      console.log(response);
+      if (response.success) {
         setSuccess(true);
       } else {
-        console.error("Sign up failed");
-        const errorData = await response.json();
-        setErrorMessage(errorData.error);
+        setErrorMessage(response.message);
         setError(true);
       }
-    } catch (error) {
-      console.error("Error occurred during sign up", error);
+    } catch (err) {
+      setErrorMessage(err);
+      setError(true);
     }
   };
 
   // disable login btn when input validation is not meet
   // handle all the form input expect country and chkTerm
-
   const handleStringInputChange = (e) => {
     const { name, value } = e.target;
     setFormValues({ ...formValues, [name]: value });
   };
 
-  // // handle countrySelector
-  // const [country, setCountry] = useState("Country");
-  // const handleCountrySelectorChange = (e) => {
-  //   setCountry(e.target.value);
-  // };
 
   // handle the check box
   const handleChkTerm = (e) => {

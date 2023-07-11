@@ -1,75 +1,53 @@
-import { useRef, useState, React } from "react";
+import { useState, React } from "react";
 import { Link } from "react-router-dom";
-import FormInput from "../FormInput";
-import CheckBox from "../CheckBox";
-import GenericButton from "../GenericButton";
-import { maxLengths } from "../../config";
-import NotificationSuccess from "../NotificationSuccess";
-import NotificationError from "../NotificationError";
+import FormInput from "./FormInput";
+import CheckBox from "./CheckBox";
+import GenericButton from "./GenericButton";
+import { maxLengths } from "../config";
+import NotificationSuccess from "./NotificationSuccess";
+import NotificationError from "./NotificationError";
 import Modal from "../Modal";
+import { logInWithEmailAndPassword } from "../firebase";
+import ValidationRules from "../validation-rules"
 import "./SignInForm.css";
 
 export default function SignInForm() {
-  const emailRef = useRef(null);
-  const passwordRef = useRef(null);
+  const [formValues, setFormValues] = useState({
+    email: "",
+    password: "",
+  });
 
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
 
   const LoginButtonClicked = async (e) => {
-    // e.preventDefault();
+    e.preventDefault();
 
-    const email = emailRef.current.value;
-    const password = passwordRef.current.value;
-
-    // Client-side validation
-
-    // Server-side validation
     try {
-      const response = await fetch("http://localhost:3001/api/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ email, password }),
-      });
-
-      if (response.ok) {
-        console.log("Login successful");
+      const response = await logInWithEmailAndPassword(
+        formValues.email, 
+        formValues.password, 
+      )
+      if (response.success) {
         setSuccess(true);
       } else {
-        const errorData = await response.json();
-        setErrorMessage(errorData.error);
+        setErrorMessage(response.message);
         setError(true);
       }
-    } catch (error) {
-      console.error("Error occurred during login: ", error);
+    } catch (err) {
+      setErrorMessage(err);
+      setError(true);
     }
   };
-
-  // disable login btn when email and password validation is not meet
-  const [formValues, setFormValues] = useState({
-    email: "",
-    password: "",
-  });
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormValues({ ...formValues, [name]: value });
   };
 
-  const isEmailValid = (email) => {
-    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailPattern.test(email);
-  };
-
-  const isPasswordValid = (password) => {
-    return password.length >= 8 && password.length <= 128;
-  };
-
   const isDisabled = !(
-    isEmailValid(formValues.email) && isPasswordValid(formValues.password)
+    ValidationRules.isEmailValid(formValues.email) && ValidationRules.isPasswordValid(formValues.password)
   );
 
   return (
@@ -92,7 +70,6 @@ export default function SignInForm() {
               type="email"
               placeholder="Email"
               name="email"
-              inputRef={emailRef}
               onChange={handleInputChange}
               maxLength={maxLengths.email}
             />
