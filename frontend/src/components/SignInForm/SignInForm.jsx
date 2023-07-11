@@ -85,55 +85,53 @@ export default function SignInForm() {
         errorMessage={errorMessage}
       />
       <h1 className="my-5 display-3 fw-bold">Sign In</h1>
-      <div className="mx-4 mx-md-0">
-        <form action="/upload" method="POST">
-          <div className="row gy-3 mb-3">
-            <div className="col-12">
-              <FormInput
-                type="email"
-                placeholder="Email"
-                name="email"
-                inputRef={emailRef}
-                onChange={handleInputChange}
-                maxLength={maxLengths.email}
-              />
-            </div>
-          </div>
-          <div className="row gy-3 mb-3">
-            <div className="col-12">
-              <FormInput
-                type="password"
-                placeholder="Password"
-                name="password"
-                inputRef={passwordRef}
-                onChange={handleInputChange}
-                maxLength={maxLengths.password}
-              />
-            </div>
-          </div>
-          <CheckBox chkName="rememberLogin" chkMsg="Remember me" />
-          <p>
-            <Modal
-              className="text-body-tertiary text-decoration-none "
-              display="Forgot username or password?"
-              title="Forgot username or password"
-              content="Please contact xxx@gmail.com"
+      <form action="/upload" method="POST">
+        <div className="row gy-3 mb-3">
+          <div className="col-12">
+            <FormInput
+              type="email"
+              placeholder="Email"
+              name="email"
+              inputRef={emailRef}
+              onChange={handleInputChange}
+              maxLength={maxLengths.email}
             />
-          </p>
-          <GenericButton
-            type="submit"
-            className="btn-warning text-light mb-4"
-            btnName="Login"
-            handler={LoginButtonClicked}
-            id="login-btn"
-            disabled={isDisabled}
+          </div>
+        </div>
+        <div className="row gy-3 mb-3">
+          <div className="col-12">
+            <FormInput
+              type="password"
+              placeholder="Password"
+              name="password"
+              inputRef={passwordRef}
+              onChange={handleInputChange}
+              maxLength={maxLengths.password}
+            />
+          </div>
+        </div>
+        <CheckBox chkName="rememberLogin" chkMsg="Remember me" />
+        <p>
+          <Modal
+            className="text-body-tertiary text-decoration-none "
+            display="Forgot username or password?"
+            title="Forgot username or password"
+            content="Please contact xxx@gmail.com"
           />
-        </form>
-        <span>Don't have an account? </span>
-        <Link to="/register" className="text-decoration-none">
-          Sign up
-        </Link>
-      </div>
+        </p>
+        <GenericButton
+          type="submit"
+          className="btn-warning text-light mb-4"
+          btnName="Login"
+          handler={LoginButtonClicked}
+          id="login-btn"
+          disabled={isDisabled}
+        />
+      </form>
+      <span>Don't have an account? </span>
+      <Link to="/register" className="text-decoration-none">
+        Sign up
+      </Link>
     </div>
   );
 }
