@@ -2,6 +2,7 @@
 import { initializeApp } from "firebase/app";
 import { GoogleAuthProvider, getAuth, signInWithPopup, signInWithEmailAndPassword, createUserWithEmailAndPassword, sendPasswordResetEmail, signOut} from "firebase/auth";
 import { getFirestore, query, getDocs, collection, where, addDoc} from "firebase/firestore";
+import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 
 import { getAnalytics } from "firebase/analytics";
 // TODO: Add SDKs for Firebase products that you want to use
@@ -56,4 +57,40 @@ const logInWithEmailAndPassword = async (email, password) => {
   return {success: true}
 };
 
-export { app, auth, db, analytics, registerWithEmailAndPassword, logInWithEmailAndPassword};
+const fetchItems = async () => {
+  try {
+    const querySnapshot = await getDocs(collection(db, "items"));
+    const fetchedItems = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data()}));
+    return fetchedItems;
+  } catch (err) {
+    console.error("Error is here:" + err);
+    alert("An error occured while fetching user data")
+  }
+}
+
+const uploadItem = async () => {
+  try {
+    const storage = getStorage();
+
+    const storageRef = ref(storage, 'item1.webp');
+
+    const imageURL = await getDownloadURL(storageRef);
+
+    const itemDoc = {
+      name: 'Genie S80 Manlift',
+      location: 'Hong Kong',
+      price: 2500,
+      imageUrl: imageURL,
+      description: "Genie S80 Manlift.. Estimated Dimension ( L x W x H): 37'x8.21'x8.21'."
+    };
+
+    // Save the image document in Firestore collection
+    const collectionRef = collection(db, 'items');
+    await addDoc(collectionRef, itemDoc);
+  } catch (error) {
+    console.error('Error uploading image:', error);
+  }
+};
+
+
+export { app, auth, db, analytics, registerWithEmailAndPassword, logInWithEmailAndPassword, fetchItems, uploadItem };

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Search from "../components/Search";
 import Item from "../components/Items/Item";
+import { uploadItem, fetchItems } from "../firebase";
 
 export function Shop() {
   const [query, setQuery] = useState("");
@@ -11,12 +12,9 @@ export function Shop() {
 
   const fetchItemsData = async () => {
     try {
-      const response = await fetch("http://localhost:3001/api/data");
-      if (response.ok) {
-        setItems(await response.json());
-      } else {
-        throw new Error("Request failed with status " + response.status);
-      }
+      const response = await fetchItems()
+      setItems(response)
+      console.log(items)
     } catch (error) {
       console.error("Error fetching data: ", error);
     }
@@ -56,7 +54,7 @@ export function Shop() {
                 id={item.id}
                 name={item.name}
                 price={item.price}
-                image={item.image}
+                image={item.imageUrl}
                 description={item.description}
               />
             </div>
