@@ -21,6 +21,7 @@ export function Shop() {
       console.error('Error fetching data: ', error);
     }
   })
+
   // Fetching data from remote MySQL database
   useEffect(() => {
     fetchItemsData();
