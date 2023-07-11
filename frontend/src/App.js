@@ -8,7 +8,7 @@ import { Upload } from "./pages/Upload";
 import { Help } from "./pages/Help";
 import { About } from "./pages/About";
 import Navbar from "./components/Navbar";
-import Footer from "./components/Footer/Footer";
+import Footer from "./components/Footer";
 
 export default function App() {
   return (

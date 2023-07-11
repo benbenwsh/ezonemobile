@@ -1,13 +1,22 @@
-import React from 'react';
-import NotificationError from '../components/NotificationError';
-import NotificationSuccess from '../components/NotificationSuccess';
+import React from "react";
+import Heroes from "../components/Heroes";
+import Features from "../components/features/Features";
+import HotItemImgRight from "../components/HotItemImgRight/HotItemImgRight";
+import HotItemImgLeft from "../components/HotitemImgLeft/HotItemImgLeft";
 
 export function Home() {
   return (
     <>
-      <h1>Home page</h1>
-      <NotificationError />
-      <NotificationSuccess />
+      <Heroes />
+      <Features />
+      <div className="container">
+        <hr class="featurette-divider" />
+        <HotItemImgRight />
+        <hr class="featurette-divider" />
+        <HotItemImgLeft />
+        <hr class="featurette-divider" />
+        <HotItemImgRight />
+      </div>
     </>
   );
 }

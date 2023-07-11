@@ -7,7 +7,7 @@ export default function Search(props) {
   };
 
   return (
-    <div className="container mt-3">
+    <div className="mt-3">
       <form className="d-flex" role="search" onSubmit={handleSubmit}>
         <input
           className="form-control me-2"

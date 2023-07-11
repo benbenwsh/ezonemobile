@@ -10,7 +10,7 @@ export default function Navbar() {
             src="https://fotama.com/storage/images/logo.png?v=e41ce8ee65494ea841e86412513e9035"
             alt="icon"
             style={{ maxHeight: "50px" }}
-          ></img>
+          />
         </Link>
         <button
           className="navbar-toggler"
