@@ -5,6 +5,7 @@ const mysql = require('mysql2');
 // const sql = require('mssql');
 const cors = require('cors');
 const assert = require('assert');
+const crypto = require('crypto');
 
 const validationRules = require('../frontend/src/validation-rules');
 
@@ -61,6 +62,15 @@ app.get('/api/data', (req, res) => {
   });
 });
 
+function hashEmail(email) {
+  const hashedEmail = crypto
+    .createHash('sha256')
+    .update(email.toLowerCase().trim())
+    .digest('hex');
+  
+  return hashedEmail;
+}
+
 app.post('/api/signup', (req, res) => {
   const {
     fName,
@@ -74,9 +84,11 @@ app.post('/api/signup', (req, res) => {
     chkTerm,
   } = req.body;
   // Server-side validation
+  const validatedEmail = email.toLowerCase();
+  
   const isValid = (
     validationRules.isNameValid(fName, lName) &&
-    validationRules.isEmailValid(email) &&
+    validationRules.isEmailValid(validatedEmail) &&
     validationRules.isPasswordValid(password) &&
     validationRules.isCountryValid(country) &&
     validationRules.isAddressValid(city, state, address) &&
@@ -86,8 +98,10 @@ app.post('/api/signup', (req, res) => {
     res.status(404).json({ error: 'Invalid Registration' });
   } else {
     connection.query(
-      'INSERT INTO users (first_name, last_name, email, password, country, city, state, address, chk_term) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)',
-      [fName, lName, email, password, country, city, state, address, chkTerm],
+      `
+      INSERT INTO users (first_name, last_name, email, password, country, city, state, address, chk_term, hash) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+      `,
+      [fName, lName, validatedEmail, password, country, city, state, address, chkTerm, hashEmail(validatedEmail)],
       (error, results) => {
         if (error) {
           console.error('Error inserting user:', error);
