@@ -39,7 +39,7 @@ export default function Footer() {
             </Link>
           </li>
         </ul>
-        <p class="text-center text-muted">
+        <p className="text-center text-muted">
           Copyright © {currentYear} Fotama, Inc
         </p>
       </footer>

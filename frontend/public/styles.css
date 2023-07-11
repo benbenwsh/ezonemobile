@@ -1,43 +1,3 @@
-/* item details style */
-.carousel-inner {
-  max-height: 500px;
-}
-
-/* sign in form style */
-.text-decoration-none {
-  text-decoration: none;
-}
-
-/* register form term */
-.term-label {
-  font-size: 0.8em;
-}
-
-/* product item style */
-.card-img-top {
-  width: 100%;
-  height: 200px;
-  object-fit: cover;
-}
-
-/* upload page style */
-.img-drop-zone {
-  height: 300px;
-  background-color: #f8f9fa;
-  border: 3px dashed #e9ecef;
-  display: flex;
-  justify-content: center;
-  padding: 0 1em;
-  text-align: center;
-}
-
-.img-drop-zone-content {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-}
-
 /* footer style */
 .footer-bg-color {
   background-color: #f8f9fa;
@@ -46,11 +6,11 @@
 @media (min-width: 768px) {
   /* sign in form and registeration form style */
   .form-max-width {
-    max-width: 540px;
+    max-width: 540px !important;
   }
 
   /* item detail page style */
   .item-detail-container-max-width {
-    max-width: 720px;
+    max-width: 720px !important;
   }
 }

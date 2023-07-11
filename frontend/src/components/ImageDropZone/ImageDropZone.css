@@ -1,0 +1,17 @@
+/* upload page style */
+.img-drop-zone {
+  height: 300px;
+  background-color: #f8f9fa;
+  border: 3px dashed #e9ecef;
+  display: flex;
+  justify-content: center;
+  padding: 0 1em;
+  text-align: center;
+}
+
+.img-drop-zone-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}

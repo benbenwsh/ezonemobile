@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Search from "../components/Search";
-import Item from "../components/Item";
+import Item from "../components/Items/Item";
 
 export function Shop() {
   const [query, setQuery] = useState("");
@@ -9,18 +9,18 @@ export function Shop() {
   const [items, setItems] = useState([]);
   const [searchedItems, setSearchedItems] = useState([]);
 
-  const fetchItemsData = (async () => {
+  const fetchItemsData = async () => {
     try {
-      const response = await fetch('http://localhost:3001/api/data');
+      const response = await fetch("http://localhost:3001/api/data");
       if (response.ok) {
         setItems(await response.json());
       } else {
-        throw new Error('Request failed with status ' + response.status);
+        throw new Error("Request failed with status " + response.status);
       }
     } catch (error) {
-      console.error('Error fetching data: ', error);
+      console.error("Error fetching data: ", error);
     }
-  })
+  };
 
   // Fetching data from remote MySQL database
   useEffect(() => {
@@ -29,14 +29,19 @@ export function Shop() {
 
   // Filtering data
   useEffect(() => {
-    setSearchedItems(items.filter((item) => {
-      return searchParam.some((newItem) => {
-        return (
-          item[newItem].toString().toLowerCase().indexOf(query.toLowerCase()) > -1
-        );
-      });
-    }));
-  }, [items, query, searchParam])
+    setSearchedItems(
+      items.filter((item) => {
+        return searchParam.some((newItem) => {
+          return (
+            item[newItem]
+              .toString()
+              .toLowerCase()
+              .indexOf(query.toLowerCase()) > -1
+          );
+        });
+      })
+    );
+  }, [items, query, searchParam]);
 
   return (
     <div className="container">

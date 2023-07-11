@@ -12,7 +12,7 @@ export default function CheckBox(props) {
       />
       <label
         className={`form-check-label ${props.className}`}
-        for={props.chkName}
+        htmlFor={props.chkName}
       >
         {props.chkMsg}
       </label>

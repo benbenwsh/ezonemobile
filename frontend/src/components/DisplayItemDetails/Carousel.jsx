@@ -1,4 +1,5 @@
 import React from "react";
+import "./ItemDetails.css";
 
 export default function CarouselItem() {
   return (

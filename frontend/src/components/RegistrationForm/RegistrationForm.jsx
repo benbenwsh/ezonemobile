@@ -1,12 +1,13 @@
 import { useRef, React, useState } from "react";
-import FormInput from "./FormInput";
-import GenericButton from "./GenericButton";
-import { maxLengths } from "../config";
+import FormInput from "../FormInput";
+import GenericButton from "../GenericButton";
+import { maxLengths } from "../../config";
 import CountrySelector from "./CountrySelector";
-import NotificationSuccess from "./NotificationSuccess";
-import NotificationError from "./NotificationError";
-import Modal from "./Modal";
-import ValidationRules from "../validation-rules"
+import NotificationSuccess from "../NotificationSuccess";
+import NotificationError from "../NotificationError";
+import Modal from "../Modal";
+import ValidationRules from "../../validation-rules";
+import "./RegistrationForm.css";
 
 export default function RegisterForm() {
   const [formValues, setFormValues] = useState({
@@ -19,7 +20,7 @@ export default function RegisterForm() {
     city: "",
     state: "",
     address: "",
-    chkTerm: false
+    chkTerm: false,
   });
 
   const [success, setSuccess] = useState(false);
@@ -46,13 +47,11 @@ export default function RegisterForm() {
       if (response.ok) {
         console.log("Sign up successful");
         setSuccess(true);
-
       } else {
         console.error("Sign up failed");
         const errorData = await response.json();
         setErrorMessage(errorData.error);
         setError(true);
-
       }
     } catch (error) {
       console.error("Error occurred during sign up", error);
@@ -75,23 +74,38 @@ export default function RegisterForm() {
 
   // handle the check box
   const handleChkTerm = (e) => {
-    setFormValues({ ...formValues, chkTerm: !formValues.chkTerm});
+    setFormValues({ ...formValues, chkTerm: !formValues.chkTerm });
   };
 
   const isDisabled = !(
     ValidationRules.isNameValid(formValues.fName, formValues.lName) &&
     ValidationRules.isEmailValid(formValues.email) &&
-    ValidationRules.isVerifyEmailValid(formValues.email, formValues.verifyEmail) && 
+    ValidationRules.isVerifyEmailValid(
+      formValues.email,
+      formValues.verifyEmail
+    ) &&
     ValidationRules.isPasswordValid(formValues.password) &&
     ValidationRules.isCountryValid(formValues.country) &&
-    ValidationRules.isAddressValid(formValues.city, formValues.state, formValues.address) &&
+    ValidationRules.isAddressValid(
+      formValues.city,
+      formValues.state,
+      formValues.address
+    ) &&
     ValidationRules.isTermChecked(formValues.chkTerm)
   );
 
   return (
     <>
-      <NotificationSuccess success={success} setSuccess={setSuccess} successMessage="Sign Up Successful!"/>
-      <NotificationError error={error} setError={setError} errorMessage={errorMessage}/>
+      <NotificationSuccess
+        success={success}
+        setSuccess={setSuccess}
+        successMessage="Sign Up Successful!"
+      />
+      <NotificationError
+        error={error}
+        setError={setError}
+        errorMessage={errorMessage}
+      />
       <div className="container text-center form-max-width">
         <h1 className="mt-5 mb-4 display-3 fw-bold">
           The best offer <br />
@@ -200,7 +214,7 @@ export default function RegisterForm() {
               />
               <label
                 className="form-check-label text-body-tertiary term-label"
-                for="term"
+                htmlFor="term"
               >
                 By logging in, you agree to the{" "}
                 <Modal

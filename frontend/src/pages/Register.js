@@ -1,6 +1,6 @@
 import React from "react";
-import RegisterForm from "../components/RegisterForm";
+import RegistrationForm from "../components/RegistrationForm//RegistrationForm";
 
 export function Register() {
-  return <RegisterForm />;
+  return <RegistrationForm />;
 }

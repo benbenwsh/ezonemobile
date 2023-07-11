@@ -5,8 +5,8 @@ export default function CountrySelector(props) {
   const options = useMemo(() => countryList().getData(), []);
 
   return (
-    <select name="country" class="form-select" onChange={props.onChange}>
-      <option selected>Country</option>
+    <select name="country" className="form-select" onChange={props.onChange}>
+      <option defaultValue="Country">Country</option>
       {options.map((country) => (
         <option key={country.code} value={country.code}>
           {country.label}

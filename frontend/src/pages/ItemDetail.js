@@ -1,8 +1,8 @@
 import React from "react";
-import Carousel from "../components/Carousel";
+import Carousel from "../components/DisplayItemDetails/Carousel";
 import { useParams } from "react-router-dom";
-import TechnicalDetailsTable from "../components/TechnicalDetailsTable";
-import ItemDescription from "../components/ItemDescription";
+import TechnicalDetailsTable from "../components/DisplayItemDetails/TechnicalDetailsTable";
+import ItemDescription from "../components/DisplayItemDetails/ItemDescription";
 
 export function ItemDetail() {
   const { id } = useParams();

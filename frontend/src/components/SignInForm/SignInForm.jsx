@@ -1,12 +1,13 @@
 import { useRef, useState, React } from "react";
 import { Link } from "react-router-dom";
-import FormInput from "./FormInput";
-import CheckBox from "./CheckBox";
-import GenericButton from "./GenericButton";
-import { maxLengths } from "../config";
-import NotificationSuccess from "./NotificationSuccess";
-import NotificationError from "./NotificationError";
-import Modal from "../components/Modal";
+import FormInput from "../FormInput";
+import CheckBox from "../CheckBox";
+import GenericButton from "../GenericButton";
+import { maxLengths } from "../../config";
+import NotificationSuccess from "../NotificationSuccess";
+import NotificationError from "../NotificationError";
+import Modal from "../Modal";
+import "./SignInForm.css";
 
 export default function SignInForm() {
   const emailRef = useRef(null);

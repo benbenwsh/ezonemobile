@@ -1,5 +1,5 @@
 import React from "react";
-import GenericButton from "./GenericButton";
+import GenericButton from "../GenericButton";
 
 export default function ItemDescription(props) {
   return (

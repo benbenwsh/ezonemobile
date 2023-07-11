@@ -1,5 +1,5 @@
 import React from "react";
-import ImageDropZone from "../components/ImageDropZone";
+import ImageDropZone from "../components/ImageDropZone/ImageDropZone";
 
 export function Upload() {
   return (
