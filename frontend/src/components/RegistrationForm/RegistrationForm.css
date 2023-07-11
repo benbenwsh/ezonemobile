@@ -1,3 +1,10 @@
 .term-label {
   font-size: 0.8em;
 }
+
+@media (min-width: 768px) {
+  /* sign in form and registeration form style */
+  .form-max-width {
+    max-width: 540px !important;
+  }
+}

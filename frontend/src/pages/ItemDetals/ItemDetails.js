@@ -1,10 +1,11 @@
 import React, { useState, useCallback, useEffect } from "react";
-import Carousel from "../components/DisplayItemDetails/Carousel";
+import Carousel from "../../components/DisplayItemDetails/Carousel";
 import { useParams } from "react-router-dom";
-import TechnicalDetailsTable from "../components/DisplayItemDetails/TechnicalDetailsTable";
-import ItemDescription from "../components/DisplayItemDetails/ItemDescription";
+import TechnicalDetailsTable from "../../components/DisplayItemDetails/TechnicalDetailsTable";
+import ItemDescription from "../../components/DisplayItemDetails/ItemDescription";
+import "./ItemDetails.css";
 
-export function ItemDetail() {
+export function ItemDetails() {
   const { id } = useParams();
 
   const [item, setItem] = useState({});

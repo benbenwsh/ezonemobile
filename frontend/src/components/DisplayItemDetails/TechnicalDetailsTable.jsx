@@ -2,7 +2,7 @@ import React from "react";
 
 export default function TechnicalDetailsTable() {
   return (
-    <table class="table">
+    <table className="table">
       <thead>
         <tr>
           <th scope="col">Technical Details</th>

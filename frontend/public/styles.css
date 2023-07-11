@@ -1,16 +1,1 @@
-/* footer style */
-.footer-bg-color {
-  background-color: #f8f9fa;
-}
 
-@media (min-width: 768px) {
-  /* sign in form and registeration form style */
-  .form-max-width {
-    max-width: 540px !important;
-  }
-
-  /* item detail page style */
-  .item-detail-container-max-width {
-    max-width: 720px !important;
-  }
-}
