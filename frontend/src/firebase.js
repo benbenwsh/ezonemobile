@@ -1,7 +1,7 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
 import { GoogleAuthProvider, getAuth, signInWithPopup, signInWithEmailAndPassword, createUserWithEmailAndPassword, sendPasswordResetEmail, signOut} from "firebase/auth";
-import { getFirestore, query, getDocs, collection, where, addDoc} from "firebase/firestore";
+import { getFirestore, query, doc, getDoc, getDocs, collection, where, addDoc} from "firebase/firestore";
 import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 
 import { getAnalytics } from "firebase/analytics";
@@ -57,6 +57,18 @@ const logInWithEmailAndPassword = async (email, password) => {
   return {success: true}
 };
 
+const fetchItem = async (docId) => {
+  try {
+    console.log("hi");
+    const querySnapshot = await getDoc(doc(db, 'items', docId))
+    console.log(querySnapshot.data());
+    return querySnapshot.data();
+  } catch (err) {
+    console.error("Error is here:" + err);
+    alert("An error occured while fetching user data")
+  }
+}
+
 const fetchItems = async () => {
   try {
     const querySnapshot = await getDocs(collection(db, "items"));
@@ -92,5 +104,4 @@ const uploadItem = async () => {
   }
 };
 
-
-export { app, auth, db, analytics, registerWithEmailAndPassword, logInWithEmailAndPassword, fetchItems, uploadItem };
+export { app, auth, db, analytics, registerWithEmailAndPassword, logInWithEmailAndPassword, fetchItem, fetchItems, uploadItem };

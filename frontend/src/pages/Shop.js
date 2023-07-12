@@ -14,7 +14,6 @@ export function Shop() {
     try {
       const response = await fetchItems()
       setItems(response)
-      console.log(items)
     } catch (error) {
       console.error("Error fetching data: ", error);
     }
