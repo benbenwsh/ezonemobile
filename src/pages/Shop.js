@@ -45,9 +45,9 @@ export function Shop() {
       <Search setQuery={setQuery} />
       <div className="row gy-3 mt-3">
         {/* get the fake data from items.js */}
-        {searchedItems.map((item) => {
+        {searchedItems.map((item, index) => {
           return (
-            <div className="col-12 col-sm-6 col-lg-3">
+            <div className="col-12 col-sm-6 col-lg-3" key={index}>
               <Item
                 key={item.id}
                 id={item.id}

@@ -3,14 +3,14 @@ import FormInput from "../FormInput";
 import GenericButton from "../GenericButton";
 import { maxLengths } from "../../config";
 import CountrySelector from "./CountrySelector";
-import NotificationSuccess from "../NotificationSuccess";
 import NotificationError from "../NotificationError";
 import Modal from "../Modal";
 import ValidationRules from "../../validation-rules";
 import { registerWithEmailAndPassword } from "../../firebase";
 import "./RegistrationForm.css";
 
-export default function RegisterForm() {
+export default function RegisterForm(props) {
+  
   const [formValues, setFormValues] = useState({
     fName: "",
     lName: "",
@@ -24,7 +24,6 @@ export default function RegisterForm() {
     chkTerm: false,
   });
 
-  const [success, setSuccess] = useState(false);
   const [error, setError] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
 
@@ -48,7 +47,7 @@ export default function RegisterForm() {
       )
       console.log(response);
       if (response.success) {
-        setSuccess(true);
+        props.setIsSignedIn(true);
       } else {
         setErrorMessage(response.message);
         setError(true);
@@ -91,11 +90,6 @@ export default function RegisterForm() {
 
   return (
     <>
-      <NotificationSuccess
-        success={success}
-        setSuccess={setSuccess}
-        successMessage="Sign Up Successful!"
-      />
       <NotificationError
         error={error}
         setError={setError}

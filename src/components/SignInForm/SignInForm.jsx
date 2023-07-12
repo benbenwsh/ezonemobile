@@ -4,20 +4,19 @@ import FormInput from "../FormInput";
 import CheckBox from "../CheckBox";
 import GenericButton from "../GenericButton";
 import { maxLengths } from "../../config";
-import NotificationSuccess from "../NotificationSuccess";
 import NotificationError from "../NotificationError";
 import Modal from "../Modal";
 import { logInWithEmailAndPassword } from "../../firebase";
 import ValidationRules from "../../validation-rules"
 import "./SignInForm.css";
 
-export default function SignInForm() {
+export default function SignInForm(props) {
+
   const [formValues, setFormValues] = useState({
     email: "",
     password: "",
   });
 
-  const [success, setSuccess] = useState(false);
   const [error, setError] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
 
@@ -30,7 +29,7 @@ export default function SignInForm() {
         formValues.password, 
       )
       if (response.success) {
-        setSuccess(true);
+        props.setIsSignedIn(true);
       } else {
         setErrorMessage(response.message);
         setError(true);
@@ -52,11 +51,6 @@ export default function SignInForm() {
 
   return (
     <div className="container text-center form-max-width">
-      <NotificationSuccess
-        success={success}
-        setSuccess={setSuccess}
-        successMessage="Sign In Successful!"
-      />
       <NotificationError
         error={error}
         setError={setError}

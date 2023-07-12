@@ -10,11 +10,11 @@ export function Home() {
       <Heroes />
       <Features />
       <div className="container">
-        <hr class="featurette-divider" />
+        <hr className="featurette-divider" />
         <HotItemImgRight />
-        <hr class="featurette-divider" />
+        <hr className="featurette-divider" />
         <HotItemImgLeft />
-        <hr class="featurette-divider" />
+        <hr className="featurette-divider" />
         <HotItemImgRight />
       </div>
     </>
