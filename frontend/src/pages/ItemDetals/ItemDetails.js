@@ -3,7 +3,6 @@ import Carousel from "../../components/DisplayItemDetails/Carousel";
 import { useParams } from "react-router-dom";
 import TechnicalDetailsTable from "../../components/DisplayItemDetails/TechnicalDetailsTable";
 import ItemDescription from "../../components/DisplayItemDetails/ItemDescription";
-import { fetchItem } from "../../firebase";
 import "./ItemDetails.css";
 
 export function ItemDetails() {
@@ -13,13 +12,13 @@ export function ItemDetails() {
 
 
   const fetchItemData = async () => {
-    try {
-      const response = await fetchItem(id)
-      setItem(response)
-      console.log(item)
-    } catch (error) {
-      console.error("Error fetching data: ", error);
-    }
+    // try {
+    //   const response = await fetchItem(id)
+    //   setItem(response)
+    //   console.log(item)
+    // } catch (error) {
+    //   console.error("Error fetching data: ", error);
+    // }
   };
 
   // Fetching data from remote MySQL database

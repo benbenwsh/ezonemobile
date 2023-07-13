@@ -6,7 +6,6 @@ import CountrySelector from "./CountrySelector";
 import NotificationError from "../NotificationError";
 import Modal from "../Modal";
 import ValidationRules from "../../validation-rules";
-import { registerWithEmailAndPassword } from "../../firebase";
 import "./RegistrationForm.css";
 
 export default function RegisterForm(props) {
@@ -32,29 +31,29 @@ export default function RegisterForm(props) {
 
   const SignUpButtonClicked = async (e) => {
     e.preventDefault();
-    try {
-      const response = await registerWithEmailAndPassword(
-        formValues.email,
-        formValues.password,
-        formValues.fName,
-        formValues.lName,
-        formValues.country,
-        formValues.city,
-        formValues.state,
-        formValues.address,
-        formValues.chkTerm
-      );
-      console.log(response);
-      if (response.success) {
-        props.setIsSignedIn(true);
-      } else {
-        setErrorMessage(response.message);
-        setError(true);
-      }
-    } catch (err) {
-      setErrorMessage(err);
-      setError(true);
-    }
+    // try {
+    //   const response = await registerWithEmailAndPassword(
+    //     formValues.email,
+    //     formValues.password,
+    //     formValues.fName,
+    //     formValues.lName,
+    //     formValues.country,
+    //     formValues.city,
+    //     formValues.state,
+    //     formValues.address,
+    //     formValues.chkTerm
+    //   );
+    //   console.log(response);
+    //   if (response.success) {
+    //     props.setIsSignedIn(true);
+    //   } else {
+    //     setErrorMessage(response.message);
+    //     setError(true);
+    //   }
+    // } catch (err) {
+    //   setErrorMessage(err);
+    //   setError(true);
+    // }
   };
 
   // disable login btn when input validation is not meet

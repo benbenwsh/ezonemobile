@@ -6,7 +6,6 @@ import GenericButton from "../GenericButton";
 import { maxLengths } from "../../config";
 import NotificationError from "../NotificationError";
 import Modal from "../Modal";
-import { logInWithEmailAndPassword } from "../../firebase";
 import ValidationRules from "../../validation-rules";
 import "./SignInForm.css";
 
@@ -22,21 +21,21 @@ export default function SignInForm(props) {
   const LoginButtonClicked = async (e) => {
     e.preventDefault();
 
-    try {
-      const response = await logInWithEmailAndPassword(
-        formValues.email,
-        formValues.password
-      );
-      if (response.success) {
-        props.setIsSignedIn(true);
-      } else {
-        setErrorMessage(response.message);
-        setError(true);
-      }
-    } catch (err) {
-      setErrorMessage(err);
-      setError(true);
-    }
+    // try {
+    //   const response = await logInWithEmailAndPassword(
+    //     formValues.email,
+    //     formValues.password
+    //   );
+    //   if (response.success) {
+    //     props.setIsSignedIn(true);
+    //   } else {
+    //     setErrorMessage(response.message);
+    //     setError(true);
+    //   }
+    // } catch (err) {
+    //   setErrorMessage(err);
+    //   setError(true);
+    // }
   };
 
   const handleInputChange = (e) => {

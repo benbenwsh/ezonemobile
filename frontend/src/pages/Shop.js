@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Search from "../components/Search";
 import Item from "../components/Items/Item";
-import { uploadItem, fetchItems } from "../firebase";
 
 export function Shop() {
   const [query, setQuery] = useState("");
