@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Route, Routes, Navigate } from "react-router-dom";
-import { Home } from "./pages/Home";
+import { Home } from "./pages/About";
 import { SignIn } from "./pages/SignIn";
 import { Register } from "./pages/Register";
 import { Shop } from "./pages/Shop";
@@ -16,23 +16,33 @@ export default function App() {
 
   useEffect(() => {
     console.log(isSignedIn);
-  }, [isSignedIn])
+  }, [isSignedIn]);
+
   return (
     <>
-      <NavigationBar isSignedIn={isSignedIn}/>
+      <NavigationBar isSignedIn={isSignedIn} />
       <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/signin" element={
-          isSignedIn ? 
-          <Navigate to="/shop" /> : 
-          <SignIn setIsSignedIn={setIsSignedIn}/>
-          }/>
-        <Route path="/register" element={
-          isSignedIn ? 
-          <Navigate to="/shop" /> : 
-          <Register setIsSignedIn={setIsSignedIn}/>
-          } />
-        <Route path="/shop" element={<Shop />} />
+        <Route path="/" element={<Shop />} />
+        <Route
+          path="/signin"
+          element={
+            isSignedIn ? (
+              <Navigate to="/" />
+            ) : (
+              <SignIn setIsSignedIn={setIsSignedIn} />
+            )
+          }
+        />
+        <Route
+          path="/register"
+          element={
+            isSignedIn ? (
+              <Navigate to="/" />
+            ) : (
+              <Register setIsSignedIn={setIsSignedIn} />
+            )
+          }
+        />
         <Route path="/shop/:id" element={<ItemDetails />} />
         <Route path="/upload" element={<Upload />} />
         <Route path="/help" element={<Help />} />

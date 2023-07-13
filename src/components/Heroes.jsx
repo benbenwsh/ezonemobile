@@ -18,7 +18,7 @@ export default function Heroes() {
           more recently with desktop publishing software like Aldus PageMaker
           including versions of Lorem Ipsum.
         </p>
-        <div className="d-grid gap-2 d-sm-flex justify-content-sm-center">
+        {/* <div className="d-grid gap-2 d-sm-flex justify-content-sm-center">
           <Link to="/signin">
             <GenericButton
               type="button"
@@ -33,7 +33,7 @@ export default function Heroes() {
               className="btn-outline-secondary btn-lg px-4"
             />
           </Link>
-        </div>
+        </div> */}
       </div>
     </div>
   );

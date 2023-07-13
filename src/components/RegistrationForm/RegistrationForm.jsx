@@ -10,7 +10,6 @@ import { registerWithEmailAndPassword } from "../../firebase";
 import "./RegistrationForm.css";
 
 export default function RegisterForm(props) {
-  
   const [formValues, setFormValues] = useState({
     fName: "",
     lName: "",
@@ -35,16 +34,16 @@ export default function RegisterForm(props) {
     e.preventDefault();
     try {
       const response = await registerWithEmailAndPassword(
-        formValues.email, 
-        formValues.password, 
-        formValues.fName, 
-        formValues.lName, 
-        formValues.country, 
+        formValues.email,
+        formValues.password,
+        formValues.fName,
+        formValues.lName,
+        formValues.country,
         formValues.city,
         formValues.state,
         formValues.address,
         formValues.chkTerm
-      )
+      );
       console.log(response);
       if (response.success) {
         props.setIsSignedIn(true);
@@ -64,7 +63,6 @@ export default function RegisterForm(props) {
     const { name, value } = e.target;
     setFormValues({ ...formValues, [name]: value });
   };
-
 
   // handle the check box
   const handleChkTerm = (e) => {
@@ -103,7 +101,7 @@ export default function RegisterForm(props) {
         <h5 className="text-body-secondary mb-5" style={descriptionStyle}>
           Sign up to see more product information
         </h5>
-        <form action="#" method="POST">
+        <form action="/" method="POST">
           <div className="row gy-3">
             <div className="col-12 col-sm-6">
               <FormInput

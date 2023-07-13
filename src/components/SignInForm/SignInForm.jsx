@@ -7,11 +7,10 @@ import { maxLengths } from "../../config";
 import NotificationError from "../NotificationError";
 import Modal from "../Modal";
 import { logInWithEmailAndPassword } from "../../firebase";
-import ValidationRules from "../../validation-rules"
+import ValidationRules from "../../validation-rules";
 import "./SignInForm.css";
 
 export default function SignInForm(props) {
-
   const [formValues, setFormValues] = useState({
     email: "",
     password: "",
@@ -25,9 +24,9 @@ export default function SignInForm(props) {
 
     try {
       const response = await logInWithEmailAndPassword(
-        formValues.email, 
-        formValues.password, 
-      )
+        formValues.email,
+        formValues.password
+      );
       if (response.success) {
         props.setIsSignedIn(true);
       } else {
@@ -46,7 +45,8 @@ export default function SignInForm(props) {
   };
 
   const isDisabled = !(
-    ValidationRules.isEmailValid(formValues.email) && ValidationRules.isPasswordValid(formValues.password)
+    ValidationRules.isEmailValid(formValues.email) &&
+    ValidationRules.isPasswordValid(formValues.password)
   );
 
   return (
@@ -57,7 +57,7 @@ export default function SignInForm(props) {
         errorMessage={errorMessage}
       />
       <h1 className="my-5 display-3 fw-bold">Sign In</h1>
-      <form action="/upload" method="POST">
+      <form action="/" method="POST">
         <div className="row gy-3 mb-3">
           <div className="col-12">
             <FormInput
