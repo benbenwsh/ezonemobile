@@ -12,8 +12,13 @@ export function Shop() {
 
   const fetchItemsData = async () => {
     try {
-      const response = await fetchItems()
-      setItems(response)
+      const response = await fetch('http://10.100.1.205:3001/api/data');
+      if (response.ok) {
+        const responseJson = await response.json()
+        setItems(responseJson.recordset);
+      } else {
+        throw new Error('Request failed with status ' + response.status);
+      }
     } catch (error) {
       console.error("Error fetching data: ", error);
     }
