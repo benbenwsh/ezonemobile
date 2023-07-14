@@ -11,7 +11,7 @@ export function Shop() {
 
   const fetchItemsData = async () => {
     try {
-      const response = await fetch('http://10.100.1.205:3001/api/data');
+      const response = await fetch('http://localhost/api/data');
       if (response.ok) {
         const responseJson = await response.json()
         setItems(responseJson.recordset);

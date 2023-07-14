@@ -31,6 +31,11 @@ export default function NavigationBar(props) {
               </Link>
             </Nav.Item>
             <Nav.Item>
+              <Link className="nav-link" to="/shop">
+                Shop
+              </Link>
+            </Nav.Item>
+            <Nav.Item>
               <Link className="nav-link" to="/help">
                 Help
               </Link>
