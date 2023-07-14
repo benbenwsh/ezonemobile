@@ -21,6 +21,30 @@ export default function SignInForm(props) {
   const LoginButtonClicked = async (e) => {
     e.preventDefault();
 
+    try {
+      // POST request because email and password are sensitive info
+      const response = await fetch("http://localhost:3001/api/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formValues),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        localStorage.setItem('token', data.token);
+        props.setIsSignedIn(true);
+      } else {
+        console.error("Sign in failed");
+        setErrorMessage(data.error);
+        setError(true);
+
+      }
+    } catch (error) {
+      console.error("Error occurred during sign up", error);
+    }
     // try {
     //   const response = await logInWithEmailAndPassword(
     //     formValues.email,

@@ -6,6 +6,7 @@ import CountrySelector from "./CountrySelector";
 import NotificationError from "../NotificationError";
 import Modal from "../Modal";
 import ValidationRules from "../../validation-rules";
+import jwt_decode from 'jwt-decode';
 import "./RegistrationForm.css";
 
 export default function RegisterForm(props) {
@@ -30,30 +31,33 @@ export default function RegisterForm(props) {
   };
 
   const SignUpButtonClicked = async (e) => {
-    e.preventDefault();
-    // try {
-    //   const response = await registerWithEmailAndPassword(
-    //     formValues.email,
-    //     formValues.password,
-    //     formValues.fName,
-    //     formValues.lName,
-    //     formValues.country,
-    //     formValues.city,
-    //     formValues.state,
-    //     formValues.address,
-    //     formValues.chkTerm
-    //   );
-    //   console.log(response);
-    //   if (response.success) {
-    //     props.setIsSignedIn(true);
-    //   } else {
-    //     setErrorMessage(response.message);
-    //     setError(true);
-    //   }
-    // } catch (err) {
-    //   setErrorMessage(err);
-    //   setError(true);
-    // }
+    e.preventDefault();  
+    
+    try {
+      const { verifyEmail, ...formValuesToSubmit } = formValues;
+      console.log(formValuesToSubmit);
+      const response = await fetch("http://localhost:3001/api/signup", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formValuesToSubmit),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        localStorage.setItem('token', data.token);
+        props.setIsSignedIn(true);
+      } else {
+        console.error("Sign up failed");
+        setErrorMessage(data.error);
+        setError(true);
+
+      }
+    } catch (error) {
+      console.error("Error occurred during sign up", error);
+    }
   };
 
   // disable login btn when input validation is not meet

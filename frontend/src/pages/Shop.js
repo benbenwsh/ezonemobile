@@ -11,9 +11,9 @@ export function Shop() {
 
   const fetchItemsData = async () => {
     try {
-      const response = await fetch('http://localhost/api/data');
+      const response = await fetch('http://localhost:3001/api/data');
       if (response.ok) {
-        const responseJson = await response.json()
+        const responseJson = await response.json();
         setItems(responseJson.recordset);
       } else {
         throw new Error('Request failed with status ' + response.status);
