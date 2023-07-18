@@ -10,7 +10,6 @@ export function ItemDetails() {
 
   const [item, setItem] = useState({});
 
-
   const fetchItemData = async () => {
     try {
       const response = await fetch(`http://localhost:3001/api/item?id=${id}`);
@@ -18,7 +17,7 @@ export function ItemDetails() {
         const responseJson = await response.json();
         setItem(responseJson.recordset[0]);
       } else {
-        throw new Error('Request failed with status ' + response.status);
+        throw new Error("Request failed with status " + response.status);
       }
     } catch (error) {
       console.error("Error fetching data: ", error);
@@ -33,10 +32,10 @@ export function ItemDetails() {
   return (
     <div className="container my-3 item-detail-container-max-width">
       <div className="row gy-3">
-        <div className="col-12 col-md-6">
+        <div className="col-12 col-md-7">
           <Carousel />
         </div>
-        <div className="col-12 col-md-6">
+        <div className="col-12 col-md-5">
           <ItemDescription
             id={id}
             name={item.itemName}
@@ -45,13 +44,11 @@ export function ItemDetails() {
           />
         </div>
       </div>
+      <hr />
 
       {/* table */}
       <div className="row gy-3">
-        <div className="col-12 col-md-6">
-          <TechnicalDetailsTable />
-        </div>
-        <div className="col-12 col-md-6">
+        <div className="col-12">
           <TechnicalDetailsTable />
         </div>
       </div>

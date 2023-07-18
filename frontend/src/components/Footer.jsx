@@ -24,11 +24,6 @@ export default function Footer() {
             </Link>
           </li>
           <li className="nav-item">
-            <Link className="nav-link px-2 text-muted" to="/help">
-              Help
-            </Link>
-          </li>
-          <li className="nav-item">
             <Link className="nav-link px-2 text-muted" to="/about">
               About
             </Link>

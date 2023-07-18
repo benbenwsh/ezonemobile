@@ -1,32 +1,37 @@
 import React from "react";
 
-export default function TechnicalDetailsTable() {
+export default function TechnicalDetailsTable(props) {
   return (
-    <table className="table">
-      <thead>
-        <tr>
-          <th scope="col">Technical Details</th>
-          <th scope="col"></th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>Make/ Brand</td>
-          <td>Make/ Brand</td>
-        </tr>
-        <tr>
-          <td>Model</td>
-          <td>Model</td>
-        </tr>
-        <tr>
-          <td>Inventory ID</td>
-          <td>Inventory ID</td>
-        </tr>
-        <tr>
-          <td>Condition</td>
-          <td>Condition</td>
-        </tr>
-      </tbody>
-    </table>
+    <>
+      <h2>Product Information</h2>
+      <table className="table">
+        <tbody>
+          <tr>
+            <td>Version</td>
+            <td>JP</td>
+          </tr>
+          <tr>
+            <td>Model</td>
+            <td>6</td>
+          </tr>
+          <tr>
+            <td>Memory</td>
+            <td>16</td>
+          </tr>
+          <tr>
+            <td>Grade</td>
+            <td>A/B/C</td>
+          </tr>
+          <tr>
+            <td>QTY</td>
+            <td>300+</td>
+          </tr>
+          <tr>
+            <td>Colour</td>
+            <td>MIX+</td>
+          </tr>
+        </tbody>
+      </table>
+    </>
   );
 }
