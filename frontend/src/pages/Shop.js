@@ -11,7 +11,7 @@ export function Shop() {
 
   const fetchItemsData = async () => {
     try {
-      const response = await fetch('http://localhost:3001/api/data');
+      const response = await fetch('http://localhost:3005/api/data');
       if (response.ok) {
         const responseJson = await response.json();
         setItems(responseJson.recordset);
@@ -24,24 +24,25 @@ export function Shop() {
   };
 
   // Fetching data from remote MySQL database
-  useEffect(() => {
-    fetchItemsData();
-  }, []);
+  // useEffect(() => {
+  //   fetchItemsData();
+  // }, []);
 
   // Filtering data
   useEffect(() => {
-    setSearchedItems(
-      items.filter((item) => {
-        return searchParam.some((newItem) => {
-          return (
-            item[newItem]
-              .toString()
-              .toLowerCase()
-              .indexOf(query.toLowerCase()) > -1
-          );
-        });
-      })
-    );
+    fetchItemsData();
+    // setSearchedItems(
+    //   items.filter((item) => {
+    //     return searchParam.some((newItem) => {
+    //       return (
+    //         item[newItem]
+    //           .toString()
+    //           .toLowerCase()
+    //           .indexOf(query.toLowerCase()) > -1
+    //       );
+    //     });
+    //   })
+    // );
   }, [items, query, searchParam]);
 
   return (

@@ -6,7 +6,15 @@ const path = require('path');
 const sql = require('mssql');
 const cors = require('cors');
 const assert = require('assert');
+const elasticsearch = require('elasticsearch');
 const secretKey = 'mysecretkey';
+
+// // set up Elasticsearch client
+// const esClient = new Client({ node: 'http://10.100.1.205:9200' });
+var elasticClient = new elasticsearch.Client({
+  host: 'localhost:9200',
+  log: 'trace'
+})
 
 app.use(cors());
 app.use(express.json());
@@ -48,15 +56,59 @@ sql.connect(config, err => {
   }
 });
 
-app.get('/api/data', (req, res) => {
-  sql.query('SELECT * FROM items', (error, result) => {
-    if (error) {
-      console.error('Error executing SELECT:', error);
-      res.status(500).json({ error: 'Internal server error' });
-    } else {
-      res.json(result);
-    }
+async function bulkIndexing(req, res, indexName, docType, payload){
+  const items = await sql.query('SELECT * FROM items');
+  const body = items.recordset.reduce((acc, item) => {
+    acc.push({ index: { _index: 'items'} });
+    acc.push(product);
+    return acc;
+  }, []);
+  await elasticClient.bulk({
+      index: 'items',
+      body: body
   });
+}
+
+
+app.get('/api/data', async (req, res) => {
+  // create Elasticsearch index
+  await elasticClient.indices.create({
+    index: 'items',
+  }).then(function (resp) {
+	        console.log('YAYYYY');
+	        // res.status(200)
+	        // return res.json(resp)
+	    }, function (err) {
+	        console.log(err.message);
+	        // res.status(500)
+	        // return res.json(err)
+	    });
+
+  console.log( 'nihao')
+
+  elasticClient.indices.exists({
+	        index: 'items'
+	    }).then(function (resp) {
+	        console.log(resp);
+	        // res.status(200);
+	        // return res.json(resp)
+	    }, function (err) {
+	        console.log(err.message);
+	        // res.status(500)
+	        // return res.json(err)
+	    });
+    
+  initMapping(req, res, 1, 'text', {} );
+  // console.log('hi')
+  // // const searchKeywords = searchDoc.nouns().data().map((noun) => noun.normal);
+  // sql.query('SELECT * FROM items', (error, result) => {
+  //   if (error) {
+  //     console.error('Error executing SELECT:', error);
+  //     res.status(500).json({ error: 'Internal server error' });
+  //   } else {
+  //     res.json(result);
+  //   }
+  // });
 });
 
 app.post('/api/signup', async (req, res) => {
@@ -143,6 +195,6 @@ app.get('/api/item', (req, res) => {
   });
 });
 
-app.listen(3001, () => {
+app.listen(3005, () => {
   console.log('Server is running on http://localhost:3001');
 });
