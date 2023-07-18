@@ -131,6 +131,18 @@ app.post('/api/login', async (req, res) => {
   // 2b. The password does not match
 });
 
+app.get('/api/item', (req, res) => {
+  console.log('Error executing SELECT:')
+  sql.query(`SELECT * FROM items WHERE id = ${req.query.id}`, (error, result) => {
+    if (error) {
+      console.error('Error executing SELECT:', error);
+      res.status(500).json({ error: 'Internal server error' });
+    } else {
+      res.status(200).json(result);
+    }
+  });
+});
+
 app.listen(3001, () => {
   console.log('Server is running on http://localhost:3001');
 });

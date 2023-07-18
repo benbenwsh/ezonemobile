@@ -12,13 +12,17 @@ export function ItemDetails() {
 
 
   const fetchItemData = async () => {
-    // try {
-    //   const response = await fetchItem(id)
-    //   setItem(response)
-    //   console.log(item)
-    // } catch (error) {
-    //   console.error("Error fetching data: ", error);
-    // }
+    try {
+      const response = await fetch(`http://localhost:3001/api/item?id=${id}`);
+      if (response.ok) {
+        const responseJson = await response.json();
+        setItem(responseJson.recordset[0]);
+      } else {
+        throw new Error('Request failed with status ' + response.status);
+      }
+    } catch (error) {
+      console.error("Error fetching data: ", error);
+    }
   };
 
   // Fetching data from remote MySQL database
@@ -35,7 +39,7 @@ export function ItemDetails() {
         <div className="col-12 col-md-6">
           <ItemDescription
             id={id}
-            name={item.name}
+            name={item.itemName}
             location={item.location}
             description={item.description}
           />

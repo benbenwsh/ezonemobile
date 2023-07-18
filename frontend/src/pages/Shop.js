@@ -4,7 +4,7 @@ import Item from "../components/Items/Item";
 
 export function Shop() {
   const [query, setQuery] = useState("");
-  const [searchParam] = useState(["name", "price", "description"]);
+  const [searchParam] = useState(["itemName", "price", "description"]);
 
   const [items, setItems] = useState([]);
   const [searchedItems, setSearchedItems] = useState([]);
