@@ -6,7 +6,6 @@ import CountrySelector from "./CountrySelector";
 import NotificationError from "../NotificationError";
 import Modal from "../Modal";
 import ValidationRules from "../../validation-rules";
-import jwt_decode from 'jwt-decode';
 import "./RegistrationForm.css";
 
 export default function RegisterForm(props) {
@@ -31,8 +30,8 @@ export default function RegisterForm(props) {
   };
 
   const SignUpButtonClicked = async (e) => {
-    e.preventDefault();  
-    
+    e.preventDefault();
+
     try {
       const { verifyEmail, ...formValuesToSubmit } = formValues;
       console.log(formValuesToSubmit);
@@ -47,13 +46,12 @@ export default function RegisterForm(props) {
       const data = await response.json();
 
       if (response.ok) {
-        localStorage.setItem('token', data.token);
+        localStorage.setItem("token", data.token);
         props.setIsSignedIn(true);
       } else {
         console.error("Sign up failed");
         setErrorMessage(data.error);
         setError(true);
-
       }
     } catch (error) {
       console.error("Error occurred during sign up", error);

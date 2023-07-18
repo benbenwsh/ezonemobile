@@ -1,8 +1,8 @@
 import React from "react";
 import Heroes from "../components/Heroes";
-import Features from "../components/features/Features";
-import HotItemImgRight from "../components/HotItemImgRight/HotItemImgRight";
-import HotItemImgLeft from "../components/HotitemImgLeft/HotItemImgLeft";
+// import Features from "../components/features/Features";
+// import HotItemImgRight from "../components/HotItemImgRight/HotItemImgRight";
+// import HotItemImgLeft from "../components/HotitemImgLeft/HotItemImgLeft";
 
 export function About() {
   return (

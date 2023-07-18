@@ -1,6 +1,4 @@
 import React from "react";
-import { Link } from "react-router-dom";
-import GenericButton from "./GenericButton";
 
 export default function Heroes() {
   return (

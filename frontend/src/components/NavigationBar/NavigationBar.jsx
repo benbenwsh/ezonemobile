@@ -2,7 +2,7 @@ import React from "react";
 import Button from "react-bootstrap/Button";
 import Container from "react-bootstrap/Container";
 import Image from "react-bootstrap/Image";
-import { Nav, Navbar, NavDropdown, Menu } from "react-bootstrap";
+import { Nav, Navbar, NavDropdown } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { PersonCircle } from "react-bootstrap-icons";
 import "./NavigationBar.css";
@@ -28,11 +28,6 @@ export default function NavigationBar(props) {
             <Nav.Item>
               <Link className="nav-link" to="/">
                 Home
-              </Link>
-            </Nav.Item>
-            <Nav.Item>
-              <Link className="nav-link" to="/help">
-                Help
               </Link>
             </Nav.Item>
             <Nav.Item>
