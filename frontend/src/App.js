@@ -6,6 +6,7 @@ import { Shop } from "./pages/Shop";
 import { ItemDetails } from "./pages/ItemDetals/ItemDetails";
 import { Upload } from "./pages/Upload";
 import { About } from "./pages/About";
+import { NotFound } from "./pages/NotFound/NotFound";
 import Footer from "./components/Footer";
 import NavigationBar from "./components/NavigationBar/NavigationBar";
 
@@ -44,6 +45,7 @@ export default function App() {
         <Route path="/shop/:id" element={<ItemDetails />} />
         <Route path="/upload" element={<Upload />} />
         <Route path="/about" element={<About />} />
+        <Route path="*" element={<NotFound />} />
       </Routes>
       <Footer />
     </>
