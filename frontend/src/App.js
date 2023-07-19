@@ -42,7 +42,7 @@ export default function App() {
             )
           }
         />
-        <Route path="/shop/:id" element={<ItemDetails />} />
+        <Route path="/shop/:item_id" element={<ItemDetails />} />
         <Route path="/upload" element={<Upload />} />
         <Route path="/about" element={<About />} />
         <Route path="*" element={<NotFound />} />

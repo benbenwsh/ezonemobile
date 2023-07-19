@@ -6,17 +6,22 @@ import ItemDescription from "../../components/DisplayItemDetails/ItemDescription
 import "./ItemDetails.css";
 
 export function ItemDetails() {
-  const { id } = useParams();
+  const { item_id } = useParams();
 
-  const [item, setItem] = useState({});
+  const [itemCarousel, setitemCarousel] = useState({});
+  const [itemInfo, setItemInfo] = useState({});
   const [isloading, setIsLoading] = useState(true);
 
   const fetchItemData = async () => {
     try {
-      const response = await fetch(`http://localhost:3001/api/item?id=${id}`);
+      const response = await fetch(
+        `http://localhost:3001/api/item?item_id=${item_id}`
+      );
       if (response.ok) {
         const responseJson = await response.json();
-        setItem(responseJson.recordset[0]);
+
+        setitemCarousel(responseJson.recordset);
+        setItemInfo(responseJson.recordset[0]);
         setIsLoading(false);
       } else {
         throw new Error("Request failed with status " + response.status);
@@ -35,10 +40,10 @@ export function ItemDetails() {
     <div className="container my-3 item-detail-container-max-width">
       <div className="row gy-3">
         <div className="col-12 col-md-7">
-          {isloading ? <div>Loading...</div> : <Carousel item={item} />}
+          {isloading ? <div>Loading...</div> : <Carousel item={itemCarousel} />}
         </div>
         <div className="col-12 col-md-5">
-          <ItemDescription item={item} />
+          <ItemDescription item={itemInfo} />
         </div>
       </div>
       <hr />
@@ -46,7 +51,7 @@ export function ItemDetails() {
       {/* table */}
       <div className="row gy-3">
         <div className="col-12">
-          <TechnicalDetailsTable item={item} />
+          <TechnicalDetailsTable item={itemInfo} />
         </div>
       </div>
     </div>
