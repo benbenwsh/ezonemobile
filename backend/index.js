@@ -136,7 +136,7 @@ app.get('/api/data', async (req, res) => {
         console.error('Error executing SELECT:', error);
         res.status(500).json({ error: 'Internal server error' });
       } else {
-        res.json(result);
+        res.json(result.recordset);
       }
     });
   }

@@ -15,7 +15,7 @@ export function Shop() {
       if (response.ok) {
         const responseJson = await response.json();
         console.log(responseJson);
-        setItems(responseJson.recordset);
+        setItems(responseJson);
       } else {
         throw new Error('Request failed with status ' + response.status);
       }
@@ -27,35 +27,35 @@ export function Shop() {
   // Fetching data from remote MySQL database
   useEffect(() => {
     fetchItemsData();
-  }, []);
+  }, [query]);
 
-  // Filtering data
-  useEffect(() => {
-    fetchItemsData();
-    console.log(items);
-    setSearchedItems(items);
+  // // Filtering data
+  // useEffect(() => {
+  //   fetchItemsData();
+  //   console.log(items);
+  //   setSearchedItems(items);
 
-    // setSearchedItems(
-    //   items.filter((item) => {
-    //     console.log(item)
-    //     return searchParam.some((newItem) => {
-    //       return (
-    //         item[newItem]
-    //           .toString()
-    //           .toLowerCase()
-    //           .indexOf(query.toLowerCase()) > -1
-    //       );
-    //     });
-    //   })
-    // );
-  }, [query, searchParam]);
+  //   // setSearchedItems(
+  //   //   items.filter((item) => {
+  //   //     console.log(item)
+  //   //     return searchParam.some((newItem) => {
+  //   //       return (
+  //   //         item[newItem]
+  //   //           .toString()
+  //   //           .toLowerCase()
+  //   //           .indexOf(query.toLowerCase()) > -1
+  //   //       );
+  //   //     });
+  //   //   })
+  //   // );
+  // }, [query, searchParam]);
 
   return (
     <div className="container">
       <Search setQuery={setQuery} />
       <div className="row gy-3 mt-3">
         {/* get the fake data from items.js */}
-        {searchedItems.map((item, index) => {
+        {items.map((item, index) => {
           console.log(item)
           return (
             <div className="col-12 col-sm-6 col-lg-3" key={index}>
