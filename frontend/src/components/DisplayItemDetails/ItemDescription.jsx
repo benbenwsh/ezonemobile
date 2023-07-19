@@ -4,12 +4,9 @@ import GenericButton from "../GenericButton";
 export default function ItemDescription(props) {
   return (
     <>
-      <p>item id: {props.id}</p>
-      <h1>
-        14-inch MacBook Pro Apple M1 Pro Chip with 8-Core CPU and 14-Core CPU -
-        Space Grey
-      </h1>
-      <p>HK$12,309</p>
+      <p>item id: {props.item.id}</p>
+      <h1>{props.item.model}</h1>
+      <p>HK${props.item.price}</p>
       <div className="d-flex align-items-center my-3">
         <svg
           xmlns="http://www.w3.org/2000/svg"

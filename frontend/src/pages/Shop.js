@@ -4,14 +4,14 @@ import Item from "../components/Items/Item";
 
 export function Shop() {
   const [query, setQuery] = useState("");
-  const [searchParam] = useState(["itemName", "price", "description"]);
+  const [searchParam] = useState(["model", "memory", "grade", "quantity", "price"]);
 
   const [items, setItems] = useState([]);
   const [searchedItems, setSearchedItems] = useState([]);
 
   const fetchItemsData = async () => {
     try {
-      const response = await fetch('http://localhost:3005/api/data');
+      const response = await fetch('http://localhost:3001/api/data');
       if (response.ok) {
         const responseJson = await response.json();
         setItems(responseJson.recordset);
@@ -24,25 +24,25 @@ export function Shop() {
   };
 
   // Fetching data from remote MySQL database
-  // useEffect(() => {
-  //   fetchItemsData();
-  // }, []);
+  useEffect(() => {
+    fetchItemsData();
+  }, []);
 
   // Filtering data
   useEffect(() => {
-    fetchItemsData();
-    // setSearchedItems(
-    //   items.filter((item) => {
-    //     return searchParam.some((newItem) => {
-    //       return (
-    //         item[newItem]
-    //           .toString()
-    //           .toLowerCase()
-    //           .indexOf(query.toLowerCase()) > -1
-    //       );
-    //     });
-    //   })
-    // );
+    setSearchedItems(
+      items.filter((item) => {
+        console.log(item)
+        return searchParam.some((newItem) => {
+          return (
+            item[newItem]
+              .toString()
+              .toLowerCase()
+              .indexOf(query.toLowerCase()) > -1
+          );
+        });
+      })
+    );
   }, [items, query, searchParam]);
 
   return (
@@ -54,12 +54,7 @@ export function Shop() {
           return (
             <div className="col-12 col-sm-6 col-lg-3" key={index}>
               <Item
-                key={item.id}
-                id={item.id}
-                name={item.name}
-                price={item.price}
-                image={item.imageUrl}
-                description={item.description}
+                item={item}
               />
             </div>
           );

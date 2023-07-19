@@ -8,27 +8,27 @@ export default function TechnicalDetailsTable(props) {
         <tbody>
           <tr>
             <td>Version</td>
-            <td>JP</td>
+            <td>{props.item.version}</td>
           </tr>
           <tr>
             <td>Model</td>
-            <td>6</td>
+            <td>{props.item.model}</td>
           </tr>
           <tr>
             <td>Memory</td>
-            <td>16</td>
+            <td>{props.item.memory}</td>
           </tr>
           <tr>
             <td>Grade</td>
-            <td>A/B/C</td>
+            <td>{props.item.grade}</td>
           </tr>
           <tr>
             <td>QTY</td>
-            <td>300+</td>
+            <td>{props.item.quantity}</td>
           </tr>
           <tr>
             <td>Colour</td>
-            <td>MIX+</td>
+            <td>{props.item.colour}</td>
           </tr>
         </tbody>
       </table>

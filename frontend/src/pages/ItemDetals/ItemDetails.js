@@ -36,12 +36,7 @@ export function ItemDetails() {
           <Carousel />
         </div>
         <div className="col-12 col-md-5">
-          <ItemDescription
-            id={id}
-            name={item.itemName}
-            location={item.location}
-            description={item.description}
-          />
+          <ItemDescription item={item}/>
         </div>
       </div>
       <hr />
@@ -49,7 +44,7 @@ export function ItemDetails() {
       {/* table */}
       <div className="row gy-3">
         <div className="col-12">
-          <TechnicalDetailsTable />
+          <TechnicalDetailsTable item={item}/>
         </div>
       </div>
     </div>
