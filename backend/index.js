@@ -12,7 +12,6 @@ const secretKey = 'mysecretkey';
 // set up Elasticsearch client
 var elasticClient = new elasticsearch.Client({
   host: 'localhost:9200',
-  // log: 'trace'
 })
 
 app.use(cors());
@@ -57,8 +56,13 @@ sql.connect(config, (err) => {
 
 const mapping = {
   properties: {
-    id: { type: 'integer' },
-    model: {type: 'text'}
+    item_id: {type: 'integer'},
+    model: {type: 'text'},
+    memory: {type: 'text'},
+    version: {type: 'text'},
+    grade: {type: 'text'},
+    colour: {type: 'text'},
+    description: {type: 'text'}
   }
 };
 async function createIndices() {
@@ -81,7 +85,8 @@ async function indexExists() {
 
 async function bulkIndexing(){
   try {
-    const items = await sql.query('SELECT id, model FROM items');
+    const request = new sql.Request();
+    const items = await request.query('SELECT item_id, model, memory, version, grade, colour, description FROM items');
     const body = items.recordset.reduce((acc, item) => {
       acc.push({ index: { _index: 'items'} });
       acc.push(item);
@@ -92,8 +97,6 @@ async function bulkIndexing(){
         index: 'items',
         body: body
     });
-    const count = await elasticClient.count({ index: 'items' })
-    console.log(count)
   } catch (error) {
     console.error(error.message);
   }
@@ -103,21 +106,24 @@ async function deleteAllIndices() {
   const { body } = await elasticClient.indices.delete({
     index: 'items'
   });
-  console.log(body);
 }
 
 async function search(query){
   return new Promise((resolve, reject) => {
     elasticClient.search({ index: 'items', body: {
       query: {
-        match: {model: query}
+        multi_match: {
+          query: query,
+          fields: ['model', 'memory', 'version^2', 'grade', 'colour', 'description']
+        }
       }
     }}, function(err, resp) {
       if (err) {
         reject(err);
       } else {
-        const data = resp.hits.hits.map((item) => item._source);
+        const data = resp.hits.hits.map((item) => item._source.item_id);
         console.log(query)
+        console.log('AHHHH')
         console.log(data);
         resolve(data);
       }
@@ -126,17 +132,34 @@ async function search(query){
 }
 
 app.get('/api/data', async (req, res) => {
+  // await deleteAllIndices();
+  // await createIndices();
+  // await bulkIndexing();
+
   const query = req.query.query;
+  const request = new sql.Request();
+  // Simplify this
   if (query != '') {
-    const data = await search(query);
-    res.json(data)
+    const itemIds = await search(query);
+    request.input('item_ids', sql.VarChar, itemIds.join(', '));
+    request.query('SELECT * FROM items WHERE item_id IN (SELECT value FROM STRING_SPLIT(@item_ids, \',\'))', (error, result) => {
+      if (error) {
+        console.error('Error executing SELECT:', error);
+        res.status(500).json({ error: 'Internal server error' });
+      } else {
+        // Make this more efficient
+        const sortedResults = result.recordset.sort((a, b) => itemIds.indexOf(a.item_id) - itemIds.indexOf(b.item_id));
+        res.status(200).json(sortedResults);
+      }
+    })
+
   } else {
     sql.query('SELECT * FROM items', (error, result) => {
       if (error) {
         console.error('Error executing SELECT:', error);
         res.status(500).json({ error: 'Internal server error' });
       } else {
-        res.json(result.recordset);
+        res.status(200).json(result.recordset);
       }
     });
   }
@@ -191,20 +214,14 @@ app.post("/api/login", async (req, res) => {
 
     // Request
     const request = new sql.Request();
-    request.input("email", sql.VarChar, email);
-    await request.query(
-      "SELECT password FROM users WHERE email = @email",
-      (err, result) => {
-        if (
-          result.length !== 0 &&
-          bcrypt.compare(password, result.recordset[0].password)
-        ) {
-          // Generate a JWT token
-          const token = jwt.sign({ email, correctPassword }, secretKey);
-          res.status(200).json({ token: token });
-        } else {
-          res.status(404).json({ error: "Incorrect email or password." });
-        }
+    request.input('email', sql.VarChar, email);
+    request.query('SELECT password FROM users WHERE email = @email', (err, result) => {
+      if (result.length !== 0 && bcrypt.compare(password, result.recordset[0].password)) {
+        // Generate a JWT token
+        const token = jwt.sign({ email, correctPassword }, secretKey);
+        res.status(200).json({ token: token });
+      } else {
+        res.status(404).json({ error: 'Incorrect email or password.' });
       }
     );
   } catch (error) {
@@ -235,6 +252,9 @@ app.get("/api/item", (req, res) => {
   );
 });
 
-app.listen(3001, () => {
+app.listen(3001, async () => {
   console.log("Server is running on http://localhost:3001");
+  await deleteAllIndices();
+  await createIndices();
+  await bulkIndexing();
 });
