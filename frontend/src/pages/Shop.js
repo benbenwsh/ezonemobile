@@ -11,9 +11,10 @@ export function Shop() {
 
   const fetchItemsData = async () => {
     try {
-      const response = await fetch('http://localhost:3001/api/data');
+      const response = await fetch(`http://localhost:3005/api/data?query=${query}`);
       if (response.ok) {
         const responseJson = await response.json();
+        console.log(responseJson);
         setItems(responseJson.recordset);
       } else {
         throw new Error('Request failed with status ' + response.status);
@@ -30,20 +31,24 @@ export function Shop() {
 
   // Filtering data
   useEffect(() => {
-    setSearchedItems(
-      items.filter((item) => {
-        console.log(item)
-        return searchParam.some((newItem) => {
-          return (
-            item[newItem]
-              .toString()
-              .toLowerCase()
-              .indexOf(query.toLowerCase()) > -1
-          );
-        });
-      })
-    );
-  }, [items, query, searchParam]);
+    fetchItemsData();
+    console.log(items);
+    setSearchedItems(items);
+
+    // setSearchedItems(
+    //   items.filter((item) => {
+    //     console.log(item)
+    //     return searchParam.some((newItem) => {
+    //       return (
+    //         item[newItem]
+    //           .toString()
+    //           .toLowerCase()
+    //           .indexOf(query.toLowerCase()) > -1
+    //       );
+    //     });
+    //   })
+    // );
+  }, [query, searchParam]);
 
   return (
     <div className="container">
@@ -51,6 +56,7 @@ export function Shop() {
       <div className="row gy-3 mt-3">
         {/* get the fake data from items.js */}
         {searchedItems.map((item, index) => {
+          console.log(item)
           return (
             <div className="col-12 col-sm-6 col-lg-3" key={index}>
               <Item

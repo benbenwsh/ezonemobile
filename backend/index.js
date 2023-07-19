@@ -1,19 +1,19 @@
 const express = require("express");
 const app = express();
-const bcrypt = require("bcryptjs");
-const jwt = require("jsonwebtoken");
-const path = require("path");
-const sql = require("mssql");
-const cors = require("cors");
-const assert = require("assert");
-// const elasticsearch = require('elasticsearch');
-const secretKey = "mysecretkey";
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
+const path = require('path');
+const sql = require('mssql');
+const cors = require('cors');
+const assert = require('assert');
+const elasticsearch = require('elasticsearch');
+const secretKey = 'mysecretkey';
 
-// // set up Elasticsearch client
-// var elasticClient = new elasticsearch.Client({
-//   host: 'localhost:9200',
-//   log: 'trace'
-// })
+// set up Elasticsearch client
+var elasticClient = new elasticsearch.Client({
+  host: 'localhost:9200',
+  // log: 'trace'
+})
 
 app.use(cors());
 app.use(express.json());
@@ -55,55 +55,91 @@ sql.connect(config, (err) => {
   }
 });
 
-// async function bulkIndexing(req, res, indexName, docType, payload){
-//   const items = await sql.query('SELECT * FROM items');
-//   const body = items.recordset.reduce((acc, item) => {
-//     acc.push({ index: { _index: 'items'} });
-//     acc.push(product);
-//     return acc;
-//   }, []);
-//   await elasticClient.bulk({
-//       index: 'items',
-//       body: body
-//   });
-// }
+const mapping = {
+  properties: {
+    id: { type: 'integer' },
+    model: {type: 'text'}
+  }
+};
+async function createIndices() {
+  try {
+    await elasticClient.indices.create({index: 'items', body: {
+      mappings: mapping
+    }})
+  } catch (error) {
+    console.error(error.message)
+  }
+}
 
-app.get("/api/data", async (req, res) => {
-  // // create Elasticsearch index
-  // await elasticClient.indices.create({
-  //   index: 'items',
-  // }).then(function (resp) {
-  //         // res.status(200)
-  //         // return res.json(resp)
-  //     }, function (err) {
-  //         console.log(err.message);
-  //         // res.status(500)
-  //         // return res.json(err)
-  //     });
+async function indexExists() {
+  try {
+    elasticClient.indices.exists({index: 'items'})
+  } catch (error) {
+    console.error(error.message)
+  }
+}
 
-  // console.log( 'nihao')
+async function bulkIndexing(){
+  try {
+    const items = await sql.query('SELECT id, model FROM items');
+    const body = items.recordset.reduce((acc, item) => {
+      acc.push({ index: { _index: 'items'} });
+      acc.push(item);
+      return acc;
+    }, []);
 
-  // elasticClient.indices.exists({
-  //         index: 'items'
-  //     }).then(function (resp) {
-  //         console.log(resp);
-  //     }, function (err) {
-  //         console.log(err.message);
-  //     });
+    await elasticClient.bulk({
+        index: 'items',
+        body: body
+    });
+    const count = await elasticClient.count({ index: 'items' })
+    console.log(count)
+  } catch (error) {
+    console.error(error.message);
+  }
+}
 
-  // initMapping(req, res, 1, 'text', {} );
+async function deleteAllIndices() {
+  const { body } = await elasticClient.indices.delete({
+    index: 'items'
+  });
+  console.log(body);
+}
 
-  sql.query(
-    "SELECT items.*, images.image_data FROM items CROSS APPLY (SELECT  TOP 1 images.image_data FROM images WHERE items.item_id = images.item_id) images",
-    (error, result) => {
+async function search(query){
+  return new Promise((resolve, reject) => {
+    elasticClient.search({ index: 'items', body: {
+      query: {
+        match: {model: query}
+      }
+    }}, function(err, resp) {
+      if (err) {
+        reject(err);
+      } else {
+        const data = resp.hits.hits.map((item) => item._source);
+        console.log(query)
+        console.log(data);
+        resolve(data);
+      }
+    });
+  })
+}
+
+app.get('/api/data', async (req, res) => {
+  const query = req.query.query;
+  if (query != '') {
+    const data = await search(query);
+    res.json(data)
+  } else {
+    sql.query('SELECT * FROM items', (error, result) => {
       if (error) {
-        console.error("Error executing SELECT:", error);
-        res.status(500).json({ error: "Internal server error" });
+        console.error('Error executing SELECT:', error);
+        res.status(500).json({ error: 'Internal server error' });
       } else {
         res.json(result);
       }
-    }
-  );
+    });
+  }
 });
 
 app.post("/api/signup", async (req, res) => {
