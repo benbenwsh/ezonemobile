@@ -140,9 +140,13 @@ app.get('/api/data', async (req, res) => {
   const request = new sql.Request();
   // Simplify this
   if (query != '') {
+    console.log('query' + query)
     const itemIds = await search(query);
     request.input('item_ids', sql.VarChar, itemIds.join(', '));
-    request.query('SELECT * FROM items WHERE item_id IN (SELECT value FROM STRING_SPLIT(@item_ids, \',\'))', (error, result) => {
+    request.query(`SELECT items.*, images.image_data \
+    FROM items 
+    CROSS APPLY (SELECT  TOP 1 images.image_data FROM images WHERE items.item_id = images.item_id) images \
+    WHERE item_id IN (SELECT value FROM STRING_SPLIT(@item_ids, \',\'))`, (error, result) => {
       if (error) {
         console.error('Error executing SELECT:', error);
         res.status(500).json({ error: 'Internal server error' });
@@ -154,7 +158,7 @@ app.get('/api/data', async (req, res) => {
     })
 
   } else {
-    sql.query('SELECT * FROM items', (error, result) => {
+    sql.query("SELECT items.*, images.image_data FROM items CROSS APPLY (SELECT  TOP 1 images.image_data FROM images WHERE items.item_id = images.item_id) images", (error, result) => {
       if (error) {
         console.error('Error executing SELECT:', error);
         res.status(500).json({ error: 'Internal server error' });
@@ -223,7 +227,7 @@ app.post("/api/login", async (req, res) => {
       } else {
         res.status(404).json({ error: 'Incorrect email or password.' });
       }
-    );
+    /api/d});
   } catch (error) {
     console.error("Error inserting user:", error);
     res.status(500).json({ error: "Failed to register user" });
