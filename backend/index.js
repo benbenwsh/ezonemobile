@@ -93,15 +93,17 @@ app.get("/api/data", async (req, res) => {
 
   // initMapping(req, res, 1, 'text', {} );
 
-  // SELECT DISTINCT ON (item_id * FROM items ORDER BY item_id)
-  sql.query("SELECT * FROM items", (error, result) => {
-    if (error) {
-      console.error("Error executing SELECT:", error);
-      res.status(500).json({ error: "Internal server error" });
-    } else {
-      res.json(result);
+  sql.query(
+    "SELECT items.*, images.image_data FROM items CROSS APPLY (SELECT  TOP 1 images.image_data FROM images WHERE items.item_id = images.item_id) images",
+    (error, result) => {
+      if (error) {
+        console.error("Error executing SELECT:", error);
+        res.status(500).json({ error: "Internal server error" });
+      } else {
+        res.json(result);
+      }
     }
-  });
+  );
 });
 
 app.post("/api/signup", async (req, res) => {
@@ -181,9 +183,11 @@ app.post("/api/login", async (req, res) => {
   // 2b. The password does not match
 });
 
+// SELECT items.*, image_data FROM images INNER JOIN items ON (images.item_id = items.item_id)
+
 app.get("/api/item", (req, res) => {
   sql.query(
-    `SELECT * FROM items WHERE item_id = ${req.query.item_id}`,
+    `SELECT items.*, image_data FROM images INNER JOIN items ON (images.item_id = items.item_id) WHERE items.item_id = ${req.query.item_id}`,
     (error, result) => {
       if (error) {
         console.error("Error executing SELECT:", error);

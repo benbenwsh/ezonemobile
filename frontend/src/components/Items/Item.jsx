@@ -11,7 +11,7 @@ export default function Item(props) {
     return window.btoa(binary);
   };
 
-  let binaryImg = arrayBufferToBase64(props.item.image.data);
+  let binaryImg = arrayBufferToBase64(props.item.image_data.data);
   return (
     <div className="card h-100">
       <img

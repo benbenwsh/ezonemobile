@@ -16,7 +16,10 @@ export default function CarouselItem(props) {
         return (
           <Carousel.Item key={index}>
             <img
-              src={"data:image/jpg;base64," + arrayBufferToBase64(i.image.data)}
+              src={
+                "data:image/jpg;base64," +
+                arrayBufferToBase64(i.image_data.data)
+              }
               style={{ maxWidth: "100%", height: "auto" }}
             />
           </Carousel.Item>
