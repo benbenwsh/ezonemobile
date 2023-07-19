@@ -9,6 +9,7 @@ export function ItemDetails() {
   const { id } = useParams();
 
   const [item, setItem] = useState({});
+  const [isloading, setIsLoading] = useState(true);
 
   const fetchItemData = async () => {
     try {
@@ -16,6 +17,7 @@ export function ItemDetails() {
       if (response.ok) {
         const responseJson = await response.json();
         setItem(responseJson.recordset[0]);
+        setIsLoading(false);
       } else {
         throw new Error("Request failed with status " + response.status);
       }
@@ -33,10 +35,10 @@ export function ItemDetails() {
     <div className="container my-3 item-detail-container-max-width">
       <div className="row gy-3">
         <div className="col-12 col-md-7">
-          <Carousel />
+          {isloading ? <div>Loading...</div> : <Carousel item={item} />}
         </div>
         <div className="col-12 col-md-5">
-          <ItemDescription item={item}/>
+          <ItemDescription item={item} />
         </div>
       </div>
       <hr />
@@ -44,7 +46,7 @@ export function ItemDetails() {
       {/* table */}
       <div className="row gy-3">
         <div className="col-12">
-          <TechnicalDetailsTable item={item}/>
+          <TechnicalDetailsTable item={item} />
         </div>
       </div>
     </div>

@@ -4,8 +4,7 @@ import GenericButton from "../GenericButton";
 export default function ItemDescription(props) {
   return (
     <>
-      <p>item id: {props.item.id}</p>
-      <h1>{props.item.model}</h1>
+      <h1>Apple {props.item.version} - {props.item.model}</h1>
       <p>HK${props.item.price}</p>
       <div className="d-flex align-items-center my-3">
         <svg
@@ -13,7 +12,7 @@ export default function ItemDescription(props) {
           width="16"
           height="16"
           fill="currentColor"
-          class="bi bi-box2-fill"
+          className="bi bi-box2-fill"
           viewBox="0 0 16 16"
         >
           <path d="M3.75 0a1 1 0 0 0-.8.4L.1 4.2a.5.5 0 0 0-.1.3V15a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1V4.5a.5.5 0 0 0-.1-.3L13.05.4a1 1 0 0 0-.8-.4h-8.5ZM15 4.667V5H1v-.333L1.5 4h6V1h1v3h6l.5.667Z" />
@@ -28,7 +27,7 @@ export default function ItemDescription(props) {
           width="16"
           height="16"
           fill="currentColor"
-          class="bi bi-info-circle-fill"
+          className="bi bi-info-circle-fill"
           viewBox="0 0 16 16"
         >
           <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm.93-9.412-1 4.705c-.07.34.029.533.304.533.194 0 .487-.07.686-.246l-.088.416c-.287.346-.92.598-1.465.598-.703 0-1.002-.422-.808-1.319l.738-3.468c.064-.293.006-.399-.287-.47l-.451-.081.082-.381 2.29-.287zM8 5.5a1 1 0 1 1 0-2 1 1 0 0 1 0 2z" />

@@ -14,7 +14,7 @@ export default function App() {
   const [isSignedIn, setIsSignedIn] = useState(false);
 
   useEffect(() => {
-    console.log(isSignedIn);
+    console.log("isSignedIn: " + isSignedIn);
   }, [isSignedIn]);
 
   return (

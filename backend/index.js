@@ -176,7 +176,6 @@ app.post('/api/login', async (req, res) => {
 });
 
 app.get('/api/item', (req, res) => {
-  console.log('Error executing SELECT:')
   sql.query(`SELECT * FROM items WHERE id = ${req.query.id}`, (error, result) => {
     if (error) {
       console.error('Error executing SELECT:', error);

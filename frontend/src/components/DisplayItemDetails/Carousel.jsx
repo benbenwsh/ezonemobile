@@ -1,7 +1,15 @@
 import React from "react";
 import "./ItemDetails.css";
 
-export default function CarouselItem() {
+export default function Carousel(props) {
+  const arrayBufferToBase64 = (buffer) => {
+    let binary = "";
+    let bytes = [].slice.call(new Uint8Array(buffer));
+    bytes.forEach((b) => (binary += String.fromCharCode(b)));
+    return window.btoa(binary);
+  };
+
+  let binaryImg = arrayBufferToBase64(props.item.image.data);
   return (
     <div id="carouselIndicators" className="carousel slide">
       <div className="carousel-indicators">
@@ -29,7 +37,7 @@ export default function CarouselItem() {
       <div className="carousel-inner">
         <div className="carousel-item active">
           <img
-            src="https://webassets.lqdt1.com/assets/photos/19822/19822_196_1.jpg?cb=230628111752&h=480&webp=true"
+            src={"data:image/jpg;base64," + binaryImg}
             className="d-block w-100"
             alt="..."
           />

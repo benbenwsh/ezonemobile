@@ -4,10 +4,10 @@ import "./Item.css";
 
 export default function Item(props) {
   const arrayBufferToBase64 = (buffer) => {
-    var binary = '';
-        var bytes = [].slice.call(new Uint8Array(buffer));
-        bytes.forEach((b) => binary += String.fromCharCode(b));
-        return window.btoa(binary); 
+    let binary = '';
+    let bytes = [].slice.call(new Uint8Array(buffer));
+    bytes.forEach((b) => binary += String.fromCharCode(b));
+    return window.btoa(binary); 
   }
 
   let binaryImg = arrayBufferToBase64(props.item.image.data);
@@ -22,7 +22,7 @@ export default function Item(props) {
         <p className="card-text">Grade: {props.item.grade}</p>
         <h5 className="card-title"></h5>
         <p className="card-text">{props.item.description}</p>
-        <Link to={`/shop/${props.item.id}`} className="btn btn-primary mt-auto">
+        <Link to={`/shop/${props.item.item_id}`} className="btn btn-primary mt-auto">
           More
         </Link>
       </div>
