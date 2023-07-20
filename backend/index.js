@@ -48,18 +48,15 @@ sql.connect(config, (err) => {
   }
 });
 
-app.get("/api/home", async (req, res) => {
+app.get("/api/shop", async (req, res) => {
   const request = new sql.Request();
   request.query("SELECT model_name, model_image FROM models", (error, result) => {
     if (error) {
       console.error("Error executing SELECT:", error);
       res.status(500).json({ error: "Internal server error" });
     } else {
-      // Make this more efficient
-      const sortedResults = result.recordset.sort(
-        (a, b) => itemIds.indexOf(a.item_id) - itemIds.indexOf(b.item_id)
-      );
-      res.status(200).json(sortedResults);
+      console.log(result)
+      res.status(200).json(result.recordset);
     }
   })
 });
@@ -101,5 +98,5 @@ app.get("/api/model", async (req, res) => {
 });
 
 app.listen(3001, async () => {
-  console.log("Server is running on http://localhost:3005");
+  console.log("Server is running on http://localhost:3001");
 });
