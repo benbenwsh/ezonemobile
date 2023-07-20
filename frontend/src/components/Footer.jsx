@@ -13,7 +13,7 @@ export default function Footer() {
               Home
             </Link>
           </li>
-          <li className="nav-item">
+          {/* <li className="nav-item">
             <Link className="nav-link px-2 text-muted" to="/signin">
               Sign In
             </Link>
@@ -22,7 +22,7 @@ export default function Footer() {
             <Link className="nav-link px-2 text-muted" to="/register">
               Register
             </Link>
-          </li>
+          </li> */}
           <li className="nav-item">
             <Link className="nav-link px-2 text-muted" to="/about">
               About

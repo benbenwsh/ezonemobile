@@ -22,7 +22,7 @@ export default function App() {
       <NavigationBar isSignedIn={isSignedIn} />
       <Routes>
         <Route path="/" element={<Shop />} />
-        <Route
+        {/* <Route
           path="/signin"
           element={
             isSignedIn ? (
@@ -41,7 +41,7 @@ export default function App() {
               <Register setIsSignedIn={setIsSignedIn} />
             )
           }
-        />
+        /> */}
         <Route path="/shop/:item_id" element={<ItemDetails />} />
         <Route path="/upload" element={<Upload />} />
         <Route path="/about" element={<About />} />

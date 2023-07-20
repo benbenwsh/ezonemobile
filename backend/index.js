@@ -1,18 +1,18 @@
 const express = require("express");
 const app = express();
-const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
-const path = require('path');
-const sql = require('mssql');
-const cors = require('cors');
-const assert = require('assert');
-const elasticsearch = require('elasticsearch');
-const secretKey = 'mysecretkey';
+const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
+const path = require("path");
+const sql = require("mssql");
+const cors = require("cors");
+const assert = require("assert");
+const elasticsearch = require("elasticsearch");
+const secretKey = "mysecretkey";
 
 // set up Elasticsearch client
 var elasticClient = new elasticsearch.Client({
-  host: 'localhost:9200',
-})
+  host: "localhost:9200",
+});
 
 app.use(cors());
 app.use(express.json());
@@ -56,46 +56,51 @@ sql.connect(config, (err) => {
 
 const mapping = {
   properties: {
-    item_id: {type: 'integer'},
-    model: {type: 'text'},
-    memory: {type: 'text'},
-    version: {type: 'text'},
-    grade: {type: 'text'},
-    colour: {type: 'text'},
-    description: {type: 'text'}
-  }
+    item_id: { type: "integer" },
+    model: { type: "text" },
+    memory: { type: "text" },
+    version: { type: "text" },
+    grade: { type: "text" },
+    colour: { type: "text" },
+    description: { type: "text" },
+  },
 };
 async function createIndices() {
   try {
-    await elasticClient.indices.create({index: 'items', body: {
-      mappings: mapping
-    }})
+    await elasticClient.indices.create({
+      index: "items",
+      body: {
+        mappings: mapping,
+      },
+    });
   } catch (error) {
-    console.error(error.message)
+    console.error(error.message);
   }
 }
 
 async function indexExists() {
   try {
-    elasticClient.indices.exists({index: 'items'})
+    elasticClient.indices.exists({ index: "items" });
   } catch (error) {
-    console.error(error.message)
+    console.error(error.message);
   }
 }
 
-async function bulkIndexing(){
+async function bulkIndexing() {
   try {
     const request = new sql.Request();
-    const items = await request.query('SELECT item_id, model, memory, version, grade, colour, description FROM items');
+    const items = await request.query(
+      "SELECT item_id, model, memory, version, grade, colour, description FROM items"
+    );
     const body = items.recordset.reduce((acc, item) => {
-      acc.push({ index: { _index: 'items'} });
+      acc.push({ index: { _index: "items" } });
       acc.push(item);
       return acc;
     }, []);
 
     await elasticClient.bulk({
-        index: 'items',
-        body: body
+      index: "items",
+      body: body,
     });
   } catch (error) {
     console.error(error.message);
@@ -104,34 +109,47 @@ async function bulkIndexing(){
 
 async function deleteAllIndices() {
   const { body } = await elasticClient.indices.delete({
-    index: 'items'
+    index: "items",
   });
 }
 
-async function search(query){
+async function search(query) {
   return new Promise((resolve, reject) => {
-    elasticClient.search({ index: 'items', body: {
-      query: {
-        multi_match: {
-          query: query,
-          fields: ['model', 'memory', 'version^2', 'grade', 'colour', 'description']
+    elasticClient.search(
+      {
+        index: "items",
+        body: {
+          query: {
+            multi_match: {
+              query: query,
+              fields: [
+                "model",
+                "memory",
+                "version^2",
+                "grade",
+                "colour",
+                "description",
+              ],
+            },
+          },
+        },
+      },
+      function (err, resp) {
+        if (err) {
+          reject(err);
+        } else {
+          const data = resp.hits.hits.map((item) => item._source.item_id);
+          console.log(query);
+          console.log("AHHHH");
+          console.log(data);
+          resolve(data);
         }
       }
-    }}, function(err, resp) {
-      if (err) {
-        reject(err);
-      } else {
-        const data = resp.hits.hits.map((item) => item._source.item_id);
-        console.log(query)
-        console.log('AHHHH')
-        console.log(data);
-        resolve(data);
-      }
-    });
-  })
+    );
+  });
 }
 
-app.get('/api/data', async (req, res) => {
+app.get("/api/data", async (req, res) => {
   // await deleteAllIndices();
   // await createIndices();
   // await bulkIndexing();
@@ -139,33 +157,40 @@ app.get('/api/data', async (req, res) => {
   const query = req.query.query;
   const request = new sql.Request();
   // Simplify this
-  if (query != '') {
-    console.log('query' + query)
+  if (query != "") {
+    console.log("query" + query);
     const itemIds = await search(query);
-    request.input('item_ids', sql.VarChar, itemIds.join(', '));
-    request.query(`SELECT items.*, images.image_data \
+    request.input("item_ids", sql.VarChar, itemIds.join(", "));
+    request.query(
+      `SELECT items.*, images.image_data \
     FROM items 
     CROSS APPLY (SELECT  TOP 1 images.image_data FROM images WHERE items.item_id = images.item_id) images \
-    WHERE item_id IN (SELECT value FROM STRING_SPLIT(@item_ids, \',\'))`, (error, result) => {
-      if (error) {
-        console.error('Error executing SELECT:', error);
-        res.status(500).json({ error: 'Internal server error' });
-      } else {
-        // Make this more efficient
-        const sortedResults = result.recordset.sort((a, b) => itemIds.indexOf(a.item_id) - itemIds.indexOf(b.item_id));
-        res.status(200).json(sortedResults);
+    WHERE item_id IN (SELECT value FROM STRING_SPLIT(@item_ids, \',\'))`,
+      (error, result) => {
+        if (error) {
+          console.error("Error executing SELECT:", error);
+          res.status(500).json({ error: "Internal server error" });
+        } else {
+          // Make this more efficient
+          const sortedResults = result.recordset.sort(
+            (a, b) => itemIds.indexOf(a.item_id) - itemIds.indexOf(b.item_id)
+          );
+          res.status(200).json(sortedResults);
+        }
       }
-    })
-
+    );
   } else {
-    sql.query("SELECT items.*, images.image_data FROM items CROSS APPLY (SELECT  TOP 1 images.image_data FROM images WHERE items.item_id = images.item_id) images", (error, result) => {
-      if (error) {
-        console.error('Error executing SELECT:', error);
-        res.status(500).json({ error: 'Internal server error' });
-      } else {
-        res.status(200).json(result.recordset);
+    sql.query(
+      "SELECT items.*, images.image_data FROM items CROSS APPLY (SELECT  TOP 1 images.image_data FROM images WHERE items.item_id = images.item_id) images",
+      (error, result) => {
+        if (error) {
+          console.error("Error executing SELECT:", error);
+          res.status(500).json({ error: "Internal server error" });
+        } else {
+          res.status(200).json(result.recordset);
+        }
       }
-    });
+    );
   }
 });
 
@@ -218,16 +243,23 @@ app.post("/api/login", async (req, res) => {
 
     // Request
     const request = new sql.Request();
-    request.input('email', sql.VarChar, email);
-    request.query('SELECT password FROM users WHERE email = @email', (err, result) => {
-      if (result.length !== 0 && bcrypt.compare(password, result.recordset[0].password)) {
-        // Generate a JWT token
-        const token = jwt.sign({ email, correctPassword }, secretKey);
-        res.status(200).json({ token: token });
-      } else {
-        res.status(404).json({ error: 'Incorrect email or password.' });
+    request.input("email", sql.VarChar, email);
+    request.query(
+      "SELECT password FROM users WHERE email = @email",
+      (err, result) => {
+        if (
+          result.length !== 0 &&
+          bcrypt.compare(password, result.recordset[0].password)
+        ) {
+          // Generate a JWT token
+          const token = jwt.sign({ email, correctPassword }, secretKey);
+          res.status(200).json({ token: token });
+        } else {
+          res.status(404).json({ error: "Incorrect email or password." });
+        }
+        /api/d;
       }
-    /api/d});
+    );
   } catch (error) {
     console.error("Error inserting user:", error);
     res.status(500).json({ error: "Failed to register user" });

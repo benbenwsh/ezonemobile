@@ -51,18 +51,20 @@ export default function NavigationBar(props) {
                   <NavDropdown.Item href="#">Sign Out</NavDropdown.Item>
                 </NavDropdown>
               </Link>
-            ) : (
-              <>
-                <Link className="nav-link" to="/signin">
-                  <Button variant="warning" className="text-light">
-                    Sign In
-                  </Button>
-                </Link>
-                <Link className="nav-link" to="/register">
-                  <Button variant="outline-secondary">Register</Button>
-                </Link>
-              </>
-            )}
+            ) : null}
+
+            {/* : (
+             <>
+              <Link className="nav-link" to="/signin">
+                 <Button variant="warning" className="text-light">
+                  Sign In
+                </Button>
+              </Link>
+             <Link className="nav-link" to="/register">
+                <Button variant="outline-secondary">Register</Button>
+             </Link>
+           </>
+         )} */}
           </Nav>
         </Navbar.Collapse>
       </Container>
