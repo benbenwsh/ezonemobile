@@ -50,12 +50,11 @@ sql.connect(config, (err) => {
 
 app.get("/api/shop", async (req, res) => {
   const request = new sql.Request();
-  request.query("SELECT model_name, model_image FROM models", (error, result) => {
+  request.query("SELECT * FROM models", (error, result) => {
     if (error) {
       console.error("Error executing SELECT:", error);
       res.status(500).json({ error: "Internal server error" });
     } else {
-      console.log(result)
       res.status(200).json(result.recordset);
     }
   })
@@ -83,14 +82,12 @@ app.get("/api/model", async (req, res) => {
       request.input("colour", sql.VarChar, req.query.colour);
       cond.push("colour = @colour")
     }
-    if (req.query.quantity) {
-      request.input("quantity", sql.VarChar, req.query.quantity);
-      cond.push("quantity = @quantity")
-    }
 
     const condStr = cond.join(" AND ");
 
-    await request.query(`SELECT item_id, memory, grade, quantity, colour, price FROM items WHERE ${condStr}`)
+    const result = await request.query(`SELECT item_id, memory, grade, quantity, colour, price published_date FROM items WHERE ${condStr} ORDER BY price, published_date DESC`);
+
+    res.status(200).json(result.recordset);
   } catch (error) {
     console.error("Error inserting user:", error);
     res.status(500).json({ error: "Failed to register user" });

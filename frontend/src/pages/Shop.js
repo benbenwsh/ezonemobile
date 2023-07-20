@@ -14,6 +14,7 @@ export function Shop() {
       );
       if (response.ok) {
         const responseJson = await response.json();
+        console.log(responseJson);
         setItems(responseJson);
         setIsLoading(false);
       } else {
