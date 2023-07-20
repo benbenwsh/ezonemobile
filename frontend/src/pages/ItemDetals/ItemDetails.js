@@ -3,6 +3,7 @@ import Carousel from "../../components/DisplayItemDetails/Carousel";
 import { useParams } from "react-router-dom";
 import TechnicalDetailsTable from "../../components/DisplayItemDetails/TechnicalDetailsTable";
 import ItemDescription from "../../components/DisplayItemDetails/ItemDescription";
+import Spinner from "react-bootstrap/Spinner";
 import "./ItemDetails.css";
 
 export function ItemDetails() {
@@ -10,7 +11,7 @@ export function ItemDetails() {
 
   const [itemCarousel, setitemCarousel] = useState({});
   const [itemInfo, setItemInfo] = useState({});
-  const [isloading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(true);
 
   const fetchItemData = async () => {
     try {
@@ -40,10 +41,18 @@ export function ItemDetails() {
     <div className="container my-3 item-detail-container-max-width">
       <div className="row gy-3">
         <div className="col-12 col-md-7">
-          {isloading ? <div>Loading...</div> : <Carousel item={itemCarousel} />}
+          {isLoading ? (
+            <Spinner animation="border" variant="warning" />
+          ) : (
+            <Carousel item={itemCarousel} />
+          )}
         </div>
         <div className="col-12 col-md-5">
-          <ItemDescription item={itemInfo} />
+          {isLoading ? (
+            <Spinner animation="border" variant="warning" />
+          ) : (
+            <ItemDescription item={itemInfo} />
+          )}
         </div>
       </div>
       <hr />
