@@ -26,7 +26,7 @@ export default function Item(props) {
       <div className="card-body d-flex flex-column">
         <h5 className="card-title">Apple {props.item.model_name}</h5>
         <Link
-          // to={`/shop/${props.item.item_id}`}
+          to={`/shop/${props.item.model_name}`}
           className="mt-auto text-light btn btn-warning"
         >
           More
