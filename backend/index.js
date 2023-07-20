@@ -281,6 +281,8 @@ app.get("/api/item", (req, res) => {
       if (error) {
         console.error("Error executing SELECT:", error);
         res.status(500).json({ error: "Internal server error" });
+      } else if (result.recordset.length === 0) {
+        res.status(404).json(result);
       } else {
         res.status(200).json(result);
       }
@@ -288,9 +290,9 @@ app.get("/api/item", (req, res) => {
   );
 });
 
-app.listen(3001, async () => {
-  console.log("Server is running on http://localhost:3001");
-  await deleteAllIndices();
-  await createIndices();
-  await bulkIndexing();
+app.listen(3005, async () => {
+  console.log("Server is running on http://localhost:3005");
+  // await deleteAllIndices();
+  // await createIndices();
+  // await bulkIndexing();
 });

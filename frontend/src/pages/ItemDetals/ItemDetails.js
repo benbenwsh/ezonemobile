@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import Carousel from "../../components/DisplayItemDetails/Carousel";
 import { useParams } from "react-router-dom";
 import TechnicalDetailsTable from "../../components/DisplayItemDetails/TechnicalDetailsTable";
@@ -16,14 +17,15 @@ export function ItemDetails() {
   const fetchItemData = async () => {
     try {
       const response = await fetch(
-        `http://localhost:3001/api/item?item_id=${item_id}`
+        `http://localhost:3005/api/item?item_id=${item_id}`
       );
       if (response.ok) {
         const responseJson = await response.json();
-
         setitemCarousel(responseJson.recordset);
         setItemInfo(responseJson.recordset[0]);
         setIsLoading(false);
+      } else if (response.status === 404) {
+        negative("/notfound");
       } else {
         throw new Error("Request failed with status " + response.status);
       }
@@ -36,6 +38,8 @@ export function ItemDetails() {
   useEffect(() => {
     fetchItemData();
   }, []);
+
+  const negative = useNavigate();
 
   return (
     <div className="container my-3 item-detail-container-max-width">

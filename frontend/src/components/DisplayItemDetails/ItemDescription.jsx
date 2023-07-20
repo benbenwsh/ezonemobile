@@ -1,5 +1,6 @@
 import React from "react";
 import GenericButton from "../GenericButton";
+import Modal from "../Modal";
 
 export default function ItemDescription(props) {
   const formatedNumber = (price) => {
@@ -47,13 +48,7 @@ export default function ItemDescription(props) {
         <span className="ms-1">Get help buying. Contact (+852) xxxx-xxxx</span>
       </div>
       <div className="d-grid gap-2">
-        <GenericButton
-          btnName="Buy"
-          className="text-light btn btn-warning
-          text-light
-          btn
-          btn-warning"
-        />
+        <GenericButton btnName="Buy" className="text-light btn-warning" />
       </div>
     </>
   );
