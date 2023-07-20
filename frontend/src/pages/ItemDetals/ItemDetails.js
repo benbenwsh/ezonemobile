@@ -28,13 +28,22 @@ export function ItemDetails() {
         const responseJson = await response.json();
         
         if (quantity == null) {
-          const sum = responseJson
+          const totalPrice = responseJson
           .map((item) => item.price * item.quantity)
           .reduce((acc, currVal) => acc + currVal)
           const totalQuantity = responseJson
           .map((item) => item.quantity)
           .reduce((acc, currVal) => acc + currVal)
-          setMinAvgPrice(sum / totalQuantity);
+          setMinAvgPrice(totalPrice / totalQuantity);
+        } else {
+          let totalPrice = 0;
+          let totalQuantity = 0;
+          // There might be a bug on responseJson.length
+          for (let i=0; i<Math.min(responseJson.length, totalQuantity); i++) {
+            totalPrice+= responseJson[i].price;
+            totalQuantity += responseJson[i].quantity;
+          }
+          setMinAvgPrice(totalPrice / totalQuantity);
         }
 
         setitemCarousel(responseJson);
