@@ -180,18 +180,31 @@ app.get("/api/data", async (req, res) => {
       }
     );
   } else {
-    sql.query(
-      "SELECT items.*, images.image_data FROM items CROSS APPLY (SELECT  TOP 1 images.image_data FROM images WHERE items.item_id = images.item_id) images",
-      (error, result) => {
-        if (error) {
-          console.error("Error executing SELECT:", error);
-          res.status(500).json({ error: "Internal server error" });
-        } else {
-          res.status(200).json(result.recordset);
-        }
+    sql.query("SELECT model_name, model_image FROM models", (error, result) => {
+      if (error) {
+        console.error("Error executing SELECT:", error);
+        res.status(500).json({ error: "Internal server error" });
+      } else {
+        res.status(200).json(result.recordset);
       }
-    );
+    });
   }
+});
+
+app.get("/api/item", (req, res) => {
+  sql.query(
+    `SELECT items.*, image_data FROM images INNER JOIN items ON (images.item_id = items.item_id) WHERE items.item_id = ${req.query.item_id}`,
+    (error, result) => {
+      if (error) {
+        console.error("Error executing SELECT:", error);
+        res.status(500).json({ error: "Internal server error" });
+      } else if (result.recordset.length === 0) {
+        res.status(404).json(result);
+      } else {
+        res.status(200).json(result);
+      }
+    }
+  );
 });
 
 app.post("/api/signup", async (req, res) => {
@@ -270,24 +283,6 @@ app.post("/api/login", async (req, res) => {
   // 2. There is someone with that username
   // 2a. The password matches that in the database
   // 2b. The password does not match
-});
-
-// SELECT items.*, image_data FROM images INNER JOIN items ON (images.item_id = items.item_id)
-
-app.get("/api/item", (req, res) => {
-  sql.query(
-    `SELECT items.*, image_data FROM images INNER JOIN items ON (images.item_id = items.item_id) WHERE items.item_id = ${req.query.item_id}`,
-    (error, result) => {
-      if (error) {
-        console.error("Error executing SELECT:", error);
-        res.status(500).json({ error: "Internal server error" });
-      } else if (result.recordset.length === 0) {
-        res.status(404).json(result);
-      } else {
-        res.status(200).json(result);
-      }
-    }
-  );
 });
 
 app.listen(3005, async () => {

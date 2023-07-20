@@ -11,7 +11,7 @@ export default function Item(props) {
     return window.btoa(binary);
   };
 
-  let binaryImg = arrayBufferToBase64(props.item.image_data.data);
+  let binaryImg = arrayBufferToBase64(props.item.model_image.data);
 
   const formatedNumber = (price) => {
     return price.toLocaleString("en-US");
@@ -24,14 +24,9 @@ export default function Item(props) {
         alt={props.item.name}
       />
       <div className="card-body d-flex flex-column">
-        <h5 className="card-title">
-          Apple {props.item.model} - {props.item.memory} - {props.item.colour}
-        </h5>
-        <p className="card-text text-body-secondary">
-          HK${formatedNumber(props.item.price)}
-        </p>
+        <h5 className="card-title">Apple {props.item.model_name}</h5>
         <Link
-          to={`/shop/${props.item.item_id}`}
+          // to={`/shop/${props.item.item_id}`}
           className="mt-auto text-light btn btn-warning"
         >
           More
