@@ -1,62 +1,50 @@
 import React from "react";
 import { useTable, useMemo } from "react-table";
 import { Link } from "react-router-dom";
+import GenericButton from "../GenericButton";
+import ModalBtn from "../ModalBtn";
 
 export default function StcokListTable(props) {
-  const data = React.useMemo(() => props.stockList, []);
-  const columns = React.useMemo(
-    () => [
-      {
-        Header: "Version",
-        accessor: "version",
-      },
-      {
-        Header: "Memory",
-        accessor: "memory",
-      },
-      {
-        Header: "Grade",
-        accessor: "grade",
-      },
-      {
-        Header: "Quantity",
-        accessor: "quantity",
-      },
-      {
-        Header: "Colour",
-        accessor: "colour",
-      },
-      {
-        Header: "Price",
-        accessor: "price",
-      },
-    ],
-    []
-  );
-
-  const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
-    useTable({ columns, data });
-
   return (
-    <div className="table-responsive w-100  ">
-      <table {...getTableProps()} className="table table-responsive">
+    <div className="table-responsive w-100">
+      <table className="table table-responsive">
         <thead>
-          {headerGroups.map((headerGroup) => (
-            <tr {...headerGroup.getHeaderGroupProps()}>
-              {headerGroup.headers.map((column) => (
-                <th {...column.getHeaderProps()}>{column.render("Header")}</th>
-              ))}
-            </tr>
-          ))}
+          <tr>
+            <th>Version</th>
+            <th>Storage</th>
+            <th>Grade</th>
+            <th>Quantity</th>
+            <th>Colour</th>
+            <th>Price</th>
+            <th>Action</th>
+            <th>Seller info</th>
+          </tr>
         </thead>
-        <tbody {...getTableBodyProps()}>
-          {rows.map((row) => {
-            prepareRow(row);
+        <tbody>
+          {props.stockList.map((stock, index) => {
             return (
-              <tr {...row.getRowProps()}>
-                {row.cells.map((cell) => (
-                  <td {...cell.getCellProps()}> {cell.render("Cell")} </td>
-                ))}
+              <tr key={index}>
+                <td>{stock.version}</td>
+                <td>{stock.memory}</td>
+                <td>{stock.grade}</td>
+                <td>{stock.quantity}</td>
+                <td>{stock.colour}</td>
+                <td>{stock.price}</td>
+                <td>
+                  <ModalBtn
+                    title="You can contact us"
+                    content="(+852) xxxx-xxxx"
+                  />
+                </td>
+                <td>
+                  <Link to={`/shop/${props.modelName}/${stock.seller_id}`}>
+                    <GenericButton
+                      type="button"
+                      btnName="More"
+                      className="btn-outline-secondary"
+                    />
+                  </Link>
+                </td>
               </tr>
             );
           })}

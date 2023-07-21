@@ -84,12 +84,15 @@ export function StockList() {
           </div>
         </div>
       </div>
-      <h4>Details</h4>
+      <h2>Details</h2>
       <div className="d-flex justify-content-center">
         {isLoading ? (
           <Spinner animation="border" variant="warning" />
         ) : (
-          <StcokListTable stockList={stockDetails} />
+          <StcokListTable
+            stockList={stockDetails}
+            modelName={model.model_name}
+          />
         )}
       </div>
     </div>

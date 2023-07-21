@@ -85,7 +85,7 @@ app.get("/api/model/stockDetails", async (req, res) => {
   request.input("model_id", sql.VarChar, req.query.model_id);
 
   request.query(
-    "SELECT version, memory, grade, quantity, colour, price FROM items WHERE items.model_id = @model_id",
+    "SELECT version, memory, grade, quantity, colour, price, seller_id FROM items WHERE items.model_id = @model_id",
     (err, result) => {
       if (err) {
         console.error("Error executing SELECT:", err);
