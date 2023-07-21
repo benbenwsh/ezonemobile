@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import axios from "axios";
 import Spinner from "react-bootstrap/Spinner";
 import { useParams } from "react-router-dom";
@@ -14,6 +14,7 @@ export function StockList() {
   const [stockDetails, setstockDetails] = useState();
   const [isLoading, setIsLoading] = useState(true);
 
+  // get model data from database
   const getModelData = async () => {
     axios
       .get(`http://localhost:3009/api/model?model_name=${model_name}`)
@@ -34,9 +35,7 @@ export function StockList() {
       });
   };
 
-  useEffect(() => {
-    getModelData();
-  }, []);
+  useEffect(() => getModelData(), []);
 
   // convert array buffer to base64
   const arrayBufferToBase64 = (buffer) => {
@@ -82,6 +81,13 @@ export function StockList() {
             </h4>
           </div>
         </div>
+      </div>
+      <div className="d-flex justify-content-center">
+        {isLoading ? (
+          <Spinner animation="border" variant="warning" />
+        ) : (
+          <StcokListTable stockList={stockDetails} />
+        )}
       </div>
     </div>
   );

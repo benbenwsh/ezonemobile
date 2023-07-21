@@ -81,7 +81,6 @@ app.get("/api/model", async (req, res) => {
 });
 
 app.get("/api/model/stockDetails", async (req, res) => {
-  console.log(req.query.model_id);
   const request = new sql.Request();
   request.input("model_id", sql.VarChar, req.query.model_id);
 
