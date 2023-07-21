@@ -3,25 +3,22 @@ import Spinner from "react-bootstrap/Spinner";
 import Search from "../components/Search";
 import Item from "../components/Items/Item";
 import Breadcrumb from "../components/Breadcrumbs/Breadcrumbs";
+import axios from "axios";
 
 export function Shop() {
   const [items, setItems] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
   const fetchItemsData = async () => {
-    try {
-      const response = await fetch(`http://localhost:3009/api/shop`);
-      if (response.ok) {
-        const responseJson = await response.json();
-        console.log(responseJson);
-        setItems(responseJson);
+    axios
+      .get("http://localhost:3009/api/shop")
+      .then((res) => setItems(res.data))
+      .catch((err) => {
+        console.error("Error fetching data: ", err);
+      })
+      .finally(() => {
         setIsLoading(false);
-      } else {
-        throw new Error("Request failed with status " + response.status);
-      }
-    } catch (error) {
-      console.error("Error fetching data: ", error);
-    }
+      });
   };
 
   useEffect(() => {

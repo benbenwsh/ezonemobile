@@ -1,9 +1,8 @@
 import React from "react";
 import { useTable, useMemo } from "react-table";
+import { Link } from "react-router-dom";
 
 export default function StcokListTable(props) {
-  console.log(props.stockList);
-  // table
   const data = React.useMemo(() => props.stockList, []);
   const columns = React.useMemo(
     () => [
@@ -39,7 +38,7 @@ export default function StcokListTable(props) {
     useTable({ columns, data });
 
   return (
-    <div className="table-responsive w-100">
+    <div className="table-responsive w-100  ">
       <table {...getTableProps()} className="table table-responsive">
         <thead>
           {headerGroups.map((headerGroup) => (

@@ -5,26 +5,25 @@ import GenericButton from "../components/GenericButton";
 import ValidationRules from "../validation-rules";
 
 export function Upload() {
-  const [modelOptions, setModelOptions] = useState([])
-  const [sellerOptions, setSellerOptions] = useState([])
+  const [modelOptions, setModelOptions] = useState([]);
+  const [sellerOptions, setSellerOptions] = useState([]);
   const [formValues, setFormValues] = useState({
     model: "Choose model",
     seller: "Choose seller",
     origin: null,
-    capacity: null,    grade: null,
+    capacity: null,
+    grade: null,
     colour: null,
     price: null,
     quantity: null,
     description: null,
   });
 
-  useEffect(async () => {
+  useEffect(() => {
     try {
-      const response = await fetch(
-        `http://localhost:3001/api/upload-options`
-      );
+      const response = fetch(`http://localhost:3001/api/upload-options`);
       if (response.ok) {
-        const responseJson = await response.json();
+        const responseJson = response.json();
         setModelOptions(responseJson.models);
         setSellerOptions(responseJson.sellers);
       } else {
@@ -33,12 +32,12 @@ export function Upload() {
     } catch (error) {
       console.error("Error fetching data: ", error);
     }
-  }, [])
-  
+  }, []);
+
   function handleInputChange(e) {
     const { name, value } = e.target;
     setFormValues({ ...formValues, [name]: value });
-  };
+  }
 
   async function uploadButtonClicked(e) {
     e.preventDefault();
@@ -55,9 +54,8 @@ export function Upload() {
           body: JSON.stringify(formValues),
         });
 
-
         if (response.ok) {
-          console.log("Upload succeeded")
+          console.log("Upload succeeded");
         } else {
           console.error("Upload failed");
         }
@@ -84,11 +82,19 @@ export function Upload() {
             <label htmlFor="model" className="text-black fw-medium mb-1">
               Model
             </label>
-            <select className="form-select" name="model" aria-label="model" onChange={handleInputChange} required>
+            <select
+              className="form-select"
+              name="model"
+              aria-label="model"
+              onChange={handleInputChange}
+              required
+            >
               <option selected>Choose model</option>
               {modelOptions.map((model, index) => {
                 return (
-                <option value={model.model_id} key={index}>{model.model_name}</option>
+                  <option value={model.model_id} key={index}>
+                    {model.model_name}
+                  </option>
                 );
               })}
             </select>
@@ -98,11 +104,19 @@ export function Upload() {
             <label htmlFor="seller" className="text-black fw-medium mb-1">
               Seller
             </label>
-            <select className="form-select" name="seller" aria-label="seller" onChange={handleInputChange} required>
+            <select
+              className="form-select"
+              name="seller"
+              aria-label="seller"
+              onChange={handleInputChange}
+              required
+            >
               <option selected>Choose seller</option>
               {sellerOptions.map((seller, index) => {
                 return (
-                  <option value={seller.id} key={index}>{seller.company_name}</option>
+                  <option value={seller.id} key={index}>
+                    {seller.company_name}
+                  </option>
                 );
               })}
             </select>
@@ -114,11 +128,20 @@ export function Upload() {
             <label htmlFor="origin" className="text-black fw-medium mb-1">
               Origin
             </label>
-            <FormInput type="text" name="origin" id="origin" placeholder="Origin" onChange={handleInputChange}/>
+            <FormInput
+              type="text"
+              name="origin"
+              id="origin"
+              placeholder="Origin"
+              onChange={handleInputChange}
+            />
           </div>
 
           <div className="col-12 col-sm-6 col-lg-4">
-            <label htmlFor="storage_capacity" className="text-black fw-medium mb-1">
+            <label
+              htmlFor="storage_capacity"
+              className="text-black fw-medium mb-1"
+            >
               Storage Capacity
             </label>
             <div class="input-group mb-3">
@@ -140,14 +163,26 @@ export function Upload() {
             <label htmlFor="grade" className="text-black fw-medium mb-1">
               Grade
             </label>
-            <FormInput type="text" name="grade" id="grade" placeholder="Grade" onChange={handleInputChange}/>
+            <FormInput
+              type="text"
+              name="grade"
+              id="grade"
+              placeholder="Grade"
+              onChange={handleInputChange}
+            />
           </div>
 
           <div className="col-12 col-sm-6 col-lg-4">
             <label htmlFor="colour" className="text-black fw-medium mb-1">
               Colour
             </label>
-            <FormInput type="text" name="colour" id="colour" placeholder="Colour" onChange={handleInputChange}/>
+            <FormInput
+              type="text"
+              name="colour"
+              id="colour"
+              placeholder="Colour"
+              onChange={handleInputChange}
+            />
           </div>
         </div>
 
@@ -172,7 +207,13 @@ export function Upload() {
             <label htmlFor="quantity" className="text-black fw-medium mb-1">
               Quantity
             </label>
-            <FormInput type="number" name="quantity" id="quantity" placeholder="Quantity" onChange={handleInputChange}/>
+            <FormInput
+              type="number"
+              name="quantity"
+              id="quantity"
+              placeholder="Quantity"
+              onChange={handleInputChange}
+            />
           </div>
         </div>
 

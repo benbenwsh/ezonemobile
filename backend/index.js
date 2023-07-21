@@ -135,10 +135,13 @@ app.get("/api/model/modelDetails", (req, res) => {});
 app.get("/api/upload-options", async (req, res) => {
   const request = new sql.Request();
 
-  const models = (await request.query("SELECT model_id, model_name FROM models")).recordset;
-  const sellers = (await request.query("SELECT id, company_name FROM sellers")).recordset;
-  res.status(200).json({models: models, sellers: sellers})
-})
+  const models = (
+    await request.query("SELECT model_id, model_name FROM models")
+  ).recordset;
+  const sellers = (await request.query("SELECT id, company_name FROM sellers"))
+    .recordset;
+  res.status(200).json({ models: models, sellers: sellers });
+});
 
 app.post("/api/upload", async (req, res) => {
   try {
@@ -151,36 +154,37 @@ app.post("/api/upload", async (req, res) => {
       colour,
       price,
       quantity,
-      description
+      description,
     } = req.body;
 
     const request = new sql.Request();
-    console.log('here2')
+    console.log("here2");
 
-    request.input('model', sql.Int, model);
-    request.input('seller', sql.Int, seller);
-    request.input('origin', sql.VarChar, origin);
-    request.input('capacity', sql.Int, capacity);
-    request.input('grade', sql.VarChar, grade);
-    request.input('colour', sql.VarChar, colour);
-    request.input('price', sql.Decimal, price);
-    request.input('quantity', sql.Int, quantity);
-    request.input('description', sql.Text, description);
-    request.query(`INSERT INTO items (model_id, seller_id, version, memory, grade, colour, price, quantity, description) \
-    VALUES (@model, @seller, @origin, @capacity, @grade, @colour, @price, @quantity, @description)`, (err, result) => {
-      if (err) {
-        console.error("Error executing INSERT:", err);
-        res.status(500).json({ error: "Internal server error" });
-      } else {
-        res.status(200).end();
+    request.input("model", sql.Int, model);
+    request.input("seller", sql.Int, seller);
+    request.input("origin", sql.VarChar, origin);
+    request.input("capacity", sql.Int, capacity);
+    request.input("grade", sql.VarChar, grade);
+    request.input("colour", sql.VarChar, colour);
+    request.input("price", sql.Decimal, price);
+    request.input("quantity", sql.Int, quantity);
+    request.input("description", sql.Text, description);
+    request.query(
+      `INSERT INTO items (model_id, seller_id, version, memory, grade, colour, price, quantity, description) \
+    VALUES (@model, @seller, @origin, @capacity, @grade, @colour, @price, @quantity, @description)`,
+      (err, result) => {
+        if (err) {
+          console.error("Error executing INSERT:", err);
+          res.status(500).json({ error: "Internal server error" });
+        } else {
+          res.status(200).end();
+        }
       }
-    });
+    );
   } catch (error) {
-    res.status(500).json({ error: 'Failed to upload' })
+    res.status(500).json({ error: "Failed to upload" });
   }
-
-
-})
+});
 app.listen(3009, async () => {
   console.log("Server is running on http://localhost:3009");
 });

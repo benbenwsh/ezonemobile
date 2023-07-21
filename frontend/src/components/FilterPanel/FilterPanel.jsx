@@ -50,7 +50,7 @@ export default function FilterPanel() {
           </Form.Select>
         </div>
       </div>
-      <div class="d-grid gap-2 mt-4">
+      <div className="d-grid gap-2 mt-4">
         <GenericButton
           type="submit"
           btnName="Search"

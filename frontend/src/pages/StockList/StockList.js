@@ -35,7 +35,9 @@ export function StockList() {
       });
   };
 
-  useEffect(() => getModelData(), []);
+  useEffect(() => {
+    getModelData();
+  }, []);
 
   // convert array buffer to base64
   const arrayBufferToBase64 = (buffer) => {
@@ -82,6 +84,7 @@ export function StockList() {
           </div>
         </div>
       </div>
+      <h4>Details</h4>
       <div className="d-flex justify-content-center">
         {isLoading ? (
           <Spinner animation="border" variant="warning" />
