@@ -86,27 +86,13 @@ app.get("/api/shop", async (req, res) => {
 });
 
 app.get("/api/model", async (req, res) => {
-  const request = new sql.Request();
-  request.input("model_name", sql.VarChar, req.query.model_name);
-
-  request.query(
-    "SELECT model_name, model_image FROM models WHERE model_name = @model_name",
-    (err, result) => {
-      if (err) {
-        console.error("Error executing SELECT:", err);
-        res.status(500).json({ error: "Internal server error" });
-      } else {
-        res.status(200).json(result.recordset[0]);
-      }
-    }
-  );
   try {
-    const modelId = req.query.modelId;
+    const modelId = req.query.modelId
     const request = new sql.Request();
 
     // Simplify this?
     request.input("model_id", sql.Int, modelId);
-    const cond = ["model_id = @modelId"];
+    const cond = ["models.model_id = @model_id"];
     if (req.query.memory) {
       request.input("memory", sql.VarChar, req.query.memory);
       cond.push("memory = @memory");
@@ -122,13 +108,14 @@ app.get("/api/model", async (req, res) => {
 
     const condStr = cond.join(" AND ");
 
-    const result = await request.query(
-      `SELECT item_id, memory, grade, quantity, colour, price published_date FROM items WHERE ${condStr} ORDER BY price, published_date DESC`
-    );
-
+    const result = await request.query(`
+      SELECT item_id, version, memory, grade, quantity, colour, price, model_image \
+      FROM models INNER JOIN items ON (models.model_id = items.model_id) \
+      WHERE ${condStr} \
+      ORDER BY items.price, items.published_time DESC`);
     res.status(200).json(result.recordset);
   } catch (error) {
-    console.error("Error inserting user:", error);
+    console.error("Error :", error);
     res.status(500).json({ error: "Failed to register user" });
   }
 });

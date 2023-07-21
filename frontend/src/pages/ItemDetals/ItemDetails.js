@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import Carousel from "../../components/Carousel/Carousel";
 import { useParams } from "react-router-dom";
@@ -8,7 +8,7 @@ import Spinner from "react-bootstrap/Spinner";
 import "./ItemDetails.css";
 
 export function ItemDetails() {
-  const { item_id } = useParams();
+  const { model_id } = useParams();
 
   const [itemCarousel, setitemCarousel] = useState({});
   const [itemInfo, setItemInfo] = useState({});
@@ -16,36 +16,43 @@ export function ItemDetails() {
   const [quantity, setQuantity] = useState(null);
   const [minAvgPrice, setMinAvgPrice] = useState(null);
 
-  const fetchItemData = async () => {
+  const calcMinAvgPrice = useCallback((responseJson) => {
+      // Tested 
+      if (quantity == null) {
+        const totalPrice = responseJson
+        .map((item) => item.price * item.quantity)
+        .reduce((acc, currVal) => acc + currVal)
+        const totalQuantity = responseJson
+        .map((item) => item.quantity)
+        .reduce((acc, currVal) => acc + currVal)
+        setMinAvgPrice(totalPrice / totalQuantity);
+      } else {
+        let totalPrice = 0;
+        let tempQuantity = 0;
+
+        for (let i=0; i<responseJson.length; i++) {
+          totalPrice += responseJson[i].price * Math.min(responseJson[i].quantity, quantity - tempQuantity)
+          tempQuantity += responseJson[i].quantity
+
+          if (tempQuantity >= quantity) {
+            break;
+          }
+        }
+        const totalQuantity = Math.min(tempQuantity, quantity)
+        setMinAvgPrice((totalQuantity === 0) ? null : totalPrice / totalQuantity);
+      }
+  }, [quantity])
+
+  const fetchItemData = useCallback(async () => {
     try {
       // Add parameters specified in api/model in index.js
       const response = await fetch(
-        `http://localhost:3001/api/model?model_id=${item_id}`
+        `http://localhost:3001/api/model?modelId=${model_id}`
       );
-
 
       if (response.ok) {
         const responseJson = await response.json();
-        
-        if (quantity == null) {
-          const totalPrice = responseJson
-          .map((item) => item.price * item.quantity)
-          .reduce((acc, currVal) => acc + currVal)
-          const totalQuantity = responseJson
-          .map((item) => item.quantity)
-          .reduce((acc, currVal) => acc + currVal)
-          setMinAvgPrice(totalPrice / totalQuantity);
-        } else {
-          let totalPrice = 0;
-          let totalQuantity = 0;
-          // There might be a bug on responseJson.length
-          for (let i=0; i<Math.min(responseJson.length, totalQuantity); i++) {
-            totalPrice+= responseJson[i].price;
-            totalQuantity += responseJson[i].quantity;
-          }
-          setMinAvgPrice(totalPrice / totalQuantity);
-        }
-
+        calcMinAvgPrice(responseJson);
         setitemCarousel(responseJson);
         setItemInfo(responseJson[0]);
         setIsLoading(false);
@@ -57,12 +64,12 @@ export function ItemDetails() {
     } catch (error) {
       console.error("Error fetching data: ", error);
     }
-  };
+  }, [model_id, minAvgPrice, calcMinAvgPrice]);
 
   // Fetching data from remote MySQL database
   useEffect(() => {
     fetchItemData();
-  }, []);
+  }, [quantity, fetchItemData]);
 
   const negative = useNavigate();
 
