@@ -3,6 +3,9 @@ import axios from "axios";
 import Spinner from "react-bootstrap/Spinner";
 import { useParams } from "react-router-dom";
 import FilterPanel from "../../components/FilterPanel/FilterPanel";
+import "../StockList/StockList.css";
+import Breadcrumb from "../../components/Breadcrumbs/Breadcrumbs";
+import fire from "./images/fire_animation.gif";
 
 export function StockList() {
   const { model_name } = useParams();
@@ -29,25 +32,41 @@ export function StockList() {
     return window.btoa(binary);
   };
 
+  const formatCurrency = (num) => {
+    const options = { maximumFractionDigits: 1 };
+    return num.toLocaleString("en-US", options);
+  };
+
   return (
     <div className="container my-3 item-detail-container-max-width">
-      <h1></h1>
-      <div className="row gy-3">
+      <Breadcrumb navName={model.model_name} />
+      <h1 className="display-6">{model.model_name}</h1>
+      <div className="row gy-3 mt-2">
         <div className="col-12 col-md-6">
-          {isLoading ? (
-            <Spinner animation="border" variant="warning" />
-          ) : (
-            <img
-              src={
-                "data:image/jpg;base64," +
-                arrayBufferToBase64(model.model_image.data)
-              }
-              className="img-fluid"
-            />
-          )}
+          <div className="d-flex justify-content-center">
+            {isLoading ? (
+              <Spinner animation="border" variant="warning" />
+            ) : (
+              <img
+                src={
+                  "data:image/jpg;base64," +
+                  arrayBufferToBase64(model.model_image.data)
+                }
+                className="img-fluid"
+              />
+            )}
+          </div>
         </div>
         <div className="col-12 col-md-6">
           <FilterPanel />
+          <div className="ms-4">
+            <h5 className="my-3 display-1 fs-5">
+              Average Minimum Price (per quantity)
+            </h5>
+            <h4>
+              <img src={fire} width={35} /> HK${formatCurrency(50000)}
+            </h4>
+          </div>
         </div>
       </div>
     </div>
