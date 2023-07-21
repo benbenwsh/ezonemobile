@@ -158,8 +158,6 @@ app.post("/api/upload", async (req, res) => {
     } = req.body;
 
     const request = new sql.Request();
-    console.log("here2");
-
     request.input("model", sql.Int, model);
     request.input("seller", sql.Int, seller);
     request.input("origin", sql.VarChar, origin);
@@ -184,7 +182,8 @@ app.post("/api/upload", async (req, res) => {
   } catch (error) {
     res.status(500).json({ error: "Failed to upload" });
   }
-});
-app.listen(3009, async () => {
-  console.log("Server is running on http://localhost:3009");
+})
+
+app.listen(3001, async () => {
+  console.log("Server is running on http://localhost:3001");
 });

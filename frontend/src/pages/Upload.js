@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from "react";
-import ImageDropZone from "../components/ImageDropZone/ImageDropZone";
+import React, { useEffect, useState, useCallback } from "react";
+// import ImageDropZone from "../components/ImageDropZone/ImageDropZone";
 import FormInput from "../components/FormInput";
 import GenericButton from "../components/GenericButton";
+import Notification from "../components/Notification";
 import ValidationRules from "../validation-rules";
 
 export function Upload() {
@@ -19,30 +20,42 @@ export function Upload() {
     description: null,
   });
 
-  useEffect(() => {
+  const [success, setSuccess] = useState(false);
+  const [error, setError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+
+  const fetchUploadOptions = useCallback(async () => {
     try {
-      const response = fetch(`http://localhost:3001/api/upload-options`);
+      const response = await fetch(
+        `http://localhost:3001/api/upload-options`
+      );
+
+      const responseJson = await response.json()
+
       if (response.ok) {
-        const responseJson = response.json();
         setModelOptions(responseJson.models);
         setSellerOptions(responseJson.sellers);
       } else {
-        throw new Error("Request failed with status " + response.status);
+        console.error("Error fetching data");
       }
     } catch (error) {
       console.error("Error fetching data: ", error);
     }
-  }, []);
+  }, [])  
 
+  useEffect(() => {
+    fetchUploadOptions()
+  }, [fetchUploadOptions])
+  
   function handleInputChange(e) {
     const { name, value } = e.target;
     setFormValues({ ...formValues, [name]: value });
   }
 
-  async function uploadButtonClicked(e) {
-    e.preventDefault();
-
+  const uploadButtonClicked = useCallback(async (e) => {
+    e.preventDefault()
     const form = e.target.form;
+
     if (form.checkValidity()) {
       try {
         console.log(formValues);
@@ -54,16 +67,19 @@ export function Upload() {
           body: JSON.stringify(formValues),
         });
 
+        
         if (response.ok) {
-          console.log("Upload succeeded");
+          setSuccess(true);
         } else {
-          console.error("Upload failed");
+          const responseJson = await response.json();
+          setErrorMessage(responseJson.error);
+          setError(true);
         }
       } catch (error) {
         console.error("Error occurred during upload", error);
       }
     }
-  }
+  }, [formValues])
 
   const isDisabled = !(
     ValidationRules.isModelValid(formValues.model) &&
@@ -72,6 +88,13 @@ export function Upload() {
 
   return (
     <div className="container">
+      <Notification
+        success={success} 
+        error={error}
+        setSuccess={setSuccess}
+        setError={setError}
+        message="Upload Success!"
+      />
       <h2 className="my-3">What are you listing today?</h2>
       {/* <ImageDropZone /> */}
       <div className="border-bottom border-light-subtle my-3"></div>
