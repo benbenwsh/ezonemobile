@@ -13,9 +13,6 @@ export default function Item(props) {
 
   let binaryImg = arrayBufferToBase64(props.item.model_image.data);
 
-  const formatedNumber = (price) => {
-    return price.toLocaleString("en-US");
-  };
   return (
     <div className="card h-100">
       <img

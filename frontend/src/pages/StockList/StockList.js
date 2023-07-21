@@ -10,42 +10,32 @@ import StcokListTable from "../../components/StockListTable/StockListTable";
 
 export function StockList() {
   const { model_name } = useParams();
-  const [model, setModel] = useState({});
-  const [modeDetails, setModelDetails] = useState({});
+  const [model, setModel] = useState({}); // only store image and name
+  const [stockDetails, setstockDetails] = useState();
   const [isLoading, setIsLoading] = useState(true);
 
-  const getModelImageAndName = async () => {
+  const getModelData = async () => {
     axios
       .get(`http://localhost:3009/api/model?model_name=${model_name}`)
       .then((res) => {
         setModel(res.data);
-        // modelId = res.data.model_id;
-        setIsLoading(false);
+        const modelDetailsData = res.data;
+        const getModelDetailsUrl = `http://localhost:3009/api/model/stockDetails?model_id=${modelDetailsData.model_id}`;
+        return axios.get(getModelDetailsUrl);
       })
-      .catch((e) => {
-        console.log("ERROR Fail to fetch the model name or image", e);
-      });
-  };
-
-  // stock list
-  const getModelDetails = async () => {
-    console.log(model.model_id);
-    axios
-      .get(
-        `http://localhost:3009/api/model/stockDetails?model_id=${model.model_id}`
-      )
       .then((res) => {
-        console.log(res);
-        setModelDetails(res.data);
+        setstockDetails(res.data);
       })
-      .catch((e) => {
-        console.log("ERROR Fail to fetch the stock list data", e);
+      .catch((err) => {
+        console.log("ERROR fail to fetch the data", err);
+      })
+      .finally(() => {
+        setIsLoading(false);
       });
   };
 
   useEffect(() => {
-    getModelImageAndName();
-    getModelDetails();
+    getModelData();
   }, []);
 
   // convert array buffer to base64
@@ -93,8 +83,6 @@ export function StockList() {
           </div>
         </div>
       </div>
-
-      <StcokListTable />
     </div>
   );
 }
