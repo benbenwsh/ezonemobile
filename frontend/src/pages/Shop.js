@@ -10,7 +10,7 @@ export function Shop() {
 
   const fetchItemsData = async () => {
     try {
-      const response = await fetch(`http://localhost:3001/api/shop`);
+      const response = await fetch(`http://localhost:3009/api/shop`);
       if (response.ok) {
         const responseJson = await response.json();
         console.log(responseJson);

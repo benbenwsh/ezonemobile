@@ -6,26 +6,46 @@ import FilterPanel from "../../components/FilterPanel/FilterPanel";
 import "../StockList/StockList.css";
 import Breadcrumb from "../../components/Breadcrumbs/Breadcrumbs";
 import fire from "./images/fire_animation.gif";
+import StcokListTable from "../../components/StockListTable/StockListTable";
 
 export function StockList() {
   const { model_name } = useParams();
   const [model, setModel] = useState({});
+  const [modeDetails, setModelDetails] = useState({});
   const [isLoading, setIsLoading] = useState(true);
 
-  const getModelData = async () => {
+  const getModelImageAndName = async () => {
     axios
-      .get(`http://localhost:3005/api/model?model_name=${model_name}`)
+      .get(`http://localhost:3009/api/model?model_name=${model_name}`)
       .then((res) => {
         setModel(res.data);
+        // modelId = res.data.model_id;
         setIsLoading(false);
       })
       .catch((e) => {
-        console.log("ERROR Fair to fetch the data", e);
+        console.log("ERROR Fail to fetch the model name or image", e);
+      });
+  };
+
+  // stock list
+  const getModelDetails = async () => {
+    console.log(model.model_id);
+    axios
+      .get(
+        `http://localhost:3009/api/model/stockDetails?model_id=${model.model_id}`
+      )
+      .then((res) => {
+        console.log(res);
+        setModelDetails(res.data);
+      })
+      .catch((e) => {
+        console.log("ERROR Fail to fetch the stock list data", e);
       });
   };
 
   useEffect(() => {
-    getModelData();
+    getModelImageAndName();
+    getModelDetails();
   }, []);
 
   // convert array buffer to base64
@@ -73,6 +93,8 @@ export function StockList() {
           </div>
         </div>
       </div>
+
+      <StcokListTable />
     </div>
   );
 }
