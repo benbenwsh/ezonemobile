@@ -52,6 +52,15 @@
     return chkTerm;
   };
 
+  // In Upload.js
+  function isModelValid(model) {
+    return model !== 'Choose model'
+  }
+
+  function isSellerValid(seller) {
+    return seller !== 'Choose seller'
+  }
+
   return {
     isNameValid: isNameValid,
     isEmailValid: isEmailValid,
@@ -60,5 +69,7 @@
     isCountryValid: isCountryValid,
     isAddressValid: isAddressValid,
     isTermChecked: isTermChecked,
+    isModelValid: isModelValid,
+    isSellerValid: isSellerValid
   };
 }));
