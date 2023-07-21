@@ -85,6 +85,7 @@ app.get("/api/shop", async (req, res) => {
   }
 });
 
+// this endpoint only get the model name and model image
 app.get("/api/model", async (req, res) => {
   const request = new sql.Request();
   request.input("model_name", sql.VarChar, req.query.model_name);
@@ -100,6 +101,9 @@ app.get("/api/model", async (req, res) => {
       }
     }
   );
+});
+
+app.get("/api/model/stockDetails", async (req, res) => {
   try {
     const modelId = req.query.modelId;
     const request = new sql.Request();

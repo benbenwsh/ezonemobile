@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import Spinner from "react-bootstrap/Spinner";
 import Search from "../components/Search";
 import Item from "../components/Items/Item";
+import Breadcrumb from "../components/Breadcrumbs/Breadcrumbs";
 
 export function Shop() {
   const [items, setItems] = useState([]);
@@ -9,9 +10,7 @@ export function Shop() {
 
   const fetchItemsData = async () => {
     try {
-      const response = await fetch(
-        `http://localhost:3001/api/shop`
-      );
+      const response = await fetch(`http://localhost:3001/api/shop`);
       if (response.ok) {
         const responseJson = await response.json();
         console.log(responseJson);
@@ -25,12 +24,13 @@ export function Shop() {
     }
   };
 
-  useEffect(async () => {
-    await fetchItemsData();
-  }, [])
+  useEffect(() => {
+    fetchItemsData();
+  }, []);
 
   return (
-    <div className="container">
+    <div className="container my-3">
+      <Breadcrumb />
       <div className="row gy-3 mt-3">
         {isLoading ? (
           <div className="d-flex justify-content-center">

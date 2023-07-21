@@ -12,7 +12,7 @@ export function StockList() {
   const [model, setModel] = useState({});
   const [isLoading, setIsLoading] = useState(true);
 
-  useEffect(() => {
+  const getModelData = async () => {
     axios
       .get(`http://localhost:3005/api/model?model_name=${model_name}`)
       .then((res) => {
@@ -22,6 +22,10 @@ export function StockList() {
       .catch((e) => {
         console.log("ERROR Fair to fetch the data", e);
       });
+  };
+
+  useEffect(() => {
+    getModelData();
   }, []);
 
   // convert array buffer to base64
