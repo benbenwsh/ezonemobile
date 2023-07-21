@@ -13,16 +13,41 @@ export function ItemDetails() {
   const [itemCarousel, setitemCarousel] = useState({});
   const [itemInfo, setItemInfo] = useState({});
   const [isLoading, setIsLoading] = useState(true);
+  const [quantity, setQuantity] = useState(null);
+  const [minAvgPrice, setMinAvgPrice] = useState(null);
 
   const fetchItemData = async () => {
     try {
+      // Add parameters specified in api/model in index.js
       const response = await fetch(
-        `http://localhost:3005/api/item?item_id=${item_id}`
+        `http://localhost:3001/api/model?model_id=${item_id}`
       );
+
+
       if (response.ok) {
         const responseJson = await response.json();
-        setitemCarousel(responseJson.recordset);
-        setItemInfo(responseJson.recordset[0]);
+        
+        if (quantity == null) {
+          const totalPrice = responseJson
+          .map((item) => item.price * item.quantity)
+          .reduce((acc, currVal) => acc + currVal)
+          const totalQuantity = responseJson
+          .map((item) => item.quantity)
+          .reduce((acc, currVal) => acc + currVal)
+          setMinAvgPrice(totalPrice / totalQuantity);
+        } else {
+          let totalPrice = 0;
+          let totalQuantity = 0;
+          // There might be a bug on responseJson.length
+          for (let i=0; i<Math.min(responseJson.length, totalQuantity); i++) {
+            totalPrice+= responseJson[i].price;
+            totalQuantity += responseJson[i].quantity;
+          }
+          setMinAvgPrice(totalPrice / totalQuantity);
+        }
+
+        setitemCarousel(responseJson);
+        setItemInfo(responseJson[0]);
         setIsLoading(false);
       } else if (response.status === 404) {
         negative("/notfound");
