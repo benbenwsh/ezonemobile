@@ -1,0 +1,5 @@
+@media (min-width: 768px) {
+  .item-detail-container-max-width {
+    max-width: 960px;
+  }
+}

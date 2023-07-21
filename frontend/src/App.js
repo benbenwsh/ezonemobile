@@ -9,6 +9,7 @@ import { About } from "./pages/About";
 import { NotFound } from "./pages/NotFound/NotFound";
 import Footer from "./components/Footer";
 import NavigationBar from "./components/NavigationBar/NavigationBar";
+import { StockList } from "./pages/StockList/StockList";
 
 export default function App() {
   const [isSignedIn, setIsSignedIn] = useState(false);
@@ -42,7 +43,8 @@ export default function App() {
             )
           }
         /> */}
-        <Route path="/shop/:item_id" element={<ItemDetails />} />
+        <Route path="/shop/:model_name" element={<StockList />} />
+        {/* <Route path="/shop/:item_id" element={<ItemDetails />} /> */}
         <Route path="/upload" element={<Upload />} />
         <Route path="/about" element={<About />} />
         <Route path="*" element={<NotFound />} />

@@ -1,6 +1,6 @@
 import React from "react";
 import { Carousel } from "react-bootstrap";
-import "../DisplayItemDetails/ItemDetails.css";
+import "../Carousel/Carousel.css";
 
 export default function CarouselItem(props) {
   // convert array buffer to base64

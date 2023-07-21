@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import Carousel from "../../components/DisplayItemDetails/Carousel";
+import Carousel from "../../components/Carousel/Carousel";
 import { useParams } from "react-router-dom";
 import TechnicalDetailsTable from "../../components/DisplayItemDetails/TechnicalDetailsTable";
 import ItemDescription from "../../components/DisplayItemDetails/ItemDescription";

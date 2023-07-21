@@ -191,6 +191,23 @@ app.get("/api/data", async (req, res) => {
   }
 });
 
+app.get("/api/model", (req, res) => {
+  const request = new sql.Request();
+  request.input("model_name", sql.VarChar, req.query.model_name);
+
+  request.query(
+    "SELECT model_name, model_image FROM models WHERE model_name = @model_name",
+    (err, result) => {
+      if (err) {
+        console.error("Error executing SELECT:", err);
+        res.status(500).json({ error: "Internal server error" });
+      } else {
+        res.status(200).json(result.recordset[0]);
+      }
+    }
+  );
+});
+
 app.get("/api/item", (req, res) => {
   sql.query(
     `SELECT items.*, image_data FROM images INNER JOIN items ON (images.item_id = items.item_id) WHERE items.item_id = ${req.query.item_id}`,
