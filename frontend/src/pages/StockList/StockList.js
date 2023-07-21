@@ -74,7 +74,7 @@ export function StockList() {
           <FilterPanel />
           <div className="ms-4">
             <h5 className="my-3 display-1 fs-5">
-              Average Minimum Price (per quantity)
+              Minimum Average Price (per quantity)
             </h5>
             <h4>
               <img src={fire} width={35} /> HK${formatCurrency(50000)}

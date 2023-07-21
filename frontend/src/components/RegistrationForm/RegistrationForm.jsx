@@ -15,7 +15,7 @@ export default function RegisterForm(props) {
     email: "",
     verifyEmail: "",
     password: "",
-    country: "",
+    country: "Country",
     city: "",
     state: "",
     address: "",
