@@ -4,7 +4,7 @@ import FormInput from "../FormInput";
 import CheckBox from "../CheckBox";
 import GenericButton from "../GenericButton";
 import { maxLengths } from "../../config";
-import NotificationError from "../NotificationError";
+import Notification from "../Notification"
 import Modal from "../Modal";
 import ValidationRules from "../../validation-rules";
 import "./SignInForm.css";
@@ -45,21 +45,6 @@ export default function SignInForm(props) {
     } catch (error) {
       console.error("Error occurred during sign up", error);
     }
-    // try {
-    //   const response = await logInWithEmailAndPassword(
-    //     formValues.email,
-    //     formValues.password
-    //   );
-    //   if (response.success) {
-    //     props.setIsSignedIn(true);
-    //   } else {
-    //     setErrorMessage(response.message);
-    //     setError(true);
-    //   }
-    // } catch (err) {
-    //   setErrorMessage(err);
-    //   setError(true);
-    // }
   };
 
   const handleInputChange = (e) => {
@@ -74,10 +59,12 @@ export default function SignInForm(props) {
 
   return (
     <div className="container text-center form-max-width">
-      <NotificationError
+      <Notification
+        success={false}
         error={error}
+        setSuccess={null}
         setError={setError}
-        errorMessage={errorMessage}
+        message={errorMessage}
       />
       <h1 className="my-5 display-3 fw-bold">Sign In</h1>
       <form action="/" method="POST">

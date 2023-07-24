@@ -39,7 +39,7 @@ export default function Notification(props) {
       props.setError(false);
       notifyError();
     }
-  }, [props, notify])
+  }, [props, notifySuccess, notifyError])
 
   return (
     <ToastContainer />

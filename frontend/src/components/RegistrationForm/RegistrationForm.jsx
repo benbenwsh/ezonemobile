@@ -3,7 +3,7 @@ import FormInput from "../FormInput";
 import GenericButton from "../GenericButton";
 import { maxLengths } from "../../config";
 import CountrySelector from "./CountrySelector";
-import NotificationError from "../NotificationError";
+import Notification from "../Notification";
 import Modal from "../Modal";
 import ValidationRules from "../../validation-rules";
 import "./RegistrationForm.css";
@@ -89,8 +89,10 @@ export default function RegisterForm(props) {
 
   return (
     <>
-      <NotificationError
+      <Notification
+        success={false}
         error={error}
+        setSuccess={null}
         setError={setError}
         errorMessage={errorMessage}
       />
