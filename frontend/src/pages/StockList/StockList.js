@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState, useCallback } from "react";
 import axios from "axios";
 import Spinner from "react-bootstrap/Spinner";
 import { useParams } from "react-router-dom";
@@ -11,21 +11,24 @@ import StcokListTable from "../../components/StockListTable/StockListTable";
 export function StockList() {
   const { model_name } = useParams();
   const [model, setModel] = useState({}); // only store image and name
-  const [stockDetails, setstockDetails] = useState();
+  const [stockDetails, setStockDetails] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [quantity, setQuantity] = useState(null);
+  const [minAvgPrice, setMinAvgPrice] = useState(0);
 
   // get model data from database
-  const getModelData = async () => {
+  const getModelData = useCallback(() => {
     axios
-      .get(`http://localhost:3009/api/model?model_name=${model_name}`)
+      .get(`http://localhost:3001/api/model?model_name=${model_name}`)
       .then((res) => {
         setModel(res.data);
         const modelDetailsData = res.data;
-        const getModelDetailsUrl = `http://localhost:3009/api/model/stockDetails?model_id=${modelDetailsData.model_id}`;
+        const getModelDetailsUrl = `http://localhost:3001/api/model/stockDetails?model_id=${modelDetailsData.model_id}`;
         return axios.get(getModelDetailsUrl);
       })
       .then((res) => {
-        setstockDetails(res.data);
+        setStockDetails(res.data);
+        console.log(res.data)
       })
       .catch((err) => {
         console.log("ERROR fail to fetch the data", err);
@@ -33,11 +36,45 @@ export function StockList() {
       .finally(() => {
         setIsLoading(false);
       });
-  };
+  }, [model_name])
+
+  const calcMinAvgPrice = useCallback((data) => {
+      // Tested 
+      let totalPrice = 0;
+      let totalQuantity = 0
+      if (quantity == null) {
+        totalPrice = data
+        .map((item) => item.price * item.quantity)
+        .reduce((acc, currVal) => acc + currVal, 0)
+        totalQuantity = data
+        .map((item) => item.quantity)
+        .reduce((acc, currVal) => acc + currVal, 0)
+        console.log(totalPrice)
+        console.log(totalQuantity)
+      } else {
+        let tempQuantity = 0;
+
+        for (let i=0; i<data.length; i++) {
+          totalPrice += data[i].price * Math.min(data[i].quantity, quantity - tempQuantity)
+          tempQuantity += data[i].quantity
+
+          if (tempQuantity >= quantity) {
+            break;
+          }
+        }
+        
+        totalQuantity = Math.min(tempQuantity, quantity)
+      }
+      setMinAvgPrice((totalQuantity === 0) ? 0 : totalPrice / totalQuantity);
+  }, [quantity])
 
   useEffect(() => {
     getModelData();
-  }, []);
+  }, [getModelData]);
+
+  useEffect(() => {
+    calcMinAvgPrice(stockDetails);
+  }, [calcMinAvgPrice, stockDetails])
 
   // convert array buffer to base64
   const arrayBufferToBase64 = (buffer) => {
@@ -79,7 +116,7 @@ export function StockList() {
               Minimum Average Price (per quantity)
             </h5>
             <h4>
-              <img src={fire} width={35} /> HK${formatCurrency(50000)}
+              <img src={fire} width={35} /> HK${formatCurrency((minAvgPrice))}
             </h4>
           </div>
         </div>

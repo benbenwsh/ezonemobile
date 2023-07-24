@@ -11,7 +11,7 @@ export function Shop() {
 
   const fetchItemsData = async () => {
     axios
-      .get("http://localhost:3009/api/shop")
+      .get("http://localhost:3001/api/shop")
       .then((res) => setItems(res.data))
       .catch((err) => {
         console.error("Error fetching data: ", err);

@@ -13,35 +13,6 @@ export function ItemDetails() {
   const [itemCarousel, setitemCarousel] = useState({});
   const [itemInfo, setItemInfo] = useState({});
   const [isLoading, setIsLoading] = useState(true);
-  const [quantity, setQuantity] = useState(null);
-  const [minAvgPrice, setMinAvgPrice] = useState(null);
-
-  const calcMinAvgPrice = useCallback((responseJson) => {
-      // Tested 
-      if (quantity == null) {
-        const totalPrice = responseJson
-        .map((item) => item.price * item.quantity)
-        .reduce((acc, currVal) => acc + currVal)
-        const totalQuantity = responseJson
-        .map((item) => item.quantity)
-        .reduce((acc, currVal) => acc + currVal)
-        setMinAvgPrice(totalPrice / totalQuantity);
-      } else {
-        let totalPrice = 0;
-        let tempQuantity = 0;
-
-        for (let i=0; i<responseJson.length; i++) {
-          totalPrice += responseJson[i].price * Math.min(responseJson[i].quantity, quantity - tempQuantity)
-          tempQuantity += responseJson[i].quantity
-
-          if (tempQuantity >= quantity) {
-            break;
-          }
-        }
-        const totalQuantity = Math.min(tempQuantity, quantity)
-        setMinAvgPrice((totalQuantity === 0) ? null : totalPrice / totalQuantity);
-      }
-  }, [quantity])
 
   const fetchItemData = useCallback(async () => {
     try {
@@ -52,7 +23,6 @@ export function ItemDetails() {
 
       if (response.ok) {
         const responseJson = await response.json();
-        calcMinAvgPrice(responseJson);
         setitemCarousel(responseJson);
         setItemInfo(responseJson[0]);
         setIsLoading(false);
@@ -64,12 +34,12 @@ export function ItemDetails() {
     } catch (error) {
       console.error("Error fetching data: ", error);
     }
-  }, [model_id, minAvgPrice, calcMinAvgPrice]);
+  }, [model_id]);
 
   // Fetching data from remote MySQL database
   useEffect(() => {
     fetchItemData();
-  }, [quantity, fetchItemData]);
+  }, [fetchItemData]);
 
   const negative = useNavigate();
 
