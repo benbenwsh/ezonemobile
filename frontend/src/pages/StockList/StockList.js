@@ -7,7 +7,7 @@ import FilterPanel from "../../components/FilterPanel/FilterPanel";
 import "../StockList/StockList.css";
 import Breadcrumb from "../../components/Breadcrumbs/Breadcrumbs";
 import fire from "./images/fire_animation.gif";
-import StockListTable from "../../components/StockListTable/StockListTable";
+import StockListTable from "../../components/StockListTable";
 
 export function StockList() {
   const { model_name } = useParams();
