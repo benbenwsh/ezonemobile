@@ -130,6 +130,7 @@ app.get("/api/model/stockDetails", async (req, res) => {
   // }
 });
 
+// MoreDetails page
 app.get("/api/model/modelDetails", (req, res) => {});
 
 app.get("/api/upload-options", async (req, res) => {

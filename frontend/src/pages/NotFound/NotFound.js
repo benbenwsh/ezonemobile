@@ -7,11 +7,7 @@ export function NotFound() {
   return (
     <div className="container">
       <div className="text-center">
-        <img
-          src={NotFound_404}
-          alt="404 not found"
-          className="img-fluid w-50"
-        />
+        <img src={NotFound_404} alt="404 not found" className="img-fluid" />
         <h1>Not Found</h1>
         <p>The resource requested could not be found on this server!</p>
         <Link to="/">

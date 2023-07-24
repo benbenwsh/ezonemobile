@@ -6,8 +6,9 @@ import TechnicalDetailsTable from "../components/DisplayItemDetails/TechnicalDet
 import ItemDescription from "../components/DisplayItemDetails/ItemDescription";
 import Spinner from "react-bootstrap/Spinner";
 
-export function ItemDetails() {
-  const { model_id } = useParams();
+export function MoreDetails() {
+  const { seller_id } = useParams();
+  const negative = useNavigate();
 
   const [itemCarousel, setitemCarousel] = useState({});
   const [itemInfo, setItemInfo] = useState({});
@@ -17,7 +18,7 @@ export function ItemDetails() {
     try {
       // Add parameters specified in api/model in index.js
       const response = await fetch(
-        `http://localhost:3005/api/model?modelId=${model_id}`
+        `http://localhost:3005/api/m?modelId=${seller_id}`
       );
 
       if (response.ok) {
@@ -33,14 +34,12 @@ export function ItemDetails() {
     } catch (error) {
       console.error("Error fetching data: ", error);
     }
-  }, [model_id]);
+  }, [seller_id]);
 
   // Fetching data from remote MySQL database
   useEffect(() => {
     fetchItemData();
   }, [fetchItemData]);
-
-  const negative = useNavigate();
 
   return (
     <div className="container my-3">
