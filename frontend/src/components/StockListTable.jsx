@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import GenericButton from "../GenericButton";
+import GenericButton from "./GenericButton";
 import ModalBtn from "./ModalBtn";
 
 export default function StcokListTable(props) {
@@ -31,7 +31,7 @@ export default function StcokListTable(props) {
                 <td>{stock.price}</td>
                 <td>
                   <ModalBtn
-                    title="You can contact us"
+                    title="Contact us"
                     wtsNum="(+852) xxxx-xxxx"
                     weChatNum="(+852) xxxx-xxxx"
                     email="xxx@gmail.com"

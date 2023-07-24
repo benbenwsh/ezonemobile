@@ -7,7 +7,7 @@ import FilterPanel from "../../components/FilterPanel/FilterPanel";
 import "../StockList/StockList.css";
 import Breadcrumb from "../../components/Breadcrumbs/Breadcrumbs";
 import fire from "./images/fire_animation.gif";
-import StcokListTable from "../../components/StockListTable/StockListTable";
+import StcokListTable from "../../components/StockListTable";
 
 export function StockList() {
   const { model_name } = useParams();
@@ -24,6 +24,10 @@ export function StockList() {
     axios
       .get(`http://localhost:3005/api/model?model_name=${model_name}`)
       .then((res) => {
+        if (res.data === "") {
+          negative("/notfound");
+        }
+
         setModel(res.data);
         const modelDetailsData = res.data;
         const getModelDetailsUrl = `http://localhost:3005/api/model/stockDetails?model_id=${modelDetailsData.model_id}`;
@@ -97,7 +101,7 @@ export function StockList() {
 
   return (
     <div className="container my-3">
-      <Breadcrumb navName={model.model_name} />
+      <Breadcrumb navLink={model_name} />
       <h1 className="display-6">{model.model_name}</h1>
       <div className="row gy-3 mt-2">
         <div className="col-12 col-md-6">

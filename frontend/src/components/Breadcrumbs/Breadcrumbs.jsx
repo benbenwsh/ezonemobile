@@ -5,8 +5,8 @@ export default function BreadcrumbLink(props) {
   return (
     <Breadcrumb>
       <Breadcrumb.Item href="/">Shop</Breadcrumb.Item>
-      <Breadcrumb.Item href={`/${props.navName}`}>
-        {props.navName}
+      <Breadcrumb.Item href={`/${props.navLink}`}>
+        {props.navLink}
       </Breadcrumb.Item>
     </Breadcrumb>
   );

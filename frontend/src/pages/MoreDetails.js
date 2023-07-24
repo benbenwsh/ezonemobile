@@ -3,12 +3,14 @@ import { useNavigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import Carousel from "../components/Carousel/Carousel";
 import axios from "axios";
+import Breadcrumb from "../components/Breadcrumbs/Breadcrumbs";
 import TechnicalDetailsTable from "../components/DisplayItemDetails/TechnicalDetailsTable";
 import ItemDescription from "../components/DisplayItemDetails/ItemDescription";
 import Spinner from "react-bootstrap/Spinner";
 
 export function MoreDetails() {
   const { model_name, item_id } = useParams();
+  const negative = useNavigate();
 
   const [itemCarousel, setitemCarousel] = useState({});
   const [itemInfo, setItemInfo] = useState({});
@@ -23,6 +25,7 @@ export function MoreDetails() {
         setIsLoading(false);
       })
       .catch((err) => {
+        negative("/notfound");
         console.log("ERROR fail to fetch the data", err);
       });
   };
@@ -42,6 +45,7 @@ export function MoreDetails() {
 
   return (
     <div className="container my-3">
+      <Breadcrumb navLink={model_name} />
       <div className="row gy-3">
         <div col-md-1></div>
         <div className="col-12 col-md-6">

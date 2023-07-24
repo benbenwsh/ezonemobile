@@ -30,6 +30,14 @@ export default function TechnicalDetailsTable(props) {
             <td>Colour</td>
             <td>{props.item.colour}</td>
           </tr>
+          <tr>
+            <td>Description</td>
+            {props.item.description ? (
+              <td>{props.item.description}</td>
+            ) : (
+              <td>-</td>
+            )}
+          </tr>
         </tbody>
       </table>
     </>

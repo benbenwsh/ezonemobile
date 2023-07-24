@@ -11,6 +11,12 @@ const secretKey = "mysecretkey";
 app.use(cors());
 app.use(express.json());
 
+// middleware console log where does the user route to
+app.use((req, res, next) => {
+  console.log(req.path, req.method);
+  next();
+});
+
 const config = {
   server: "HKGVSWDEVWEB01",
   port: 1433,
@@ -48,9 +54,9 @@ sql.connect(config, (err) => {
   }
 });
 
+// shop page
 app.get("/api/shop", async (req, res) => {
   const request = new sql.Request();
-  // Simplify this
 
   sql.query("SELECT model_name, model_image FROM models", (error, result) => {
     if (error) {
@@ -63,6 +69,7 @@ app.get("/api/shop", async (req, res) => {
 });
 
 // this endpoint only get the model name and model image
+// stockList page
 app.get("/api/model", async (req, res) => {
   const request = new sql.Request();
   request.input("model_name", sql.VarChar, req.query.model_name);
@@ -75,11 +82,13 @@ app.get("/api/model", async (req, res) => {
         res.status(500).json({ error: "Internal server error" });
       } else {
         res.status(200).json(result.recordset[0]);
+        console.log(res.status);
       }
     }
   );
 });
 
+// stockList page
 app.get("/api/model/stockDetails", async (req, res) => {
   const request = new sql.Request();
   request.input("model_id", sql.VarChar, req.query.model_id);
@@ -130,16 +139,19 @@ app.get("/api/model/stockDetails", async (req, res) => {
   // }
 });
 
-// MoreDetails page
+// moreDetails page
 app.get("/api/model/moreDetails", (req, res) => {
   const request = new sql.Request();
   request.input("item_id", sql.VarChar, req.query.item_id);
   request.query(
-    "SELECT version, memory, grade, quantity, colour, price FROM items WHERE item_id=@item_id",
+    "SELECT version, memory, grade, quantity, colour, price, description, seller_id FROM items WHERE item_id=@item_id",
     (err, result) => {
       if (err) {
         console.error("Error executing SELECT:", err);
         res.status(500).json({ error: "Internal server error" });
+      } else if (result.recordset[0] === undefined) {
+        console.log("test");
+        res.status(404).json({ error: "Not found in the server" });
       } else {
         res.status(200).json(result.recordset[0]);
       }
@@ -147,6 +159,7 @@ app.get("/api/model/moreDetails", (req, res) => {
   );
 });
 
+// upload page
 app.get("/api/upload-options", async (req, res) => {
   const request = new sql.Request();
 
@@ -158,6 +171,7 @@ app.get("/api/upload-options", async (req, res) => {
   res.status(200).json({ models: models, sellers: sellers });
 });
 
+// upload page
 app.post("/api/upload", async (req, res) => {
   try {
     const {
