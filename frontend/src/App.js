@@ -6,7 +6,7 @@ import { Shop } from "./pages/Shop";
 import { StockList } from "./pages/StockList/StockList";
 import { MoreDetails } from "./pages/MoreDetails";
 import { Upload } from "./pages/Upload";
-import { About } from "./pages/About";
+import { About } from "./pages/About/About";
 import { NotFound } from "./pages/NotFound/NotFound";
 import Footer from "./components/Footer";
 import NavigationBar from "./components/NavigationBar/NavigationBar";

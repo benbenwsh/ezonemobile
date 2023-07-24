@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useCallback } from "react";
-// import ImageDropZone from "../components/ImageDropZone/ImageDropZone";
+import ImageDropZone from "../components/ImageDropZone/ImageDropZone";
 import FormInput from "../components/FormInput";
 import GenericButton from "../components/GenericButton";
 import Notification from "../components/Notification";
@@ -21,16 +21,15 @@ export function Upload() {
   });
 
   const [success, setSuccess] = useState(false);
+  const [price, setPrice] = useState();
   const [error, setError] = useState(false);
-  const [message, setMessage] = useState("")
+  const [message, setMessage] = useState("");
 
   const fetchUploadOptions = useCallback(async () => {
     try {
-      const response = await fetch(
-        `http://localhost:3001/api/upload-options`
-      );
+      const response = await fetch(`http://localhost:3005/api/upload-options`);
 
-      const responseJson = await response.json()
+      const responseJson = await response.json();
 
       if (response.ok) {
         setModelOptions(responseJson.models);
@@ -41,46 +40,63 @@ export function Upload() {
     } catch (error) {
       console.error("Error fetching data: ", error);
     }
-  }, [])  
+  }, []);
 
   useEffect(() => {
-    fetchUploadOptions()
-  }, [fetchUploadOptions])
-  
+    fetchUploadOptions();
+  }, [fetchUploadOptions]);
+
   function handleInputChange(e) {
     const { name, value } = e.target;
     setFormValues({ ...formValues, [name]: value });
   }
 
-  const uploadButtonClicked = useCallback(async (e) => {
-    e.preventDefault()
-    const form = e.target.form;
+  // const formatPrice = (price) => {
+  //   return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  // };
 
-    if (form.checkValidity()) {
-      try {
-        console.log(formValues);
-        const response = await fetch("http://localhost:3001/api/upload", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(formValues),
-        });
+  // const handlePriceChange = (e) => {
+  //   const value = e.target.value.replace(/,/g, ""); // Remove any existing commas
+  //   const formattedValue = formatPrice(value);
+  //   setPrice(formattedValue);
+  // };
 
-        
-        if (response.ok) {
-          setMessage("Upload Success!")
-          setSuccess(true);
-        } else {
-          const responseJson = await response.json();
-          setMessage("Upload Error!")
-          setError(true);
+  // const handleInputAndPriceChange = (e) => {
+  //   handleInputChange(e);
+  //   handlePriceChange(e);
+  // };
+
+  const uploadButtonClicked = useCallback(
+    async (e) => {
+      e.preventDefault();
+      const form = e.target.form;
+
+      if (form.checkValidity()) {
+        try {
+          console.log(formValues);
+          const response = await fetch("http://localhost:3001/api/upload", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(formValues),
+          });
+
+          if (response.ok) {
+            setMessage("Upload Success!");
+            setSuccess(true);
+          } else {
+            const responseJson = await response.json();
+            setMessage("Upload Error!");
+            setError(true);
+          }
+        } catch (error) {
+          console.error("Error occurred during upload", error);
         }
-      } catch (error) {
-        console.error("Error occurred during upload", error);
       }
-    }
-  }, [formValues])
+    },
+    [formValues]
+  );
 
   const isDisabled = !(
     ValidationRules.isModelValid(formValues.model) &&
@@ -97,7 +113,7 @@ export function Upload() {
         message={message}
       />
       <h2 className="my-3">What are you listing today?</h2>
-      {/* <ImageDropZone /> */}
+      <ImageDropZone />
       <div className="border-bottom border-light-subtle my-3"></div>
       <h3>Item Description</h3>
       <form action="#" method="POST">
@@ -124,7 +140,7 @@ export function Upload() {
             </select>
           </div>
 
-          <div className="col-12 col-sm-6 col-lg-4">
+          <div className="col-12 col-sm-6">
             <label htmlFor="seller" className="text-black fw-medium mb-1">
               Seller
             </label>
@@ -180,9 +196,7 @@ export function Upload() {
               <span class="input-group-text">GB</span>
             </div>
           </div>
-        </div>
 
-        <div className="row gy-3 mt-1">
           <div className="col-12 col-sm-6 col-lg-4">
             <label htmlFor="grade" className="text-black fw-medium mb-1">
               Grade
@@ -208,9 +222,6 @@ export function Upload() {
               onChange={handleInputChange}
             />
           </div>
-        </div>
-
-        <div className="row gy-3 mt-1">
           <div className="col-12 col-sm-6 col-lg-4">
             <label htmlFor="price" className="text-black fw-medium mb-1">
               Price
@@ -241,17 +252,17 @@ export function Upload() {
           </div>
         </div>
 
-        <div className="row gy-3">
+        <div className="row gy-3 mt-1">
           <div className="col-12">
             <label htmlFor="description" className="text-black fw-medium mb-1">
               Description (Optional)
             </label>
             <textarea
-              class="form-control"
+              className="form-control"
               name="description"
               placeholder="More information"
               id="floatingTextarea2"
-              style={{ height: "100px" }}
+              style={{ height: "100px", resize: "none" }}
               onChange={handleInputChange}
             ></textarea>
           </div>

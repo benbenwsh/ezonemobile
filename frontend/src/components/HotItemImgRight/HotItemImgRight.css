@@ -1,9 +1,0 @@
-.hot-item-heading {
-  font-size: 32px;
-}
-@media (min-width: 768px) {
-  .hot-item-heading {
-    line-height: 1;
-    font-size: 50px;
-  }
-}
