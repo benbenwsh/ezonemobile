@@ -90,53 +90,36 @@ app.get("/api/model", async (req, res) => {
 
 // stockList page
 app.get("/api/model/stockDetails", async (req, res) => {
-  const request = new sql.Request();
-  request.input("model_id", sql.VarChar, req.query.model_id);
+  try {
+    const request = new sql.Request();
+    const types = {
+      model_id: sql.Int,
+      storage: sql.VarChar,
+      grade: sql.VarChar,
+      colour: sql.VarChar,
+      origin: sql.VarChar
+    }
 
-  request.query(
-    "SELECT item_id, version, memory, grade, quantity, colour, price, seller_id FROM items WHERE items.model_id = @model_id",
-    (err, result) => {
-      if (err) {
-        console.error("Error executing SELECT:", err);
-        res.status(500).json({ error: "Internal server error" });
-      } else {
-        res.status(200).json(result.recordset);
+    const cond = [];
+    for (const [key, value] of Object.entries(req.query)) {
+      if (value !== "") {
+        request.input(key, types[key], value)
+        cond.push(`${key} = @${key}`)
       }
     }
-  );
-
-  // try {
-  //   const modelId = req.query.modelId;
-  //   const request = new sql.Request();
-
-  //   // Simplify this?
-  //   request.input("model_id", sql.Int, modelId);
-  //   const cond = ["models.model_id = @model_id"];
-  //   if (req.query.memory) {
-  //     request.input("memory", sql.VarChar, req.query.memory);
-  //     cond.push("memory = @memory");
-  //   }
-  //   if (req.query.grade) {
-  //     request.input("grade", sql.VarChar, req.query.grade);
-  //     cond.push("grade = @grade");
-  //   }
-  //   if (req.query.colour) {
-  //     request.input("colour", sql.VarChar, req.query.colour);
-  //     cond.push("colour = @colour");
-  //   }
-
-  //   const condStr = cond.join(" AND ");
-
-  //   const result = await request.query(`
-  //     SELECT item_id, model_name, version, memory, grade, quantity, colour, price, model_image \
-  //     FROM models INNER JOIN items ON (models.model_id = items.model_id) \
-  //     WHERE ${condStr} \
-  //     ORDER BY items.price, items.published_time DESC`);
-  //   res.status(200).json(result.recordset);
-  // } catch (error) {
-  //   console.error("Error :", error);
-  //   res.status(500).json({ error: "Failed to register user" });
-  // }
+    const condStr = cond.join(" AND ");
+    const result = await request.query(`
+    SELECT origin, storage, grade, quantity, colour, price, seller_id \
+    FROM items WHERE ${condStr} \
+    ORDER BY \
+    CASE WHEN price IS NULL THEN 1 ELSE 0 END, \
+    price, published_time DESC`);
+    
+    res.status(200).json(result.recordset);
+  } catch (error) {
+    console.error("Error :", error);
+    res.status(500).json({ error: "Failed to register user" });
+  }
 });
 
 // moreDetails page
@@ -159,7 +142,30 @@ app.get("/api/model/moreDetails", (req, res) => {
   );
 });
 
-// upload page
+
+app.get("/api/filter-options", async (req, res) => {
+  try {
+    const request = new sql.Request();
+    request.input("model_id", sql.Int, req.query.modelId);
+    const storages = (
+      await request.query("SELECT DISTINCT storage FROM items WHERE model_id = @model_id")
+    ).recordset.map((data) => data.storage);
+    const grades = (
+      await request.query("SELECT DISTINCT grade FROM items WHERE model_id = @model_id")
+    ).recordset.map((data) => data.grade);
+    const colours = (
+      await request.query("SELECT DISTINCT colour FROM items WHERE model_id = @model_id")
+    ).recordset.map((data) => data.colour);
+    const origins = (
+      await request.query("SELECT DISTINCT origin FROM items WHERE model_id = @model_id")
+    ).recordset.map((data) => data.origin);
+    res.status(200).json({ storages: storages, grades: grades, colours: colours, origins: origins});
+
+  } catch (error) {
+    console.error(error)
+  }
+ });
+
 app.get("/api/upload-options", async (req, res) => {
   const request = new sql.Request();
 
@@ -197,7 +203,7 @@ app.post("/api/upload", async (req, res) => {
     request.input("quantity", sql.Int, quantity);
     request.input("description", sql.Text, description);
     request.query(
-      `INSERT INTO items (model_id, seller_id, version, memory, grade, colour, price, quantity, description) \
+      `INSERT INTO items (model_id, seller_id, origin, storage, grade, colour, price, quantity, description) \
     VALUES (@model, @seller, @origin, @capacity, @grade, @colour, @price, @quantity, @description)`,
       (err, result) => {
         if (err) {

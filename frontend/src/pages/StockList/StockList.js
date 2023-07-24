@@ -7,7 +7,7 @@ import FilterPanel from "../../components/FilterPanel/FilterPanel";
 import "../StockList/StockList.css";
 import Breadcrumb from "../../components/Breadcrumbs/Breadcrumbs";
 import fire from "./images/fire_animation.gif";
-import StcokListTable from "../../components/StockListTable";
+import StockListTable from "../../components/StockListTable/StockListTable";
 
 export function StockList() {
   const { model_name } = useParams();
@@ -18,60 +18,59 @@ export function StockList() {
   const [isLoading, setIsLoading] = useState(true);
   const [quantity, setQuantity] = useState(null);
   const [minAvgPrice, setMinAvgPrice] = useState(0);
+  const [filterParams, setFilterParams] = useState("")
 
   // get model data from database
-  const getModelData = useCallback(() => {
-    axios
-      .get(`http://localhost:3005/api/model?model_name=${model_name}`)
-      .then((res) => {
-        if (res.data === "") {
-          negative("/notfound");
-        }
+  const getModelData = useCallback(async () => {
+    try {
+      const res = await axios.get(`http://localhost:3001/api/model?model_name=${model_name}`);
+      setModel(res.data);
+      setFilterParams(`model_id=${res.data.model_id}`)
+    } catch (error) {
+      console.error(error)
+    }
+  }, [model_name])
 
-        setModel(res.data);
-        const modelDetailsData = res.data;
-        const getModelDetailsUrl = `http://localhost:3005/api/model/stockDetails?model_id=${modelDetailsData.model_id}`;
-        return axios.get(getModelDetailsUrl);
-      })
-      .then((res) => {
+  const getModelDetails = useCallback(async () => {
+    try {
+      if (filterParams) {
+        const getModelDetailsUrl = `http://localhost:3001/api/model/stockDetails?${filterParams}`;
+        const res = await axios.get(getModelDetailsUrl);
+        console.log(res.data);
         setStockDetails(res.data);
-      })
-      .catch((err) => {
-        console.log("ERROR fail to fetch the data", err);
-      })
-      .finally(() => {
         setIsLoading(false);
-      });
-  }, [model_name]);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+ }, [filterParams])
 
-  const calcMinAvgPrice = useCallback(
-    (data) => {
-      // Tested
+  const calcMinAvgPrice = useCallback((data) => {
       let totalPrice = 0;
-      let totalQuantity = 0;
+      let totalQuantity = 0
+
       if (quantity == null) {
-        totalPrice = data
-          .map((item) => item.price * item.quantity)
-          .reduce((acc, currVal) => acc + currVal, 0);
-        totalQuantity = data
-          .map((item) => item.quantity)
-          .reduce((acc, currVal) => acc + currVal, 0);
-        console.log("total price", totalPrice);
-        console.log("total quantity", totalQuantity);
-      } else {
-        let tempQuantity = 0;
-
-        for (let i = 0; i < data.length; i++) {
-          totalPrice +=
-            data[i].price * Math.min(data[i].quantity, quantity - tempQuantity);
-          tempQuantity += data[i].quantity;
-
-          if (tempQuantity >= quantity) {
-            break;
+        for (let i=0; i<data.length; i++) {
+          // Change the condition if other variables become optional as well
+          if (data[i].price !== null) {
+            totalPrice += data[i].price * data[i].quantity;
+            totalQuantity += data[i].quantity;
+            console.log(totalPrice)
+            console.log(totalQuantity)
           }
         }
+      } else {
+        for (let i=0; i<data.length; i++) {
+          if (data[i].price != null) {
+            const tempQuantity = Math.min(data[i].quantity, quantity - totalQuantity)
+            totalPrice += data[i].price * tempQuantity
+            totalQuantity += tempQuantity
 
-        totalQuantity = Math.min(tempQuantity, quantity);
+            if (totalQuantity >= quantity) {
+              break;
+            }
+          }
+        }
       }
       setMinAvgPrice(totalQuantity === 0 ? 0 : totalPrice / totalQuantity);
     },
@@ -81,6 +80,10 @@ export function StockList() {
   useEffect(() => {
     getModelData();
   }, [getModelData]);
+
+  useEffect(() => {
+    getModelDetails();
+  }, [getModelDetails])
 
   useEffect(() => {
     calcMinAvgPrice(stockDetails);
@@ -119,9 +122,12 @@ export function StockList() {
             )}
           </div>
         </div>
-        <div className="col-md-1"></div>
-        <div className="col-12 col-md-5">
-          <FilterPanel />
+
+        <div className="col-12 col-md-6">
+          <FilterPanel 
+            modelId={model.model_id}
+            setFilterParams={setFilterParams}
+          />
           <div className="ms-4">
             <h5 className="my-3 display-1 fs-5">
               Minimum Average Price (per quantity)
@@ -137,7 +143,7 @@ export function StockList() {
         {isLoading ? (
           <Spinner animation="border" variant="warning" />
         ) : (
-          <StcokListTable
+          <StockListTable
             stockList={stockDetails}
             modelName={model.model_name}
           />

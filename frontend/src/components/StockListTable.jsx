@@ -3,13 +3,13 @@ import { Link } from "react-router-dom";
 import GenericButton from "./GenericButton";
 import ModalBtn from "./ModalBtn";
 
-export default function StcokListTable(props) {
+export default function StockListTable(props) {
   return (
     <div className="table-responsive w-100">
       <table className="table table-responsive">
         <thead>
           <tr>
-            <th>Version</th>
+            <th>Origin</th>
             <th>Storage</th>
             <th>Grade</th>
             <th>Quantity</th>
@@ -23,8 +23,8 @@ export default function StcokListTable(props) {
           {props.stockList.map((stock, index) => {
             return (
               <tr key={index}>
-                <td>{stock.version}</td>
-                <td>{stock.memory}</td>
+                <td>{stock.origin}</td>
+                <td>{stock.storage}</td>
                 <td>{stock.grade}</td>
                 <td>{stock.quantity}</td>
                 <td>{stock.colour}</td>
