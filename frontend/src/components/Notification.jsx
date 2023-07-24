@@ -30,7 +30,6 @@ export default function Notification(props) {
   }, [props.message]);
 
   useEffect(() => {
-    console.log(props.success)
     if (props.success) {
       props.setSuccess(false);
       notifySuccess();

@@ -22,7 +22,7 @@ export function Upload() {
 
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState(false);
-  const [errorMessage, setErrorMessage] = useState("");
+  const [message, setMessage] = useState("")
 
   const fetchUploadOptions = useCallback(async () => {
     try {
@@ -69,10 +69,11 @@ export function Upload() {
 
         
         if (response.ok) {
+          setMessage("Upload Success!")
           setSuccess(true);
         } else {
           const responseJson = await response.json();
-          setErrorMessage(responseJson.error);
+          setMessage("Upload Error!")
           setError(true);
         }
       } catch (error) {
@@ -89,11 +90,11 @@ export function Upload() {
   return (
     <div className="container">
       <Notification
-        success={success} 
+        success={success}
         error={error}
         setSuccess={setSuccess}
         setError={setError}
-        message="Upload Success!"
+        message={message}
       />
       <h2 className="my-3">What are you listing today?</h2>
       {/* <ImageDropZone /> */}
