@@ -182,8 +182,8 @@ app.post("/api/upload", async (req, res) => {
   } catch (error) {
     res.status(500).json({ error: "Failed to upload" });
   }
-})
+});
 
-app.listen(3001, async () => {
-  console.log("Server is running on http://localhost:3001");
+app.listen(3005, async () => {
+  console.log("Server is running on http://localhost:3005");
 });

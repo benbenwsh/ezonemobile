@@ -1,8 +1,7 @@
 import React from "react";
-import { useTable, useMemo } from "react-table";
 import { Link } from "react-router-dom";
 import GenericButton from "../GenericButton";
-import ModalBtn from "../ModalBtn";
+import ModalBtn from "./ModalBtn";
 
 export default function StcokListTable(props) {
   return (
@@ -17,7 +16,7 @@ export default function StcokListTable(props) {
             <th>Colour</th>
             <th>Price</th>
             <th>Action</th>
-            <th>Seller info</th>
+            <th>More info</th>
           </tr>
         </thead>
         <tbody>
@@ -33,7 +32,9 @@ export default function StcokListTable(props) {
                 <td>
                   <ModalBtn
                     title="You can contact us"
-                    content="(+852) xxxx-xxxx"
+                    wtsNum="(+852) xxxx-xxxx"
+                    weChatNum="(+852) xxxx-xxxx"
+                    email="xxx@gmail.com"
                   />
                 </td>
                 <td>

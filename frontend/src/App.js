@@ -3,7 +3,7 @@ import { Route, Routes, Navigate, redirect } from "react-router-dom";
 import { SignIn } from "./pages/SignIn";
 import { Register } from "./pages/Register";
 import { Shop } from "./pages/Shop";
-import { ItemDetails } from "./pages/ItemDetals/ItemDetails";
+import { ItemDetails } from "./pages/ItemDetails";
 import { Upload } from "./pages/Upload";
 import { About } from "./pages/About";
 import { NotFound } from "./pages/NotFound/NotFound";

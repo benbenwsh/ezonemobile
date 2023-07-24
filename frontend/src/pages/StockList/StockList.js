@@ -19,16 +19,16 @@ export function StockList() {
   // get model data from database
   const getModelData = useCallback(() => {
     axios
-      .get(`http://localhost:3001/api/model?model_name=${model_name}`)
+      .get(`http://localhost:3005/api/model?model_name=${model_name}`)
       .then((res) => {
         setModel(res.data);
         const modelDetailsData = res.data;
-        const getModelDetailsUrl = `http://localhost:3001/api/model/stockDetails?model_id=${modelDetailsData.model_id}`;
+        const getModelDetailsUrl = `http://localhost:3005/api/model/stockDetails?model_id=${modelDetailsData.model_id}`;
         return axios.get(getModelDetailsUrl);
       })
       .then((res) => {
         setStockDetails(res.data);
-        console.log(res.data)
+        console.log(res.data);
       })
       .catch((err) => {
         console.log("ERROR fail to fetch the data", err);
@@ -36,37 +36,41 @@ export function StockList() {
       .finally(() => {
         setIsLoading(false);
       });
-  }, [model_name])
+  }, [model_name]);
 
-  const calcMinAvgPrice = useCallback((data) => {
-      // Tested 
+  const calcMinAvgPrice = useCallback(
+    (data) => {
+      // Tested
       let totalPrice = 0;
-      let totalQuantity = 0
+      let totalQuantity = 0;
       if (quantity == null) {
         totalPrice = data
-        .map((item) => item.price * item.quantity)
-        .reduce((acc, currVal) => acc + currVal, 0)
+          .map((item) => item.price * item.quantity)
+          .reduce((acc, currVal) => acc + currVal, 0);
         totalQuantity = data
-        .map((item) => item.quantity)
-        .reduce((acc, currVal) => acc + currVal, 0)
-        console.log(totalPrice)
-        console.log(totalQuantity)
+          .map((item) => item.quantity)
+          .reduce((acc, currVal) => acc + currVal, 0);
+        console.log(totalPrice);
+        console.log(totalQuantity);
       } else {
         let tempQuantity = 0;
 
-        for (let i=0; i<data.length; i++) {
-          totalPrice += data[i].price * Math.min(data[i].quantity, quantity - tempQuantity)
-          tempQuantity += data[i].quantity
+        for (let i = 0; i < data.length; i++) {
+          totalPrice +=
+            data[i].price * Math.min(data[i].quantity, quantity - tempQuantity);
+          tempQuantity += data[i].quantity;
 
           if (tempQuantity >= quantity) {
             break;
           }
         }
-        
-        totalQuantity = Math.min(tempQuantity, quantity)
+
+        totalQuantity = Math.min(tempQuantity, quantity);
       }
-      setMinAvgPrice((totalQuantity === 0) ? 0 : totalPrice / totalQuantity);
-  }, [quantity])
+      setMinAvgPrice(totalQuantity === 0 ? 0 : totalPrice / totalQuantity);
+    },
+    [quantity]
+  );
 
   useEffect(() => {
     getModelData();
@@ -74,7 +78,7 @@ export function StockList() {
 
   useEffect(() => {
     calcMinAvgPrice(stockDetails);
-  }, [calcMinAvgPrice, stockDetails])
+  }, [calcMinAvgPrice, stockDetails]);
 
   // convert array buffer to base64
   const arrayBufferToBase64 = (buffer) => {
@@ -90,7 +94,7 @@ export function StockList() {
   };
 
   return (
-    <div className="container my-3 item-detail-container-max-width">
+    <div className="container my-3">
       <Breadcrumb navName={model.model_name} />
       <h1 className="display-6">{model.model_name}</h1>
       <div className="row gy-3 mt-2">
@@ -109,14 +113,15 @@ export function StockList() {
             )}
           </div>
         </div>
-        <div className="col-12 col-md-6">
+        <div className="col-md-1"></div>
+        <div className="col-12 col-md-5">
           <FilterPanel />
           <div className="ms-4">
             <h5 className="my-3 display-1 fs-5">
               Minimum Average Price (per quantity)
             </h5>
             <h4>
-              <img src={fire} width={35} /> HK${formatCurrency((minAvgPrice))}
+              <img src={fire} width={35} /> HK${formatCurrency(minAvgPrice)}
             </h4>
           </div>
         </div>

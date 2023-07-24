@@ -1,11 +1,10 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
-import Carousel from "../../components/Carousel/Carousel";
+import Carousel from "../components/Carousel/Carousel";
 import { useParams } from "react-router-dom";
-import TechnicalDetailsTable from "../../components/DisplayItemDetails/TechnicalDetailsTable";
-import ItemDescription from "../../components/DisplayItemDetails/ItemDescription";
+import TechnicalDetailsTable from "../components/DisplayItemDetails/TechnicalDetailsTable";
+import ItemDescription from "../components/DisplayItemDetails/ItemDescription";
 import Spinner from "react-bootstrap/Spinner";
-import "./ItemDetails.css";
 
 export function ItemDetails() {
   const { model_id } = useParams();
@@ -18,7 +17,7 @@ export function ItemDetails() {
     try {
       // Add parameters specified in api/model in index.js
       const response = await fetch(
-        `http://localhost:3001/api/model?modelId=${model_id}`
+        `http://localhost:3005/api/model?modelId=${model_id}`
       );
 
       if (response.ok) {
@@ -44,7 +43,7 @@ export function ItemDetails() {
   const negative = useNavigate();
 
   return (
-    <div className="container my-3 item-detail-container-max-width">
+    <div className="container my-3">
       <div className="row gy-3">
         <div className="col-12 col-md-7">
           {isLoading ? (
