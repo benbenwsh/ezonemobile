@@ -109,7 +109,7 @@ app.get("/api/model/stockDetails", async (req, res) => {
     }
     const condStr = cond.join(" AND ");
     const result = await request.query(`
-    SELECT origin, storage, grade, quantity, colour, price, seller_id \
+    SELECT item_id, origin, storage, grade, quantity, colour, price, seller_id \
     FROM items WHERE ${condStr} \
     ORDER BY \
     CASE WHEN price IS NULL THEN 1 ELSE 0 END, \
@@ -125,9 +125,9 @@ app.get("/api/model/stockDetails", async (req, res) => {
 // moreDetails page
 app.get("/api/model/moreDetails", (req, res) => {
   const request = new sql.Request();
-  request.input("item_id", sql.VarChar, req.query.item_id);
+  request.input("item_id", sql.Int, req.query.item_id);
   request.query(
-    "SELECT version, memory, grade, quantity, colour, price, description, seller_id FROM items WHERE item_id=@item_id",
+    "SELECT origin, storage, grade, quantity, colour, price, description, seller_id FROM items WHERE item_id=@item_id",
     (err, result) => {
       if (err) {
         console.error("Error executing SELECT:", err);
@@ -219,6 +219,6 @@ app.post("/api/upload", async (req, res) => {
   }
 });
 
-app.listen(3005, async () => {
+app.listen(3001, async () => {
   console.log("Server is running on http://localhost:3005");
 });

@@ -8,3 +8,5 @@ export const maxLengths = {
   state: 128,
   address: 128
 }
+
+export const PORT = 3001

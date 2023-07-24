@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback } from "react";
 import Form from "react-bootstrap/Form";
 import "../FilterPanel/FilterPanel.css";
 import GenericButton from "../GenericButton";
+import { PORT } from "../../config";
 
 export default function FilterPanel(props) {
   const [filterOptions, setFilterOptions] = useState({
@@ -21,7 +22,7 @@ export default function FilterPanel(props) {
     try {
       if (props.modelId) {
         const response = await fetch(
-          `http://localhost:3001/api/filter-options?modelId=${props.modelId}`
+          `http://localhost:${PORT}/api/filter-options?modelId=${props.modelId}`
         );
 
         const responseJson = await response.json()

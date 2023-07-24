@@ -7,6 +7,7 @@ import Breadcrumb from "../components/Breadcrumbs/Breadcrumbs";
 import TechnicalDetailsTable from "../components/DisplayItemDetails/TechnicalDetailsTable";
 import ItemDescription from "../components/DisplayItemDetails/ItemDescription";
 import Spinner from "react-bootstrap/Spinner";
+import { PORT } from "../config";
 
 export function MoreDetails() {
   const { model_name, item_id } = useParams();
@@ -18,7 +19,7 @@ export function MoreDetails() {
 
   const getModelDetails = async () => {
     axios
-      .get(`http://localhost:3005/api/model/moreDetails?item_id=${item_id}`)
+      .get(`http://localhost:${PORT}/api/model/moreDetails?item_id=${item_id}`)
       .then((res) => {
         res.data.model = model_name;
         setItemInfo(res.data);
@@ -32,7 +33,7 @@ export function MoreDetails() {
 
   // const getStockLogImg = async () => {
   //   axios
-  //     .get(`http://localhost:3005/api/model/moreDetails?seller_id=${seller_id}`)
+  //     .get(`http://localhost:${PORT}/api/model/moreDetails?seller_id=${seller_id}`)
   //     .then((res) => {
   //       console.log(res.data);
   //     });

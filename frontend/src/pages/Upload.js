@@ -4,6 +4,7 @@ import FormInput from "../components/FormInput";
 import GenericButton from "../components/GenericButton";
 import Notification from "../components/Notification";
 import ValidationRules from "../validation-rules";
+import { PORT } from "../config";
 
 export function Upload() {
   const [modelOptions, setModelOptions] = useState([]);
@@ -27,7 +28,7 @@ export function Upload() {
 
   const fetchUploadOptions = useCallback(async () => {
     try {
-      const response = await fetch(`http://localhost:3005/api/upload-options`);
+      const response = await fetch(`http://localhost:${PORT}/api/upload-options`);
 
       const responseJson = await response.json();
 
@@ -74,7 +75,7 @@ export function Upload() {
       if (form.checkValidity()) {
         try {
           console.log(formValues);
-          const response = await fetch("http://localhost:3001/api/upload", {
+          const response = await fetch("http://localhost:${PORT}/api/upload", {
             method: "POST",
             headers: {
               "Content-Type": "application/json",

@@ -7,16 +7,16 @@ export default function TechnicalDetailsTable(props) {
       <table className="table">
         <tbody>
           <tr>
-            <td>Version</td>
-            <td>{props.item.version}</td>
+            <td>Origin</td>
+            <td>{props.item.origin}</td>
           </tr>
           <tr>
             <td>Model</td>
             <td>{props.item.model}</td>
           </tr>
           <tr>
-            <td>Memory</td>
-            <td>{props.item.memory}</td>
+            <td>Storage</td>
+            <td>{props.item.storage}</td>
           </tr>
           <tr>
             <td>Grade</td>

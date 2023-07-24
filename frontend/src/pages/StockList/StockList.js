@@ -8,6 +8,7 @@ import "../StockList/StockList.css";
 import Breadcrumb from "../../components/Breadcrumbs/Breadcrumbs";
 import fire from "./images/fire_animation.gif";
 import StockListTable from "../../components/StockListTable";
+import { PORT } from "../../config";
 
 export function StockList() {
   const { model_name } = useParams();
@@ -23,7 +24,7 @@ export function StockList() {
   // get model data from database
   const getModelData = useCallback(async () => {
     try {
-      const res = await axios.get(`http://localhost:3001/api/model?model_name=${model_name}`);
+      const res = await axios.get(`http://localhost:${PORT}/api/model?model_name=${model_name}`);
       setModel(res.data);
       setFilterParams(`model_id=${res.data.model_id}`)
     } catch (error) {
@@ -34,7 +35,7 @@ export function StockList() {
   const getModelDetails = useCallback(async () => {
     try {
       if (filterParams) {
-        const getModelDetailsUrl = `http://localhost:3001/api/model/stockDetails?${filterParams}`;
+        const getModelDetailsUrl = `http://localhost:${PORT}/api/model/stockDetails?${filterParams}`;
         const res = await axios.get(getModelDetailsUrl);
         console.log(res.data);
         setStockDetails(res.data);

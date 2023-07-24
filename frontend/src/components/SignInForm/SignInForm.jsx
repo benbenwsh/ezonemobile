@@ -7,6 +7,7 @@ import { maxLengths } from "../../config";
 import Notification from "../Notification"
 import Modal from "../Modal";
 import ValidationRules from "../../validation-rules";
+import { PORT } from "../../config";
 import "./SignInForm.css";
 
 export default function SignInForm(props) {
@@ -23,7 +24,7 @@ export default function SignInForm(props) {
 
     try {
       // POST request because email and password are sensitive info
-      const response = await fetch("http://localhost:3001/api/login", {
+      const response = await fetch(`http://localhost:${PORT}/api/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

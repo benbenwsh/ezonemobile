@@ -4,6 +4,7 @@ import Search from "../components/Search";
 import Item from "../components/Items/Item";
 import Breadcrumb from "../components/Breadcrumbs/Breadcrumbs";
 import axios from "axios";
+import { PORT } from "../config";
 
 export function Shop() {
   const [items, setItems] = useState([]);
@@ -11,7 +12,7 @@ export function Shop() {
 
   const fetchItemsData = async () => {
     axios
-      .get("http://localhost:3005/api/shop")
+      .get(`http://localhost:${PORT}/api/shop`)
       .then((res) => setItems(res.data))
       .catch((err) => {
         console.error("Error fetching data: ", err);

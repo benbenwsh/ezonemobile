@@ -1,7 +1,7 @@
 import { React, useState } from "react";
 import FormInput from "../FormInput";
 import GenericButton from "../GenericButton";
-import { maxLengths } from "../../config";
+import { maxLengths, PORT } from "../../config";
 import CountrySelector from "./CountrySelector";
 import Notification from "../Notification";
 import Modal from "../Modal";
@@ -35,7 +35,7 @@ export default function RegisterForm(props) {
     try {
       const { verifyEmail, ...formValuesToSubmit } = formValues;
       console.log(formValuesToSubmit);
-      const response = await fetch("http://localhost:3001/api/signup", {
+      const response = await fetch(`http://localhost:${PORT}/api/signup`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
