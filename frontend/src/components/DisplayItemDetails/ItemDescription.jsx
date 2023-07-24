@@ -16,7 +16,7 @@ export default function ItemDescription(props) {
   return (
     <>
       <h1>
-        Apple {props.item.model} - {props.item.memory} - {props.item.colour}
+        Apple {props.modelName} - {props.item.memory}GB - {props.item.colour}
       </h1>
       <p>HK${formatedNumber(props.item.price)}</p>
       <div className="d-flex align-items-center my-3">

@@ -38,7 +38,7 @@ export default function StcokListTable(props) {
                   />
                 </td>
                 <td>
-                  <Link to={`/shop/${props.modelName}/${stock.seller_id}`}>
+                  <Link to={`/shop/${props.modelName}/${stock.item_id}`}>
                     <GenericButton
                       type="button"
                       btnName="More"

@@ -85,7 +85,7 @@ app.get("/api/model/stockDetails", async (req, res) => {
   request.input("model_id", sql.VarChar, req.query.model_id);
 
   request.query(
-    "SELECT version, memory, grade, quantity, colour, price, seller_id FROM items WHERE items.model_id = @model_id",
+    "SELECT item_id, version, memory, grade, quantity, colour, price, seller_id FROM items WHERE items.model_id = @model_id",
     (err, result) => {
       if (err) {
         console.error("Error executing SELECT:", err);
@@ -131,7 +131,21 @@ app.get("/api/model/stockDetails", async (req, res) => {
 });
 
 // MoreDetails page
-app.get("/api/model/modelDetails", (req, res) => {});
+app.get("/api/model/moreDetails", (req, res) => {
+  const request = new sql.Request();
+  request.input("item_id", sql.VarChar, req.query.item_id);
+  request.query(
+    "SELECT version, memory, grade, quantity, colour, price FROM items WHERE item_id=@item_id",
+    (err, result) => {
+      if (err) {
+        console.error("Error executing SELECT:", err);
+        res.status(500).json({ error: "Internal server error" });
+      } else {
+        res.status(200).json(result.recordset[0]);
+      }
+    }
+  );
+});
 
 app.get("/api/upload-options", async (req, res) => {
   const request = new sql.Request();

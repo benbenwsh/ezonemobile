@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useState, useCallback } from "react";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import Spinner from "react-bootstrap/Spinner";
 import { useParams } from "react-router-dom";
@@ -10,6 +11,8 @@ import StcokListTable from "../../components/StockListTable/StockListTable";
 
 export function StockList() {
   const { model_name } = useParams();
+  const negative = useNavigate();
+
   const [model, setModel] = useState({}); // only store image and name
   const [stockDetails, setStockDetails] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -28,7 +31,6 @@ export function StockList() {
       })
       .then((res) => {
         setStockDetails(res.data);
-        console.log(res.data);
       })
       .catch((err) => {
         console.log("ERROR fail to fetch the data", err);
@@ -50,8 +52,8 @@ export function StockList() {
         totalQuantity = data
           .map((item) => item.quantity)
           .reduce((acc, currVal) => acc + currVal, 0);
-        console.log(totalPrice);
-        console.log(totalQuantity);
+        console.log("total price", totalPrice);
+        console.log("total quantity", totalQuantity);
       } else {
         let tempQuantity = 0;
 
