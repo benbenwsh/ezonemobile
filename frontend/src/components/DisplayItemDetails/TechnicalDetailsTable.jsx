@@ -12,7 +12,7 @@ export default function TechnicalDetailsTable(props) {
           </tr>
           <tr>
             <td>Model</td>
-            <td>{props.item.model}</td>
+            <td>{props.modelName}</td>
           </tr>
           <tr>
             <td>Storage</td>

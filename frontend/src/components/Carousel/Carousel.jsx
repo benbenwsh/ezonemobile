@@ -20,7 +20,7 @@ export default function CarouselItem(props) {
               className="d-block carousel-img"
               src={
                 "data:image/jpg;base64," +
-                arrayBufferToBase64(i.model_image.data)
+                arrayBufferToBase64(i.image_data.data)
               }
               style={{ maxWidth: "100%", height: "280px" }}
             />

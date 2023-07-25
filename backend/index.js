@@ -97,14 +97,14 @@ app.get("/api/model/stockDetails", async (req, res) => {
       storage: sql.VarChar,
       grade: sql.VarChar,
       colour: sql.VarChar,
-      origin: sql.VarChar
-    }
+      origin: sql.VarChar,
+    };
 
     const cond = [];
     for (const [key, value] of Object.entries(req.query)) {
       if (value !== "") {
-        request.input(key, types[key], value)
-        cond.push(`${key} = @${key}`)
+        request.input(key, types[key], value);
+        cond.push(`${key} = @${key}`);
       }
     }
     const condStr = cond.join(" AND ");
@@ -114,7 +114,7 @@ app.get("/api/model/stockDetails", async (req, res) => {
     ORDER BY \
     CASE WHEN price IS NULL THEN 1 ELSE 0 END, \
     price, published_time DESC`);
-    
+
     res.status(200).json(result.recordset);
   } catch (error) {
     console.error("Error :", error);
@@ -123,48 +123,77 @@ app.get("/api/model/stockDetails", async (req, res) => {
 });
 
 // moreDetails page
-app.get("/api/model/moreDetails", (req, res) => {
-  const request = new sql.Request();
-  request.input("item_id", sql.Int, req.query.item_id);
-  request.query(
-    "SELECT origin, storage, grade, quantity, colour, price, description, seller_id FROM items WHERE item_id=@item_id",
-    (err, result) => {
-      if (err) {
-        console.error("Error executing SELECT:", err);
-        res.status(500).json({ error: "Internal server error" });
-      } else if (result.recordset[0] === undefined) {
-        console.log("test");
-        res.status(404).json({ error: "Not found in the server" });
-      } else {
-        res.status(200).json(result.recordset[0]);
-      }
-    }
-  );
-});
+app.get("/api/model/moreDetails", async (req, res) => {
+  try {
+    const request = new sql.Request();
+    request.input("item_id", sql.Int, req.query.item_id);
 
+    // first query
+    const itemlInfo = await request.query(
+      "SELECT origin, storage, grade, quantity, colour, price, description, seller_id FROM items WHERE item_id=@item_id"
+    );
+
+    // second query
+    const itemImg = await request.query(
+      "SELECT image_data FROM stockLogImg WHERE item_id=@item_id"
+    );
+    res.status(200).json({
+      itemInfo: itemlInfo.recordset[0],
+      itemImg: itemImg.recordset,
+    });
+  } catch (e) {
+    console.error("Error executing SELECT:", err);
+    res.status(500).json({ error: "Internal server error" });
+  }
+  // const request = new sql.Request();
+  // request.input("item_id", sql.Int, req.query.item_id);
+  // request.query(
+  //   "SELECT origin, storage, grade, quantity, colour, price, description, seller_id FROM items WHERE item_id=@item_id",
+  //   (err, result) => {
+  //     if (err) {
+  //       console.error("Error executing SELECT:", err);
+  //       res.status(500).json({ error: "Internal server error" });
+  //     } else {
+  //       res.status(200).json(result.recordset[0]);
+  //     }
+  //   }
+  // );
+});
 
 app.get("/api/filter-options", async (req, res) => {
   try {
     const request = new sql.Request();
     request.input("model_id", sql.Int, req.query.modelId);
     const storages = (
-      await request.query("SELECT DISTINCT storage FROM items WHERE model_id = @model_id")
+      await request.query(
+        "SELECT DISTINCT storage FROM items WHERE model_id = @model_id"
+      )
     ).recordset.map((data) => data.storage);
     const grades = (
-      await request.query("SELECT DISTINCT grade FROM items WHERE model_id = @model_id")
+      await request.query(
+        "SELECT DISTINCT grade FROM items WHERE model_id = @model_id"
+      )
     ).recordset.map((data) => data.grade);
     const colours = (
-      await request.query("SELECT DISTINCT colour FROM items WHERE model_id = @model_id")
+      await request.query(
+        "SELECT DISTINCT colour FROM items WHERE model_id = @model_id"
+      )
     ).recordset.map((data) => data.colour);
     const origins = (
-      await request.query("SELECT DISTINCT origin FROM items WHERE model_id = @model_id")
+      await request.query(
+        "SELECT DISTINCT origin FROM items WHERE model_id = @model_id"
+      )
     ).recordset.map((data) => data.origin);
-    res.status(200).json({ storages: storages, grades: grades, colours: colours, origins: origins});
-
+    res.status(200).json({
+      storages: storages,
+      grades: grades,
+      colours: colours,
+      origins: origins,
+    });
   } catch (error) {
-    console.error(error)
+    console.error(error);
   }
- });
+});
 
 app.get("/api/upload-options", async (req, res) => {
   const request = new sql.Request();
@@ -219,6 +248,6 @@ app.post("/api/upload", async (req, res) => {
   }
 });
 
-app.listen(3001, async () => {
+app.listen(3005, async () => {
   console.log("Server is running on http://localhost:3005");
 });

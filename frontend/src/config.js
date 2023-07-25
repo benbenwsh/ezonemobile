@@ -6,7 +6,7 @@ export const maxLengths = {
   country: 128,
   city: 128,
   state: 128,
-  address: 128
-}
+  address: 128,
+};
 
-export const PORT = 3001
+export const PORT = 3005;

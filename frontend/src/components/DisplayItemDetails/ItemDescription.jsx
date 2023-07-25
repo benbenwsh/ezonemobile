@@ -16,7 +16,7 @@ export default function ItemDescription(props) {
   return (
     <>
       <h1>
-        Apple {props.modelName} - {props.item.memory}GB - {props.item.colour}
+        Apple {props.modelName} - {props.item.storage}GB - {props.item.colour}
       </h1>
       <h4>From seller #{props.item.seller_id}</h4>
       <p>HK${formatedNumber(props.item.price)}</p>

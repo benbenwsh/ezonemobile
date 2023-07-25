@@ -13,7 +13,6 @@ export function MoreDetails() {
   const { model_name, item_id } = useParams();
   const negative = useNavigate();
 
-  const [itemCarousel, setitemCarousel] = useState({});
   const [itemInfo, setItemInfo] = useState({});
   const [isLoading, setIsLoading] = useState(true);
 
@@ -31,14 +30,6 @@ export function MoreDetails() {
       });
   };
 
-  // const getStockLogImg = async () => {
-  //   axios
-  //     .get(`http://localhost:${PORT}/api/model/moreDetails?seller_id=${seller_id}`)
-  //     .then((res) => {
-  //       console.log(res.data);
-  //     });
-  // };
-
   // Fetching data from remote MySQL database
   useEffect(() => {
     getModelDetails();
@@ -50,17 +41,17 @@ export function MoreDetails() {
       <div className="row gy-3">
         <div col-md-1></div>
         <div className="col-12 col-md-6">
-          {/* {isLoading ? (
+          {isLoading ? (
             <Spinner animation="border" variant="warning" />
           ) : (
-            <Carousel item={itemCarousel} />
-          )} */}
+            <Carousel item={itemInfo.itemImg} />
+          )}
         </div>
         <div className="col-12 col-md-4">
           {isLoading ? (
             <Spinner animation="border" variant="warning" />
           ) : (
-            <ItemDescription item={itemInfo} />
+            <ItemDescription item={itemInfo.itemInfo} modelName={model_name} />
           )}
         </div>
         <div col-md-1></div>
@@ -70,7 +61,14 @@ export function MoreDetails() {
       {/* table */}
       <div className="row gy-3">
         <div className="col-12">
-          <TechnicalDetailsTable item={itemInfo} />
+          {isLoading ? (
+            <Spinner animation="border" variant="warning" />
+          ) : (
+            <TechnicalDetailsTable
+              item={itemInfo.itemInfo}
+              modelName={model_name}
+            />
+          )}
         </div>
       </div>
     </div>
