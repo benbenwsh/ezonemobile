@@ -18,7 +18,9 @@ export function MoreDetails() {
 
   const getModelDetails = useCallback(async () => {
     try {
-      const res = await axios.get(`http://localhost:${PORT}/api/model/moreDetails?item_id=${item_id}`)
+      const res = await axios.get(
+        `http://localhost:${PORT}/api/model/moreDetails?item_id=${item_id}`
+      );
       res.data.model = model_name;
       setItemInfo(res.data);
       setIsLoading(false);

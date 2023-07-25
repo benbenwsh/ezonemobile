@@ -19,24 +19,26 @@ export function StockList() {
   const [isLoading, setIsLoading] = useState(true);
   const [quantity, setQuantity] = useState(null);
   const [minAvgPrice, setMinAvgPrice] = useState(0);
-  const [filterParams, setFilterParams] = useState("")
+  const [filterParams, setFilterParams] = useState("");
   const [filterOptions, setFilterOptions] = useState({
     storages: [],
     grades: [],
     colours: [],
-    origins: []
-  })
+    origins: [],
+  });
 
   // get model data from database
   const getModelData = useCallback(async () => {
     try {
-      const res = await axios.get(`http://localhost:${PORT}/api/model?model_name=${model_name}`);
+      const res = await axios.get(
+        `http://localhost:${PORT}/api/model?model_name=${model_name}`
+      );
       setModel(res.data);
-      setFilterParams(`model_id=${res.data.model_id}`)
+      setFilterParams(`model_id=${res.data.model_id}`);
     } catch (error) {
-      console.error(error)
+      console.error(error);
     }
-  }, [model_name])
+  }, [model_name]);
 
   const getModelDetails = useCallback(async () => {
     try {
@@ -49,7 +51,7 @@ export function StockList() {
     } catch (error) {
       console.error(error);
     }
- }, [filterParams])
+  }, [filterParams]);
 
   const fetchFilterOptions = useCallback(async () => {
     try {
@@ -57,25 +59,26 @@ export function StockList() {
         const response = await fetch(
           `http://localhost:${PORT}/api/filter-options?modelId=${model.model_id}`
         );
-        const responseJson = await response.json()
+        const responseJson = await response.json();
 
         if (response.ok) {
           setFilterOptions(responseJson);
         } else {
-          throw new Error(responseJson.error)
+          throw new Error(responseJson.error);
         }
       }
     } catch (error) {
       console.error("Error fetching data: ", error);
     }
-  }, [model.model_id])
+  }, [model.model_id]);
 
-  const calcMinAvgPrice = useCallback((data) => {
+  const calcMinAvgPrice = useCallback(
+    (data) => {
       let totalPrice = 0;
-      let totalQuantity = 0
+      let totalQuantity = 0;
 
       if (quantity == null) {
-        for (let i=0; i<data.length; i++) {
+        for (let i = 0; i < data.length; i++) {
           // Change the condition if other variables become optional as well
           if (data[i].price !== null) {
             totalPrice += data[i].price * data[i].quantity;
@@ -83,11 +86,14 @@ export function StockList() {
           }
         }
       } else {
-        for (let i=0; i<data.length; i++) {
+        for (let i = 0; i < data.length; i++) {
           if (data[i].price != null) {
-            const tempQuantity = Math.min(data[i].quantity, quantity - totalQuantity)
-            totalPrice += data[i].price * tempQuantity
-            totalQuantity += tempQuantity
+            const tempQuantity = Math.min(
+              data[i].quantity,
+              quantity - totalQuantity
+            );
+            totalPrice += data[i].price * tempQuantity;
+            totalQuantity += tempQuantity;
 
             if (totalQuantity >= quantity) {
               break;
@@ -106,11 +112,11 @@ export function StockList() {
 
   useEffect(() => {
     getModelDetails();
-  }, [getModelDetails])
-  
+  }, [getModelDetails]);
+
   useEffect(() => {
     fetchFilterOptions();
-  }, [fetchFilterOptions])
+  }, [fetchFilterOptions]);
 
   useEffect(() => {
     calcMinAvgPrice(stockDetails);
@@ -134,7 +140,8 @@ export function StockList() {
       <Breadcrumb navLink={model_name} />
       <h1 className="display-6">{model.model_name}</h1>
       <div className="row gy-3 mt-2">
-        <div className="col-12 col-md-6">
+        <div className="col-md-1"></div>
+        <div className="col-12 col-md-5">
           <div className="d-flex justify-content-center">
             {isLoading ? (
               <Spinner animation="border" variant="warning" />
@@ -150,8 +157,8 @@ export function StockList() {
           </div>
         </div>
 
-        <div className="col-12 col-md-6">
-          <FilterPanel 
+        <div className="col-12 col-md-5">
+          <FilterPanel
             modelId={model.model_id}
             filterOptions={filterOptions}
             setFilterParams={setFilterParams}
@@ -165,6 +172,7 @@ export function StockList() {
             </h4>
           </div>
         </div>
+        <div className="col-md-1"></div>
       </div>
       <h2>Details</h2>
       <div className="d-flex justify-content-center">
