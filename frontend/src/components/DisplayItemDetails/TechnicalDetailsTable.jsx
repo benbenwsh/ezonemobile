@@ -8,27 +8,27 @@ export default function TechnicalDetailsTable(props) {
         <tbody>
           <tr>
             <td>Origin</td>
-            <td>{props.item.origin}</td>
+            {props.item.origin ? <td>{props.item.origin}</td> : <td>-</td>}
           </tr>
           <tr>
             <td>Model</td>
-            <td>{props.modelName}</td>
+            {props.modelName ? <td>{props.modelName}</td> : <td>-</td>}
           </tr>
           <tr>
             <td>Storage</td>
-            <td>{props.item.storage}</td>
+            {props.item.storage ? <td>{props.item.storage}</td> : <td>-</td>}
           </tr>
           <tr>
             <td>Grade</td>
-            <td>{props.item.grade}</td>
+            {props.item.grade ? <td>{props.item.grade}</td> : <td>-</td>}
           </tr>
           <tr>
             <td>QTY</td>
-            <td>{props.item.quantity}</td>
+            {props.item.quantity ? <td>{props.item.quantity}</td> : <td>-</td>}
           </tr>
           <tr>
             <td>Colour</td>
-            <td>{props.item.colour}</td>
+            {props.item.colour ? <td>{props.item.colour}</td> : <td>-</td>}
           </tr>
           <tr>
             <td>Description</td>

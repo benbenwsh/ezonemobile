@@ -15,11 +15,16 @@ export default function ItemDescription(props) {
 
   return (
     <>
-      <h1>
+      <h3>
         Apple {props.modelName} - {props.item.storage}GB - {props.item.colour}
-      </h1>
+      </h3>
       <h4>From seller #{props.item.seller_id}</h4>
-      <p>HK${formatedNumber(props.item.price)}</p>
+      {props.item.price ? (
+        <p>HK${formatedNumber(props.item.price)}</p>
+      ) : (
+        <p>Need to contact</p>
+      )}
+
       {/* <div className="d-flex align-items-center my-3">
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -48,6 +53,7 @@ export default function ItemDescription(props) {
         </svg>
         <span className="ms-1">Get help buying. Click below button</span>
       </div>
+
       <ModalBtn
         className="d-grid gap-2"
         title="Contact us"

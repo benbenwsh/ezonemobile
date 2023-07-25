@@ -7,7 +7,7 @@ export default function Search(props) {
   }, []);
 
   return (
-    <div className="mt-3">
+    <div className="my-3">
       <form className="d-flex" role="search" onSubmit={handleSubmit}>
         <input
           className="form-control me-2"
@@ -15,7 +15,9 @@ export default function Search(props) {
           placeholder="Search"
           aria-label="Search"
           value={query}
-          onChange={(e) => setQuery(e.target.value)}
+          onChange={(e) => {
+            setQuery(e.target.value);
+          }}
         />
         <button
           className="btn"
