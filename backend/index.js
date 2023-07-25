@@ -96,20 +96,30 @@ app.get("/api/model/stockDetails", async (req, res) => {
 
     const cond = [];
     for (const [key, value] of Object.entries(req.query)) {
-      if (value !== "") {
+      if (value !== "" && key !== "quantity") {
         request.input(key, types[key], value);
         cond.push(`${key} = @${key}`);
       }
     }
     const condStr = cond.join(" AND ");
-    const result = await request.query(`
+    let result = (await request.query(`
     SELECT item_id, origin, storage, grade, quantity, colour, price, seller_id \
     FROM items WHERE ${condStr} \
     ORDER BY \
     CASE WHEN price IS NULL THEN 1 ELSE 0 END, \
-    price, published_time DESC`);
+    price, published_time DESC`)).recordset;
 
-    res.status(200).json(result.recordset);
+    if (req.query.quantity) {
+      let cumulativeSum = 0
+      let i = 0;
+      while (cumulativeSum < req.query.quantity && i < result.length) {
+        cumulativeSum += result[i].quantity
+        i++;
+      }
+      result = result.slice(0, i)
+    }
+
+    res.status(200).json(result);
   } catch (error) {
     console.error("Error in stockDetails:", error);
     res.status(500).json({ error: "Failed to register user" });
@@ -227,6 +237,6 @@ app.post("/api/upload", async (req, res) => {
   }
 });
 
-app.listen(3005, async () => {
+app.listen(3001, async () => {
   console.log("Server is running on http://localhost:3005");
 });

@@ -162,6 +162,7 @@ export function StockList() {
             modelId={model.model_id}
             filterOptions={filterOptions}
             setFilterParams={setFilterParams}
+            setQuantity={setQuantity}
           />
           <div className="ms-4">
             <h5 className="my-3 display-1 fs-5">

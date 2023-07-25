@@ -1,28 +1,31 @@
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
 import Form from "react-bootstrap/Form";
 import "../FilterPanel/FilterPanel.css";
 import GenericButton from "../GenericButton";
+import FormInput from "../FormInput";
 
 export default function FilterPanel(props) {
   const [filters, setFilters] = useState({
       storage: "",
       grade: "",
       colour: "",
-      origin: ""
+      origin: "",
+      quantity: ""
     });
 
 
   function handleInputChange(e) {
-    const { id, value } = e.target;
-    setFilters({ ...filters, [id]: value});
+    const { name, value } = e.target;
+    setFilters({ ...filters, [name]: value});
   }
 
   const handleSubmitForm = (e) => {
     e.preventDefault();
     const searchParams = { ...filters, model_id: props.modelId}
     props.setFilterParams(new URLSearchParams(searchParams))
-  };
-
+    props.setQuantity(filters.quantity || null)
+  }
+  
   return (
     <Form onSubmit={handleSubmitForm} className="mb-3 p-3 filter-panel">
       <div className="row gy-3">
@@ -30,7 +33,7 @@ export default function FilterPanel(props) {
           <label htmlFor="storage">Storage</label>
           <Form.Select 
           aria-label="Select storage" 
-          id="storage"
+          name="storage"
           onChange={handleInputChange}>
             <option value="">Select storage</option>
             {props.filterOptions.storages.map((storage, index) => {
@@ -46,7 +49,7 @@ export default function FilterPanel(props) {
           <label htmlFor="grade">Grade</label>
           <Form.Select 
           aria-label="Select grade" 
-          id="grade"
+          name="grade"
           onChange={handleInputChange}>
             <option value="">Select grade</option>
             {props.filterOptions.grades.map((grade, index) => {
@@ -64,7 +67,7 @@ export default function FilterPanel(props) {
           <label htmlFor="colour">Colour</label>
           <Form.Select 
           aria-label="Select colour"
-          id="colour"
+          name="colour"
           onChange={handleInputChange}>
             <option value="">Select colour</option>
             {props.filterOptions.colours.map((colour, index) => {
@@ -80,7 +83,7 @@ export default function FilterPanel(props) {
           <label htmlFor="origin">Country of Origin</label>
           <Form.Select 
           aria-label="Select country"
-          id="origin"
+          name="origin"
           onChange={handleInputChange}>
             <option value="">Select country</option>
             {props.filterOptions.origins.map((origin, index) => {
@@ -91,6 +94,21 @@ export default function FilterPanel(props) {
               );
             })}
           </Form.Select>
+        </div>
+      </div>
+      <div className="row gy-3 mt-3">
+        <div className="col-12">
+          <label htmlFor="quantity">
+            Quantity
+          </label>
+          <FormInput
+            type="number"
+            name="quantity"
+            id="quantity"
+            placeholder="Quantity"
+            min="0"
+            onChange={handleInputChange}
+          />
         </div>
       </div>
       <div className="d-grid gap-2 mt-4">
