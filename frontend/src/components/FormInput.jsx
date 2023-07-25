@@ -7,6 +7,7 @@ export default function FormInput(props) {
       className="form-control"
       placeholder={props.placeholder}
       name={props.name}
+      min={props.min}
       onChange={props.onChange}
       maxLength={props.maxLength}
       required

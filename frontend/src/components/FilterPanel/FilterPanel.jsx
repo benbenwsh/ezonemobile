@@ -1,14 +1,16 @@
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
 import Form from "react-bootstrap/Form";
 import "../FilterPanel/FilterPanel.css";
 import GenericButton from "../GenericButton";
+import FormInput from "../FormInput";
 
 export default function FilterPanel(props) {
   const [filters, setFilters] = useState({
       storage: "",
       grade: "",
       colour: "",
-      origin: ""
+      origin: "",
+      quantity: ""
     });
 
 
@@ -21,8 +23,9 @@ export default function FilterPanel(props) {
     e.preventDefault();
     const searchParams = { ...filters, model_id: props.modelId}
     props.setFilterParams(new URLSearchParams(searchParams))
-  };
-
+    props.setQuantity(filters.quantity || null)
+  }
+  
   return (
     <Form onSubmit={handleSubmitForm} className="mb-3 p-3 filter-panel">
       <div className="row gy-3">
@@ -91,6 +94,21 @@ export default function FilterPanel(props) {
               );
             })}
           </Form.Select>
+        </div>
+      </div>
+      <div className="row gy-3 mt-3">
+        <div className="col-12">
+          <label htmlFor="quantity">
+            Quantity
+          </label>
+          <FormInput
+            type="number"
+            name="quantity"
+            id="quantity"
+            placeholder="Quantity"
+            min="0"
+            onChange={handleInputChange}
+          />
         </div>
       </div>
       <div className="d-grid gap-2 mt-4">
