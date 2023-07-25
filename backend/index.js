@@ -6,6 +6,8 @@ const path = require("path");
 const sql = require("mssql");
 const cors = require("cors");
 const assert = require("assert");
+const sharp = require("sharp");
+
 const secretKey = "mysecretkey";
 
 app.use(cors());
@@ -53,6 +55,26 @@ sql.connect(config, (err) => {
     console.log("Connected to SQL Server");
   }
 });
+
+app.get("/api/upload-model", async (req, res) => {
+  try {
+    const compressedImageBuffer = await sharp("c:/SQL_items_img/model_images/iPhone/iPhone_6.jpg")
+      .flatten({ background: "white" })
+      .toFormat("webp")
+      // .jpeg({ quality: 10 }) // You can adjust the quality as needed
+      .toBuffer();
+    const request = new sql.Request();
+    request.input('image', sql.VarBinary(sql.MAX), compressedImageBuffer);
+    await request.query(`
+      UPDATE models
+      SET model_image = @image
+      WHERE model_id = 1;
+    `);
+    console.log('ok??')
+  } catch (error) {
+    console.error(error)
+  }
+})
 
 app.get("/api/shop", async (req, res) => {
   try {
