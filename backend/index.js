@@ -7,6 +7,7 @@ const sql = require("mssql");
 const cors = require("cors");
 const assert = require("assert");
 const sharp = require("sharp");
+const fs = require("fs");
 
 const secretKey = "mysecretkey";
 
@@ -56,21 +57,33 @@ sql.connect(config, (err) => {
   }
 });
 
-app.get("/api/upload-model", async (req, res) => {
+app.get("/api/upload-model", (req, res) => {
   try {
-    const compressedImageBuffer = await sharp("c:/SQL_items_img/model_images/iPhone/iPhone_6.jpg")
-      .flatten({ background: "white" })
-      .toFormat("webp")
-      // .jpeg({ quality: 10 }) // You can adjust the quality as needed
-      .toBuffer();
-    const request = new sql.Request();
-    request.input('image', sql.VarBinary(sql.MAX), compressedImageBuffer);
-    await request.query(`
-      UPDATE models
-      SET model_image = @image
-      WHERE model_id = 1;
-    `);
-    console.log('ok??')
+    const imageDirectory = "c:/SQL_items_img/model_images/iPhone/iPhone_6.jpg"
+    fs.readdir(imageDirectory, (err, files) => {
+      if (err) {
+        console.error('Error reading image directory:', err);
+      } else {
+        files.forEach(async (file) => {
+          const imagePath = path.join(imageDirectory, file);
+          await sharp(imagePath)
+          .flatten({ background: "white" })
+          .toFormat("webp")
+          .toBuffer();
+
+          // Insert image into the database
+          const request = new sql.Request();
+          request.input('image', sql.VarBinary(sql.MAX), compressedImageBuffer);
+          request.input('model_name', sql.VarChar, file)
+          await request.query(`
+            UPDATE models
+            SET model_image = @image
+            WHERE model_name = @model_name;
+          `);
+          console.log('Compression success')
+        });
+      }
+    });
   } catch (error) {
     console.error(error)
   }
