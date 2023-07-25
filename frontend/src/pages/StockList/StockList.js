@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState, useCallback } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import Spinner from "react-bootstrap/Spinner";
@@ -20,6 +20,12 @@ export function StockList() {
   const [quantity, setQuantity] = useState(null);
   const [minAvgPrice, setMinAvgPrice] = useState(0);
   const [filterParams, setFilterParams] = useState("")
+  const [filterOptions, setFilterOptions] = useState({
+    storages: [],
+    grades: [],
+    colours: [],
+    origins: []
+  })
 
   // get model data from database
   const getModelData = useCallback(async () => {
@@ -37,7 +43,6 @@ export function StockList() {
       if (filterParams) {
         const getModelDetailsUrl = `http://localhost:${PORT}/api/model/stockDetails?${filterParams}`;
         const res = await axios.get(getModelDetailsUrl);
-        console.log(res.data);
         setStockDetails(res.data);
         setIsLoading(false);
       }
@@ -45,6 +50,25 @@ export function StockList() {
       console.error(error);
     }
  }, [filterParams])
+
+  const fetchFilterOptions = useCallback(async () => {
+    try {
+      if (model.model_id) {
+        const response = await fetch(
+          `http://localhost:${PORT}/api/filter-options?modelId=${model.model_id}`
+        );
+        const responseJson = await response.json()
+
+        if (response.ok) {
+          setFilterOptions(responseJson);
+        } else {
+          throw new Error(responseJson.error)
+        }
+      }
+    } catch (error) {
+      console.error("Error fetching data: ", error);
+    }
+  }, [model.model_id])
 
   const calcMinAvgPrice = useCallback((data) => {
       let totalPrice = 0;
@@ -56,8 +80,6 @@ export function StockList() {
           if (data[i].price !== null) {
             totalPrice += data[i].price * data[i].quantity;
             totalQuantity += data[i].quantity;
-            console.log(totalPrice)
-            console.log(totalQuantity)
           }
         }
       } else {
@@ -85,6 +107,10 @@ export function StockList() {
   useEffect(() => {
     getModelDetails();
   }, [getModelDetails])
+  
+  useEffect(() => {
+    fetchFilterOptions();
+  }, [fetchFilterOptions])
 
   useEffect(() => {
     calcMinAvgPrice(stockDetails);
@@ -127,6 +153,7 @@ export function StockList() {
         <div className="col-12 col-md-6">
           <FilterPanel 
             modelId={model.model_id}
+            filterOptions={filterOptions}
             setFilterParams={setFilterParams}
           />
           <div className="ms-4">

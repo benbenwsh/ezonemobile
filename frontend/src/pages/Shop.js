@@ -1,6 +1,5 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import Spinner from "react-bootstrap/Spinner";
-import Search from "../components/Search";
 import Item from "../components/Items/Item";
 import Breadcrumb from "../components/Breadcrumbs/Breadcrumbs";
 import axios from "axios";
@@ -10,21 +9,19 @@ export function Shop() {
   const [items, setItems] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
-  const fetchItemsData = async () => {
-    axios
-      .get(`http://localhost:${PORT}/api/shop`)
-      .then((res) => setItems(res.data))
-      .catch((err) => {
-        console.error("Error fetching data: ", err);
-      })
-      .finally(() => {
-        setIsLoading(false);
-      });
-  };
+  const fetchItemsData = useCallback(async () => {
+    try {
+      const res = await axios.get(`http://localhost:${PORT}/api/shop`)
+      setItems(res.data)
+      setIsLoading(false);
+    } catch (error) {
+      console.error("Error fetching data: ", error);
+    }
+  }, []);
 
   useEffect(() => {
     fetchItemsData();
-  }, []);
+  }, [fetchItemsData]);
 
   return (
     <div className="container my-3">

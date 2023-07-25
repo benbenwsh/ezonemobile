@@ -1,101 +1,19 @@
-import { React, useState } from "react";
+import { React } from "react";
 import FormInput from "../FormInput";
 import GenericButton from "../GenericButton";
-import { maxLengths, PORT } from "../../config";
+import { maxLengths } from "../../config";
 import CountrySelector from "./CountrySelector";
-import Notification from "../Notification";
 import Modal from "../Modal";
-import ValidationRules from "../../validation-rules";
 import "./RegistrationForm.css";
 
 export default function RegisterForm(props) {
-  const [formValues, setFormValues] = useState({
-    fName: "",
-    lName: "",
-    email: "",
-    verifyEmail: "",
-    password: "",
-    country: "Country",
-    city: "",
-    state: "",
-    address: "",
-    chkTerm: false,
-  });
-
-  const [error, setError] = useState(false);
-  const [errorMessage, setErrorMessage] = useState("");
 
   const descriptionStyle = {
     fontFamily: "'Varela Round', sans-serif",
   };
 
-  const SignUpButtonClicked = async (e) => {
-    e.preventDefault();
-
-    try {
-      const { verifyEmail, ...formValuesToSubmit } = formValues;
-      console.log(formValuesToSubmit);
-      const response = await fetch(`http://localhost:${PORT}/api/signup`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formValuesToSubmit),
-      });
-
-      const data = await response.json();
-
-      if (response.ok) {
-        localStorage.setItem("token", data.token);
-        props.setIsSignedIn(true);
-      } else {
-        console.error("Sign up failed");
-        setErrorMessage(data.error);
-        setError(true);
-      }
-    } catch (error) {
-      console.error("Error occurred during sign up", error);
-    }
-  };
-
-  // disable login btn when input validation is not meet
-  // handle all the form input expect country and chkTerm
-  const handleStringInputChange = (e) => {
-    const { name, value } = e.target;
-    setFormValues({ ...formValues, [name]: value });
-  };
-
-  // handle the check box
-  const handleChkTerm = (e) => {
-    setFormValues({ ...formValues, chkTerm: !formValues.chkTerm });
-  };
-
-  const isDisabled = !(
-    ValidationRules.isNameValid(formValues.fName, formValues.lName) &&
-    ValidationRules.isEmailValid(formValues.email) &&
-    ValidationRules.isVerifyEmailValid(
-      formValues.email,
-      formValues.verifyEmail
-    ) &&
-    ValidationRules.isPasswordValid(formValues.password) &&
-    ValidationRules.isCountryValid(formValues.country) &&
-    ValidationRules.isAddressValid(
-      formValues.city,
-      formValues.state,
-      formValues.address
-    ) &&
-    ValidationRules.isTermChecked(formValues.chkTerm)
-  );
-
   return (
     <>
-      <Notification
-        success={false}
-        error={error}
-        setSuccess={null}
-        setError={setError}
-        errorMessage={errorMessage}
-      />
       <div className="container text-center form-max-width">
         <h1 className="mt-5 mb-4 display-3 fw-bold">
           The best offer <br />
@@ -112,7 +30,7 @@ export default function RegisterForm(props) {
                 placeholder="First name"
                 name="fName"
                 maxLength={maxLengths.firstName}
-                onChange={handleStringInputChange}
+                onChange={props.handleStringInputChange}
               />
             </div>
             <div className="col-12 col-sm-6 mb-3">
@@ -121,7 +39,7 @@ export default function RegisterForm(props) {
                 placeholder="Last name"
                 name="lName"
                 maxLength={maxLengths.lastName}
-                onChange={handleStringInputChange}
+                onChange={props.handleStringInputChange}
               />
             </div>
           </div>
@@ -132,7 +50,7 @@ export default function RegisterForm(props) {
                 placeholder="Email"
                 name="email"
                 maxLength={maxLengths.email}
-                onChange={handleStringInputChange}
+                onChange={props.handleStringInputChange}
               />
             </div>
           </div>
@@ -143,7 +61,7 @@ export default function RegisterForm(props) {
                 placeholder="Verify Email"
                 name="verifyEmail"
                 maxLength={maxLengths.email}
-                onChange={handleStringInputChange}
+                onChange={props.handleStringInputChange}
               />
             </div>
           </div>
@@ -154,13 +72,13 @@ export default function RegisterForm(props) {
                 placeholder="Password"
                 name="password"
                 maxLength={maxLengths.password}
-                onChange={handleStringInputChange}
+                onChange={props.handleStringInputChange}
               />
             </div>
           </div>
           <div className="row gy-3">
             <div className="col-6 col-md-4">
-              <CountrySelector onChange={handleStringInputChange} />
+              <CountrySelector onChange={props.handleStringInputChange} />
             </div>
             <div className="col-6 col-md-4">
               <FormInput
@@ -168,7 +86,7 @@ export default function RegisterForm(props) {
                 placeholder="City"
                 name="city"
                 maxLength={maxLengths.city}
-                onChange={handleStringInputChange}
+                onChange={props.handleStringInputChange}
               />
             </div>
             <div className="col-12 col-sm-12 col-md-4 mb-3">
@@ -177,7 +95,7 @@ export default function RegisterForm(props) {
                 placeholder="State"
                 name="state"
                 maxLength={maxLengths.state}
-                onChange={handleStringInputChange}
+                onChange={props.handleStringInputChange}
               />
             </div>
           </div>
@@ -188,7 +106,7 @@ export default function RegisterForm(props) {
                 placeholder="Address"
                 name="address"
                 maxLength={maxLengths.address}
-                onChange={handleStringInputChange}
+                onChange={props.handleStringInputChange}
               />
             </div>
           </div>
@@ -199,7 +117,7 @@ export default function RegisterForm(props) {
               name="chkTerm"
               value=""
               id="term"
-              onChange={handleChkTerm}
+              onChange={props.handleStringInputChange}
             />
             <label
               className="form-check-label text-body-tertiary term-label"
@@ -229,8 +147,8 @@ export default function RegisterForm(props) {
             <GenericButton
               className="btn-success"
               btnName="Sign up"
-              handler={SignUpButtonClicked}
-              disabled={isDisabled}
+              handler={props.signUpButtonClicked}
+              disabled={props.isDisabled}
             />
           </div>
         </form>

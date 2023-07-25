@@ -1,16 +1,9 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState } from "react";
 import Form from "react-bootstrap/Form";
 import "../FilterPanel/FilterPanel.css";
 import GenericButton from "../GenericButton";
-import { PORT } from "../../config";
 
 export default function FilterPanel(props) {
-  const [filterOptions, setFilterOptions] = useState({
-    storages: [],
-    grades: [],
-    colours: [],
-    origins: []
-  })
   const [filters, setFilters] = useState({
       storage: "",
       grade: "",
@@ -18,35 +11,11 @@ export default function FilterPanel(props) {
       origin: ""
     });
 
-  const fetchFilterOptions = useCallback(async () => {
-    try {
-      if (props.modelId) {
-        const response = await fetch(
-          `http://localhost:${PORT}/api/filter-options?modelId=${props.modelId}`
-        );
-
-        const responseJson = await response.json()
-
-        if (response.ok) {
-          console.log(responseJson)
-          setFilterOptions(responseJson);
-        } else {
-          console.error("Error fetching data");
-        }
-      }
-    } catch (error) {
-      console.error("Error fetching data: ", error);
-    }
-  }, [props.modelId])
 
   function handleInputChange(e) {
     const { id, value } = e.target;
     setFilters({ ...filters, [id]: value});
   }
-
-  useEffect(() => {
-    fetchFilterOptions();
-  }, [fetchFilterOptions])
 
   const handleSubmitForm = (e) => {
     e.preventDefault();
@@ -64,7 +33,7 @@ export default function FilterPanel(props) {
           id="storage"
           onChange={handleInputChange}>
             <option value="">Select storage</option>
-            {filterOptions.storages.map((storage, index) => {
+            {props.filterOptions.storages.map((storage, index) => {
               return (
                 <option value={storage} key={index}>
                   {storage}
@@ -80,7 +49,7 @@ export default function FilterPanel(props) {
           id="grade"
           onChange={handleInputChange}>
             <option value="">Select grade</option>
-            {filterOptions.grades.map((grade, index) => {
+            {props.filterOptions.grades.map((grade, index) => {
               return (
                 <option value={grade} key={index}>
                   {grade}
@@ -98,7 +67,7 @@ export default function FilterPanel(props) {
           id="colour"
           onChange={handleInputChange}>
             <option value="">Select colour</option>
-            {filterOptions.colours.map((colour, index) => {
+            {props.filterOptions.colours.map((colour, index) => {
               return (
                 <option value={colour} key={index}>
                   {colour}
@@ -114,7 +83,7 @@ export default function FilterPanel(props) {
           id="origin"
           onChange={handleInputChange}>
             <option value="">Select country</option>
-            {filterOptions.origins.map((origin, index) => {
+            {props.filterOptions.origins.map((origin, index) => {
               return (
                 <option value={origin} key={index}>
                   {origin}

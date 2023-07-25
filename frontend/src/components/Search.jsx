@@ -1,10 +1,10 @@
-import { useState, React } from "react";
+import React, { useState, useCallback } from "react";
 
 export default function Search(props) {
   const [query, setQuery] = useState("");
-  const handleSubmit = (e) => {
+  const handleSubmit = useCallback((e) => {
     e.preventDefault();
-  };
+  }, []);
 
   return (
     <div className="mt-3">
