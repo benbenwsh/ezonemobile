@@ -14,6 +14,7 @@ export function MoreDetails() {
   const negative = useNavigate();
 
   const [itemInfo, setItemInfo] = useState({});
+  const [hasImage, setHasImage] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
   const getModelDetails = useCallback(async () => {
@@ -21,9 +22,13 @@ export function MoreDetails() {
       const res = await axios.get(
         `http://localhost:${PORT}/api/model/moreDetails?item_id=${item_id}`
       );
+
       res.data.model = model_name;
       setItemInfo(res.data);
       setIsLoading(false);
+      if (res.data.itemImg.length > 0) {
+        setHasImage(true);
+      }
     } catch (error) {
       negative("/notfound");
       console.log("ERROR fail to fetch the data", error);
@@ -41,10 +46,25 @@ export function MoreDetails() {
       <div className="row gy-3">
         <div col-md-1></div>
         <div className="col-12 col-md-6">
-          {isLoading ? (
-            <Spinner animation="border" variant="warning" />
+          {hasImage ? (
+            <>
+              {isLoading ? (
+                <Spinner animation="border" variant="warning" />
+              ) : (
+                <Carousel item={itemInfo.itemImg} />
+              )}
+            </>
           ) : (
-            <Carousel item={itemInfo.itemImg} />
+            <div
+              className="d-flex justify-content-center align-items-center h-100"
+              style={{
+                backgroundColor: "#f8f9fa",
+                minHeight: "260px",
+                color: "#6c757d",
+              }}
+            >
+              <h3>No image yet</h3>
+            </div>
           )}
         </div>
         <div className="col-12 col-md-4">

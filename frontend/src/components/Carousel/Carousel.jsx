@@ -22,7 +22,7 @@ export default function CarouselItem(props) {
                 "data:image/jpg;base64," +
                 arrayBufferToBase64(i.image_data.data)
               }
-              style={{ maxWidth: "100%", height: "280px" }}
+              style={{ maxWidth: "100%", height: "260px" }}
             />
           </Carousel.Item>
         );

@@ -14,7 +14,6 @@ export default function ImageDropZone() {
     onDrop: handleDrop,
     accept: {
       "image/jpeg": [],
-      "image/png": [],
     },
   });
 
@@ -65,7 +64,7 @@ export default function ImageDropZone() {
               />
               <p className="text-body-tertiary">or drag photos here</p>
               <em className="text-body-tertiary">
-                (Only *.jpeg and *.png images will be accepted)
+                (Only *.jpg images will be accepted)
               </em>
             </div>
           </div>

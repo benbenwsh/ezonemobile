@@ -14,8 +14,8 @@ export function Shop() {
 
   const fetchItemsData = useCallback(async () => {
     try {
-      const res = await axios.get(`http://localhost:${PORT}/api/shop`)
-      setItems(res.data)
+      const res = await axios.get(`http://localhost:${PORT}/api/shop`);
+      setItems(res.data);
       setIsLoading(false);
     } catch (error) {
       console.error("Error fetching data: ", error);
