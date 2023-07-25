@@ -54,47 +54,37 @@ sql.connect(config, (err) => {
   }
 });
 
-// shop page
 app.get("/api/shop", async (req, res) => {
-  const request = new sql.Request();
-
-  sql.query("SELECT model_name, model_image FROM models", (error, result) => {
-    if (error) {
-      console.error("Error executing SELECT:", error);
-      res.status(500).json({ error: "Internal server error" });
-    } else {
-      res.status(200).json(result.recordset);
-    }
-  });
+  try {
+    const request = new sql.Request();
+    const result = await sql.query("SELECT model_name, model_image FROM models");
+    res.status(200).json(result.recordset);
+  } catch (error) {
+    console.error("Error in Shop: ", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
 });
 
 // this endpoint only get the model name and model image
 // stockList page
 app.get("/api/model", async (req, res) => {
-  const request = new sql.Request();
-  request.input("model_name", sql.VarChar, req.query.model_name);
-
-  request.query(
-    "SELECT * FROM models WHERE model_name = @model_name",
-    (err, result) => {
-      if (err) {
-        console.error("Error executing SELECT:", err);
-        res.status(500).json({ error: "Internal server error" });
-      } else {
-        res.status(200).json(result.recordset[0]);
-        console.log(res.status);
-      }
-    }
-  );
+  try {
+    const request = new sql.Request();
+    request.input("model_name", sql.VarChar, req.query.model_name);
+    const result = await request.query("SELECT * FROM models WHERE model_name = @model_name")
+    res.status(200).json(result.recordset[0]);
+  } catch (error) {
+    console.error("Error in Model:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
 });
 
-// stockList page
 app.get("/api/model/stockDetails", async (req, res) => {
   try {
     const request = new sql.Request();
     const types = {
       model_id: sql.Int,
-      storage: sql.VarChar,
+      storage: sql.Int,
       grade: sql.VarChar,
       colour: sql.VarChar,
       origin: sql.VarChar,
@@ -117,12 +107,11 @@ app.get("/api/model/stockDetails", async (req, res) => {
 
     res.status(200).json(result.recordset);
   } catch (error) {
-    console.error("Error :", error);
+    console.error("Error in stockDetails:", error);
     res.status(500).json({ error: "Failed to register user" });
   }
 });
 
-// moreDetails page
 app.get("/api/model/moreDetails", async (req, res) => {
   try {
     const request = new sql.Request();
@@ -142,7 +131,7 @@ app.get("/api/model/moreDetails", async (req, res) => {
       itemImg: itemImg.recordset,
     });
   } catch (e) {
-    console.error("Error executing SELECT:", err);
+    console.error("Error in moreDetials", err);
     res.status(500).json({ error: "Internal server error" });
   }
   // const request = new sql.Request();
@@ -196,55 +185,53 @@ app.get("/api/filter-options", async (req, res) => {
 });
 
 app.get("/api/upload-options", async (req, res) => {
-  const request = new sql.Request();
+  try {
+    const request = new sql.Request();
 
-  const models = (
-    await request.query("SELECT model_id, model_name FROM models")
-  ).recordset;
-  const sellers = (await request.query("SELECT id, company_name FROM sellers"))
-    .recordset;
-  res.status(200).json({ models: models, sellers: sellers });
+    const models = (
+      await request.query("SELECT model_id, model_name FROM models")
+    ).recordset;
+    const sellers = (await request.query("SELECT id, company_name FROM sellers"))
+      .recordset;
+    res.status(200).json({ models: models, sellers: sellers });
+  } catch (error) {
+    res.status(500).json({ error: "Internal server error" });
+  }
 });
 
-// upload page
 app.post("/api/upload", async (req, res) => {
   try {
-    const {
-      model,
-      seller,
-      origin,
-      capacity,
-      grade,
-      colour,
-      price,
-      quantity,
-      description,
-    } = req.body;
-
     const request = new sql.Request();
-    request.input("model", sql.Int, model);
-    request.input("seller", sql.Int, seller);
-    request.input("origin", sql.VarChar, origin);
-    request.input("capacity", sql.Int, capacity);
-    request.input("grade", sql.VarChar, grade);
-    request.input("colour", sql.VarChar, colour);
-    request.input("price", sql.Decimal, price);
-    request.input("quantity", sql.Int, quantity);
-    request.input("description", sql.Text, description);
-    request.query(
-      `INSERT INTO items (model_id, seller_id, origin, storage, grade, colour, price, quantity, description) \
-    VALUES (@model, @seller, @origin, @capacity, @grade, @colour, @price, @quantity, @description)`,
-      (err, result) => {
-        if (err) {
-          console.error("Error executing INSERT:", err);
-          res.status(500).json({ error: "Internal server error" });
-        } else {
-          res.status(200).end();
-        }
+    const types = {
+      model_id: sql.Int,
+      seller_id: sql.Int,
+      origin: sql.VarChar,
+      storage: sql.Int,
+      colour: sql.VarChar,
+      price: sql.Decimal,
+      grade: sql.VarChar,
+      quantity: sql.Int,
+      description: sql.Text
+    }
+
+    const params = []
+    const cond = [];
+    for (const [key, value] of Object.entries(req.body)) {
+      if (value !== "") {
+        request.input(key, types[key], value)
+        params.push(key)
+        cond.push(`@${key}`)
       }
-    );
+    }
+
+    const paramsStr = params.join(", ")
+    const condStr = cond.join(", ")
+    await request.query(`INSERT INTO items (${paramsStr}) VALUES (${condStr})`)
+
+    res.status(200).end();
   } catch (error) {
-    res.status(500).json({ error: "Failed to upload" });
+    console.error("Error in Upload:", error);
+    res.status(500).json({ error: "Internal server error" });
   }
 });
 

@@ -3,40 +3,37 @@ import ImageDropZone from "../components/ImageDropZone/ImageDropZone";
 import FormInput from "../components/FormInput";
 import GenericButton from "../components/GenericButton";
 import Notification from "../components/Notification";
-import ValidationRules from "../validation-rules";
 import { PORT } from "../config";
 
 export function Upload() {
   const [modelOptions, setModelOptions] = useState([]);
   const [sellerOptions, setSellerOptions] = useState([]);
   const [formValues, setFormValues] = useState({
-    model: "Choose model",
-    seller: "Choose seller",
-    origin: null,
-    capacity: null,
-    grade: null,
-    colour: null,
-    price: null,
-    quantity: null,
-    description: null,
+    model_id: "",
+    seller_id: "",
+    origin: "",
+    storage: "",
+    grade: "",
+    colour: "",
+    price: "",
+    quantity: "",
+    description: "",
   });
 
   const [success, setSuccess] = useState(false);
-  const [price, setPrice] = useState();
   const [error, setError] = useState(false);
   const [message, setMessage] = useState("");
 
   const fetchUploadOptions = useCallback(async () => {
     try {
       const response = await fetch(`http://localhost:${PORT}/api/upload-options`);
-
       const responseJson = await response.json();
 
       if (response.ok) {
         setModelOptions(responseJson.models);
         setSellerOptions(responseJson.sellers);
       } else {
-        console.error("Error fetching data");
+        throw new Error(responseJson.error);
       }
     } catch (error) {
       console.error("Error fetching data: ", error);
@@ -47,10 +44,10 @@ export function Upload() {
     fetchUploadOptions();
   }, [fetchUploadOptions]);
 
-  function handleInputChange(e) {
+  const handleInputChange = useCallback((e) => {
     const { name, value } = e.target;
     setFormValues({ ...formValues, [name]: value });
-  }
+  }, [formValues])
 
   // const formatPrice = (price) => {
   //   return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
@@ -75,7 +72,7 @@ export function Upload() {
       if (form.checkValidity()) {
         try {
           console.log(formValues);
-          const response = await fetch("http://localhost:${PORT}/api/upload", {
+          const response = await fetch("http://localhost:3001/api/upload", {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
@@ -97,12 +94,10 @@ export function Upload() {
       }
     },
     [formValues]
-  );
+  );  
+  
 
-  const isDisabled = !(
-    ValidationRules.isModelValid(formValues.model) &&
-    ValidationRules.isSellerValid(formValues.seller)
-  );
+  const isDisabled = formValues.model_id === "" || formValues.seller_id === ""
 
   return (
     <div className="container">
@@ -125,12 +120,12 @@ export function Upload() {
             </label>
             <select
               className="form-select"
-              name="model"
+              name="model_id"
               aria-label="model"
               onChange={handleInputChange}
               required
             >
-              <option selected>Choose model</option>
+              <option value="" selected>Choose model</option>
               {modelOptions.map((model, index) => {
                 return (
                   <option value={model.model_id} key={index}>
@@ -147,7 +142,7 @@ export function Upload() {
             </label>
             <select
               className="form-select"
-              name="seller"
+              name="seller_id"
               aria-label="seller"
               onChange={handleInputChange}
               required
@@ -189,7 +184,7 @@ export function Upload() {
               <input
                 className="form-control"
                 type="number"
-                name="capacity"
+                name="storage"
                 onChange={handleInputChange}
                 placeholder="Capacity"
                 required

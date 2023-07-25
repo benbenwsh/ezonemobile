@@ -16,24 +16,22 @@ export function MoreDetails() {
   const [itemInfo, setItemInfo] = useState({});
   const [isLoading, setIsLoading] = useState(true);
 
-  const getModelDetails = async () => {
-    axios
-      .get(`http://localhost:${PORT}/api/model/moreDetails?item_id=${item_id}`)
-      .then((res) => {
-        res.data.model = model_name;
-        setItemInfo(res.data);
-        setIsLoading(false);
-      })
-      .catch((err) => {
-        negative("/notfound");
-        console.log("ERROR fail to fetch the data", err);
-      });
-  };
+  const getModelDetails = useCallback(async () => {
+    try {
+      const res = await axios.get(`http://localhost:${PORT}/api/model/moreDetails?item_id=${item_id}`)
+      res.data.model = model_name;
+      setItemInfo(res.data);
+      setIsLoading(false);
+    } catch (error) {
+      negative("/notfound");
+      console.log("ERROR fail to fetch the data", error);
+    }
+  }, [item_id, model_name, negative]);
 
   // Fetching data from remote MySQL database
   useEffect(() => {
     getModelDetails();
-  }, []);
+  }, [getModelDetails]);
 
   return (
     <div className="container my-3">

@@ -1,72 +1,16 @@
-import { useState, React } from "react";
+import React from "react";
 import { Link } from "react-router-dom";
 import FormInput from "../FormInput";
 import CheckBox from "../CheckBox";
 import GenericButton from "../GenericButton";
 import { maxLengths } from "../../config";
-import Notification from "../Notification"
 import Modal from "../Modal";
-import ValidationRules from "../../validation-rules";
-import { PORT } from "../../config";
 import "./SignInForm.css";
 
 export default function SignInForm(props) {
-  const [formValues, setFormValues] = useState({
-    email: "",
-    password: "",
-  });
-
-  const [error, setError] = useState(false);
-  const [errorMessage, setErrorMessage] = useState("");
-
-  const LoginButtonClicked = async (e) => {
-    e.preventDefault();
-
-    try {
-      // POST request because email and password are sensitive info
-      const response = await fetch(`http://localhost:${PORT}/api/login`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formValues),
-      });
-
-      const data = await response.json();
-
-      if (response.ok) {
-        localStorage.setItem('token', data.token);
-        props.setIsSignedIn(true);
-      } else {
-        console.error("Sign in failed");
-        setErrorMessage(data.error);
-        setError(true);
-
-      }
-    } catch (error) {
-      console.error("Error occurred during sign up", error);
-    }
-  };
-
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setFormValues({ ...formValues, [name]: value });
-  };
-
-  const isDisabled = !(
-    ValidationRules.isEmailValid(formValues.email) &&
-    ValidationRules.isPasswordValid(formValues.password)
-  );
 
   return (
     <div className="container text-center form-max-width">
-      <Notification
-        success={false}
-        error={error}
-        setSuccess={null}
-        setError={setError}
-        message={errorMessage}
-      />
       <h1 className="my-5 display-3 fw-bold">Sign In</h1>
       <form action="/" method="POST">
         <div className="row gy-3 mb-3">
@@ -75,7 +19,7 @@ export default function SignInForm(props) {
               type="email"
               placeholder="Email"
               name="email"
-              onChange={handleInputChange}
+              onChange={props.handleInputChange}
               maxLength={maxLengths.email}
             />
           </div>
@@ -86,7 +30,7 @@ export default function SignInForm(props) {
               type="password"
               placeholder="Password"
               name="password"
-              onChange={handleInputChange}
+              onChange={props.handleInputChange}
               maxLength={maxLengths.password}
             />
           </div>
@@ -104,9 +48,9 @@ export default function SignInForm(props) {
           type="submit"
           className="btn-warning text-light mb-4"
           btnName="Login"
-          handler={LoginButtonClicked}
+          handler={props.loginButtonClicked}
           id="login-btn"
-          disabled={isDisabled}
+          disabled={props.isDisabled}
         />
       </form>
       <span>Don't have an account? </span>
