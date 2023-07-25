@@ -105,12 +105,14 @@ export default function FilterPanel(props) {
       </div>
       <div className="row gy-3 mt-1">
         <div className="col-12">
-          <label htmlFor="quantity">Quantity</label>
-          <FormInput
+          <label htmlFor="quantity">
+            Quantity
+          </label>
+          <input
             type="number"
-            name="quantity"
-            id="quantity"
+            className="form-control"
             placeholder="Quantity"
+            name="quantity"
             min="0"
             onChange={handleInputChange}
           />
