@@ -54,18 +54,15 @@ sql.connect(config, (err) => {
   }
 });
 
-// shop page
 app.get("/api/shop", async (req, res) => {
-  const request = new sql.Request();
-
-  sql.query("SELECT model_name, model_image FROM models", (error, result) => {
-    if (error) {
-      console.error("Error executing SELECT:", error);
-      res.status(500).json({ error: "Internal server error" });
-    } else {
-      res.status(200).json(result.recordset);
-    }
-  });
+  try {
+    const request = new sql.Request();
+    const result = await sql.query("SELECT model_name, model_image FROM models");
+    res.status(200).json(result.recordset);
+  } catch (error) {
+    console.error("Error executing SELECT:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
 });
 
 // this endpoint only get the model name and model image
