@@ -13,8 +13,8 @@ export default function FilterPanel(props) {
 
 
   function handleInputChange(e) {
-    const { id, value } = e.target;
-    setFilters({ ...filters, [id]: value});
+    const { name, value } = e.target;
+    setFilters({ ...filters, [name]: value});
   }
 
   const handleSubmitForm = (e) => {
@@ -30,7 +30,7 @@ export default function FilterPanel(props) {
           <label htmlFor="storage">Storage</label>
           <Form.Select 
           aria-label="Select storage" 
-          id="storage"
+          name="storage"
           onChange={handleInputChange}>
             <option value="">Select storage</option>
             {props.filterOptions.storages.map((storage, index) => {
@@ -46,7 +46,7 @@ export default function FilterPanel(props) {
           <label htmlFor="grade">Grade</label>
           <Form.Select 
           aria-label="Select grade" 
-          id="grade"
+          name="grade"
           onChange={handleInputChange}>
             <option value="">Select grade</option>
             {props.filterOptions.grades.map((grade, index) => {
@@ -64,7 +64,7 @@ export default function FilterPanel(props) {
           <label htmlFor="colour">Colour</label>
           <Form.Select 
           aria-label="Select colour"
-          id="colour"
+          name="colour"
           onChange={handleInputChange}>
             <option value="">Select colour</option>
             {props.filterOptions.colours.map((colour, index) => {
@@ -80,7 +80,7 @@ export default function FilterPanel(props) {
           <label htmlFor="origin">Country of Origin</label>
           <Form.Select 
           aria-label="Select country"
-          id="origin"
+          name="origin"
           onChange={handleInputChange}>
             <option value="">Select country</option>
             {props.filterOptions.origins.map((origin, index) => {
