@@ -14,21 +14,22 @@ export default function Item(props) {
   let binaryImg = arrayBufferToBase64(props.item.model_image.data);
 
   return (
-    <div className="card h-100">
-      <img
-        src={"data:image/jpg;base64," + binaryImg}
-        className="card-img-top"
-        alt={props.item.name}
-      />
-      <div className="card-body d-flex flex-column">
-        <h5 className="card-title">Apple {props.item.model_name}</h5>
-        <Link
-          to={`/shop/${props.item.model_name}`}
-          className="mt-auto text-light btn btn-warning"
-        >
-          More
-        </Link>
-      </div>
-    </div>
+    <>
+      <Link
+        to={`/shop/${props.item.model_name}`}
+        className="text-decoration-none"
+      >
+        <div className="card h-100">
+          <img
+            src={"data:image/jpg;base64," + binaryImg}
+            className="card-img-top"
+            alt={props.item.name}
+          />
+          <div className="card-body d-flex flex-column">
+            <h5 className="card-title">Apple {props.item.model_name}</h5>
+          </div>
+        </div>
+      </Link>
+    </>
   );
 }
