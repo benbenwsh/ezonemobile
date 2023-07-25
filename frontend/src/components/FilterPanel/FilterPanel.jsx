@@ -6,35 +6,36 @@ import FormInput from "../FormInput";
 
 export default function FilterPanel(props) {
   const [filters, setFilters] = useState({
-      storage: "",
-      grade: "",
-      colour: "",
-      origin: "",
-      quantity: ""
-    });
-
+    storage: "",
+    grade: "",
+    colour: "",
+    origin: "",
+    quantity: "",
+  });
 
   function handleInputChange(e) {
     const { name, value } = e.target;
-    setFilters({ ...filters, [name]: value});
+    setFilters({ ...filters, [name]: value });
   }
 
   const handleSubmitForm = (e) => {
     e.preventDefault();
-    const searchParams = { ...filters, model_id: props.modelId}
-    props.setFilterParams(new URLSearchParams(searchParams))
-    props.setQuantity(filters.quantity || null)
-  }
-  
+    const searchParams = { ...filters, model_id: props.modelId };
+    props.setFilterParams(new URLSearchParams(searchParams));
+    props.setQuantity(filters.quantity || null);
+  };
+
   return (
     <Form onSubmit={handleSubmitForm} className="mb-3 p-3 filter-panel">
       <div className="row gy-3">
         <div className="col-6">
           <label htmlFor="storage">Storage</label>
-          <Form.Select 
-          aria-label="Select storage" 
-          name="storage"
-          onChange={handleInputChange}>
+          <Form.Select
+            aria-label="Select storage"
+            name="storage"
+            id="storage"
+            onChange={handleInputChange}
+          >
             <option value="">Select storage</option>
             {props.filterOptions.storages.map((storage, index) => {
               return (
@@ -47,10 +48,12 @@ export default function FilterPanel(props) {
         </div>
         <div className="col-6">
           <label htmlFor="grade">Grade</label>
-          <Form.Select 
-          aria-label="Select grade" 
-          name="grade"
-          onChange={handleInputChange}>
+          <Form.Select
+            aria-label="Select grade"
+            name="grade"
+            id="grade"
+            onChange={handleInputChange}
+          >
             <option value="">Select grade</option>
             {props.filterOptions.grades.map((grade, index) => {
               return (
@@ -62,13 +65,15 @@ export default function FilterPanel(props) {
           </Form.Select>
         </div>
       </div>
-      <div className="row gy-3 mt-3">
+      <div className="row gy-3 mt-1">
         <div className="col-6">
           <label htmlFor="colour">Colour</label>
-          <Form.Select 
-          aria-label="Select colour"
-          name="colour"
-          onChange={handleInputChange}>
+          <Form.Select
+            aria-label="Select colour"
+            name="colour"
+            id="colour"
+            onChange={handleInputChange}
+          >
             <option value="">Select colour</option>
             {props.filterOptions.colours.map((colour, index) => {
               return (
@@ -81,10 +86,12 @@ export default function FilterPanel(props) {
         </div>
         <div className="col-6">
           <label htmlFor="origin">Country of Origin</label>
-          <Form.Select 
-          aria-label="Select country"
-          name="origin"
-          onChange={handleInputChange}>
+          <Form.Select
+            aria-label="Select country"
+            name="origin"
+            id="origin"
+            onChange={handleInputChange}
+          >
             <option value="">Select country</option>
             {props.filterOptions.origins.map((origin, index) => {
               return (
@@ -96,11 +103,9 @@ export default function FilterPanel(props) {
           </Form.Select>
         </div>
       </div>
-      <div className="row gy-3 mt-3">
+      <div className="row gy-3 mt-1">
         <div className="col-12">
-          <label htmlFor="quantity">
-            Quantity
-          </label>
+          <label htmlFor="quantity">Quantity</label>
           <FormInput
             type="number"
             name="quantity"
