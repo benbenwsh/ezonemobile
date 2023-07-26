@@ -6,6 +6,9 @@ const path = require("path");
 const sql = require("mssql");
 const cors = require("cors");
 const assert = require("assert");
+const sharp = require("sharp");
+const fs = require("fs");
+
 const secretKey = "mysecretkey";
 
 app.use(cors());
@@ -53,6 +56,50 @@ sql.connect(config, (err) => {
     console.log("Connected to SQL Server");
   }
 });
+
+// app.get("/api/upload-model", (req, res) => {
+//   try {
+//     const imageDirectory = "c:/SQL_items_img/model_images/Mac/"
+//     fs.readdir(imageDirectory, async (err, files) => {
+//       if (err) {
+//         console.error('Error reading image directory:', err);
+//       } else {
+//         let i = 34;
+//         files.sort((a, b) => {
+//           return a.localeCompare(b, undefined, { numeric: true, sensitivity: 'base' });
+//         });
+//         for (const file of files) {
+//           const imagePath = path.join(imageDirectory, file);
+//           const compressedImageBuffer = await sharp(imagePath)
+//           .flatten({ background: "white" })
+//           .toFormat("webp")
+//           .toBuffer();
+
+//           // Insert image into the database
+//           const request = new sql.Request();
+//           request.input('image', sql.VarBinary(sql.MAX), compressedImageBuffer);
+//           request.input('model_name', sql.VarChar, file.substring(0, file.length - 4))
+//           console.log(i)
+//           console.log(file)
+//           request.input('model_id', sql.Int, i)
+//           try {
+//             await request.query(`
+//               UPDATE models
+//               SET model_image = @image, model_name = @model_name
+//               WHERE model_id = @model_id;
+//             `);
+//             i = i+1;
+//             console.log('Compression success')
+//           } catch (error) {
+//             console.error(error)
+//           }
+//         };
+//       }
+//     });
+//   } catch (error) {
+//     console.error(error)
+//   }
+// })
 
 app.get("/api/shop", async (req, res) => {
   try {

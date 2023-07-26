@@ -1,5 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { LazyLoadImage } from "react-lazy-load-image-component"
+import "react-lazy-load-image-component/src/effects/blur.css"
 import "./Item.css";
 
 export default function Item(props) {
@@ -19,8 +21,10 @@ export default function Item(props) {
       className="text-decoration-none"
     >
       <div className="card h-100">
-        <img
+        <LazyLoadImage
           src={"data:image/jpg;base64," + binaryImg}
+          effect="blur"
+          threshold={100}
           className="card-img-top"
           alt={props.item.name}
         />
