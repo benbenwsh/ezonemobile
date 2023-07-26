@@ -9,6 +9,8 @@ import Breadcrumb from "../../components/Breadcrumbs/Breadcrumbs";
 import fire from "./images/fire_animation.gif";
 import StockListTable from "../../components/StockListTable";
 import { PORT } from "../../config";
+import { LazyLoadImage } from "react-lazy-load-image-component"
+import "react-lazy-load-image-component/src/effects/blur.css"
 
 export function StockList() {
   const { model_name } = useParams();
@@ -146,11 +148,13 @@ export function StockList() {
             {isLoading ? (
               <Spinner animation="border" variant="warning" />
             ) : (
-              <img
+              <LazyLoadImage
                 src={
                   "data:image/jpg;base64," +
                   arrayBufferToBase64(model.model_image.data)
                 }
+                alt={model.model_name}
+                effect="blur"
                 className="img-fluid"
               />
             )}

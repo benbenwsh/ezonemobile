@@ -1,5 +1,7 @@
 import React from "react";
 import { Carousel } from "react-bootstrap";
+import { LazyLoadImage } from "react-lazy-load-image-component"
+import "react-lazy-load-image-component/src/effects/blur.css"
 import "../Carousel/Carousel.css";
 
 export default function CarouselItem(props) {
@@ -16,7 +18,7 @@ export default function CarouselItem(props) {
       {props.item.map((i, index) => {
         return (
           <Carousel.Item key={index}>
-            <img
+            <LazyLoadImage
               className="d-block carousel-img"
               src={
                 "data:image/jpg;base64," +

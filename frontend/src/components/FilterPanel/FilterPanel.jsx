@@ -1,8 +1,7 @@
-import React, { useState, useCallback } from "react";
+import React, { useState } from "react";
 import Form from "react-bootstrap/Form";
 import "../FilterPanel/FilterPanel.css";
 import GenericButton from "../GenericButton";
-import FormInput from "../FormInput";
 
 export default function FilterPanel(props) {
   const [filters, setFilters] = useState({
