@@ -31,7 +31,7 @@ export function Shop() {
   const searchItems = items.filter((item) =>
     item.model_name.toString().toLowerCase().includes(query.toLowerCase())
   );
-  console.log(query.toLowerCase());
+
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentItem = items.slice(indexOfFirstItem, indexOfLastItem);
@@ -59,7 +59,7 @@ export function Shop() {
               <>
                 {currentItem.map((item, index) => {
                   return (
-                    <div className="col-12 col-sm-6 col-lg-3" key={index}>
+                    <div className="col-12 col-sm-6 col-lg-3">
                       <Item item={item} />
                     </div>
                   );
@@ -69,7 +69,7 @@ export function Shop() {
               <>
                 {searchItems.map((item, index) => {
                   return (
-                    <div className="col-12 col-sm-6 col-lg-3" key={index}>
+                    <div className="col-12 col-sm-6 col-lg-3">
                       <Item item={item} />
                     </div>
                   );

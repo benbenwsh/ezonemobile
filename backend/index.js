@@ -102,21 +102,23 @@ app.get("/api/model/stockDetails", async (req, res) => {
       }
     }
     const condStr = cond.join(" AND ");
-    let result = (await request.query(`
+    let result = (
+      await request.query(`
     SELECT item_id, origin, storage, grade, quantity, colour, price, seller_id \
     FROM items WHERE ${condStr} \
     ORDER BY \
     CASE WHEN price IS NULL THEN 1 ELSE 0 END, \
-    price, published_time DESC`)).recordset;
+    price, published_time DESC`)
+    ).recordset;
 
     if (req.query.quantity) {
-      let cumulativeSum = 0
+      let cumulativeSum = 0;
       let i = 0;
       while (cumulativeSum < req.query.quantity && i < result.length) {
-        cumulativeSum += result[i].quantity
+        cumulativeSum += result[i].quantity;
         i++;
       }
-      result = result.slice(0, i)
+      result = result.slice(0, i);
     }
 
     res.status(200).json(result);
@@ -237,6 +239,6 @@ app.post("/api/upload", async (req, res) => {
   }
 });
 
-app.listen(3001, async () => {
+app.listen(3005, async () => {
   console.log("Server is running on http://localhost:3005");
 });

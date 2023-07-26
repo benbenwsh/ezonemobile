@@ -18,11 +18,13 @@ export default function ItemDescription(props) {
       <h3>
         Apple {props.modelName} - {props.item.storage}GB - {props.item.colour}
       </h3>
-      <h4>From seller #{props.item.seller_id}</h4>
+      <h5>From seller #{props.item.seller_id}</h5>
       {props.item.price ? (
-        <p>HK${formatedNumber(props.item.price)}</p>
+        <h4 style={{ color: "#ee9b00" }}>
+          HK${formatedNumber(props.item.price)}
+        </h4>
       ) : (
-        <p>Need to contact</p>
+        <h4 style={{ color: "#ee9b00" }}>Need to contact</h4>
       )}
 
       {/* <div className="d-flex align-items-center my-3">

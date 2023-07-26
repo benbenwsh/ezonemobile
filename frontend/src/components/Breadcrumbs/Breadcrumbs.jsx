@@ -5,7 +5,7 @@ export default function BreadcrumbLink(props) {
   return (
     <Breadcrumb>
       <Breadcrumb.Item href="/">Shop</Breadcrumb.Item>
-      <Breadcrumb.Item href={`/${props.navLink}`}>
+      <Breadcrumb.Item href={`/shop/${props.navLink}`}>
         {props.navLink}
       </Breadcrumb.Item>
     </Breadcrumb>

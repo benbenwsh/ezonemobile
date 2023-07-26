@@ -9,4 +9,4 @@ export const maxLengths = {
   address: 128,
 };
 
-export const PORT = 3001;
+export const PORT = 3005;
