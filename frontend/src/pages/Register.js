@@ -26,7 +26,7 @@ export function Register(props) {
 
       const { verifyEmail, ...formValuesToSubmit } = formValues;
       console.log(formValuesToSubmit);
-      const response = await fetch(`http://localhost:${PORT}/api/signup`, {
+      const response = await fetch(`http://www.ezonemobile.com/api/signup`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

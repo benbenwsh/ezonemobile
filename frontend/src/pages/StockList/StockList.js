@@ -33,7 +33,7 @@ export function StockList() {
   const getModelData = useCallback(async () => {
     try {
       const res = await axios.get(
-        `http://localhost:${PORT}/api/model?model_name=${model_name}`
+        `http://www.ezonemobile.com/api/model?model_name=${model_name}`
       );
       setModel(res.data);
       setFilterParams(`model_id=${res.data.model_id}`);
@@ -45,7 +45,7 @@ export function StockList() {
   const getModelDetails = useCallback(async () => {
     try {
       if (filterParams) {
-        const getModelDetailsUrl = `http://localhost:${PORT}/api/model/stockDetails?${filterParams}`;
+        const getModelDetailsUrl = `http://www.ezonemobile.com/api/model/stockDetails?${filterParams}`;
         const res = await axios.get(getModelDetailsUrl);
         setStockDetails(res.data);
         setIsLoading(false);
@@ -59,7 +59,7 @@ export function StockList() {
     try {
       if (model.model_id) {
         const response = await fetch(
-          `http://localhost:${PORT}/api/filter-options?modelId=${model.model_id}`
+          `http://ezonemobile/api/filter-options?modelId=${model.model_id}`
         );
         const responseJson = await response.json();
 

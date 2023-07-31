@@ -72,7 +72,7 @@ export function Upload() {
       if (form.checkValidity()) {
         try {
           console.log(formValues);
-          const response = await fetch("http://localhost:3001/api/upload", {
+          const response = await fetch("http://www.ezonemobile.com/api/upload", {
             method: "POST",
             headers: {
               "Content-Type": "application/json",

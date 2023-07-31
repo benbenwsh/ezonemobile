@@ -18,7 +18,7 @@ export function SignIn(props) {
 
     try {
       // POST request because email and password are sensitive info
-      const response = await fetch(`http://localhost:${PORT}/api/login`, {
+      const response = await fetch(`http://www.ezonemobile.com/api/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

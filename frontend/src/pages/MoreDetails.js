@@ -20,7 +20,7 @@ export function MoreDetails() {
   const getModelDetails = useCallback(async () => {
     try {
       const res = await axios.get(
-        `http://localhost:${PORT}/api/model/moreDetails?item_id=${item_id}`
+        `http://www.ezonemobile.com/api/model/moreDetails?item_id=${item_id}`
       );
 
       res.data.model = model_name;
