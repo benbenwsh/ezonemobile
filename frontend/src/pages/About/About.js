@@ -76,7 +76,7 @@ export function About() {
           <p className="lead mb-4">
             Thank you for considering our platform for your mobile phone trading
             needs. We look forward to working with you and helping you achieve
-            your global business goals."
+            your global business goals.
           </p>
         </div>
       </div>
