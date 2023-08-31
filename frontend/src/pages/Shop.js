@@ -16,7 +16,7 @@ export function Shop() {
 
   const fetchItemsData = useCallback(async () => {
     try {
-      const res = await axios.get(`http://www.ezonemobile.com/api/shop`);
+      const res = await axios.get(`http://www.ezonemobile.com/api/shop/`);
       setItems(res.data);
       setIsLoading(false);
     } catch (error) {

@@ -1,7 +1,8 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import GenericButton from "./GenericButton";
-import ModalBtn from "./ModalBtn";
+import ModalBtn from "./ModalBtn"
+import { EMAIL } from "../config";
 
 export default function StockListTable(props) {
   return (
@@ -32,9 +33,9 @@ export default function StockListTable(props) {
                 <td>
                   <ModalBtn
                     title="Contact us"
-                    wtsNum="(+852) xxxx-xxxx"
-                    weChatNum="(+852) xxxx-xxxx"
-                    email="xxx@gmail.com"
+                    // wtsNum="(+852) xxxx-xxxx"
+                    // weChatNum="(+852) xxxx-xxxx"
+                    email={EMAIL}
                   />
                 </td>
                 <td>

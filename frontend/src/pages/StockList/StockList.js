@@ -9,8 +9,8 @@ import Breadcrumb from "../../components/Breadcrumbs/Breadcrumbs";
 import fire from "./images/fire_animation.gif";
 import StockListTable from "../../components/StockListTable";
 import { PORT } from "../../config";
-import { LazyLoadImage } from "react-lazy-load-image-component"
-import "react-lazy-load-image-component/src/effects/blur.css"
+import { LazyLoadImage } from "react-lazy-load-image-component";
+import "react-lazy-load-image-component/src/effects/blur.css";
 
 export function StockList() {
   const { model_name } = useParams();
@@ -59,7 +59,7 @@ export function StockList() {
     try {
       if (model.model_id) {
         const response = await fetch(
-          `http://ezonemobile/api/filter-options?modelId=${model.model_id}`
+          `http://www.ezonemobile.com/api/filter-options?modelId=${model.model_id}`
         );
         const responseJson = await response.json();
 
@@ -79,7 +79,7 @@ export function StockList() {
       let totalPrice = 0;
       let totalQuantity = 0;
 
-      if (quantity == null) {
+      if (quantity === null) {
         for (let i = 0; i < data.length; i++) {
           // Change the condition if other variables become optional as well
           if (data[i].price !== null) {

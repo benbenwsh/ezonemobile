@@ -9,4 +9,5 @@ export const maxLengths = {
   address: 128,
 };
 
+export const EMAIL = "ezonemobile.contact@gmail.com"
 export const PORT = 3005;

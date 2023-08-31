@@ -1,6 +1,7 @@
 import React from "react";
 import GenericButton from "../GenericButton";
 import ModalBtn from "../ModalBtn";
+import { EMAIL } from "../../config";
 
 export default function ItemDescription(props) {
   const formatedNumber = (price) => {
@@ -61,7 +62,7 @@ export default function ItemDescription(props) {
         title="Contact us"
         wtsNum="(+852) xxxx-xxxx"
         weChatNum="(+852) xxxx-xxxx"
-        email="xxx@gmail.com"
+        email={EMAIL}
       />
     </>
   );

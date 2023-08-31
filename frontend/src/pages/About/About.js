@@ -8,7 +8,7 @@ import phone from "./images/phone.png";
 export function About() {
   return (
     <div className="px-4 py-5 my-5 text-center ">
-      <h1 className="display-5 fw-bold text-body-emphasis">Fotama</h1>
+      <h1 className="display-5 fw-bold text-body-emphasis">ezonemobile</h1>
       <div className="col-lg-6 mx-auto">
         <div className="my-5">
           <h2>Who we are?</h2>

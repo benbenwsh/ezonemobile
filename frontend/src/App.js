@@ -7,6 +7,7 @@ import { StockList } from "./pages/StockList/StockList";
 import { MoreDetails } from "./pages/MoreDetails";
 import { Upload } from "./pages/Upload";
 import { About } from "./pages/About/About";
+import { ContactUs } from "./pages/ContactUs";
 import { NotFound } from "./pages/NotFound/NotFound";
 import Footer from "./components/Footer";
 import NavigationBar from "./components/NavigationBar/NavigationBar";
@@ -48,6 +49,7 @@ export default function App() {
         <Route path="/shop/:model_name/:item_id" element={<MoreDetails />} />
         <Route path="/upload" element={<Upload />} />
         <Route path="/about" element={<About />} />
+        <Route path="/contact-us" element={<ContactUs />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
       <Footer />

@@ -5,6 +5,7 @@ import Image from "react-bootstrap/Image";
 import { Nav, Navbar, NavDropdown } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { PersonCircle } from "react-bootstrap-icons";
+import logo from "../../assets/ezonemobile_logo.jpeg"
 import "./NavigationBar.css";
 
 export default function NavigationBar(props) {
@@ -13,9 +14,9 @@ export default function NavigationBar(props) {
       <Container>
         <Navbar.Brand href="/">
           <Image
-            src="https://fotama.com/storage/images/logo.png?v=e41ce8ee65494ea841e86412513e9035"
+            src={logo}
             alt="icon"
-            style={{ maxHeight: "50px" }}
+            style={{ maxHeight: "100px" }}
           />
         </Navbar.Brand>
         <Navbar.Toggle aria-controls="navbarScroll" />
@@ -33,6 +34,11 @@ export default function NavigationBar(props) {
             <Nav.Item>
               <Link className="nav-link" to="/about">
                 About Us
+              </Link>
+            </Nav.Item>
+            <Nav.Item>
+              <Link className="nav-link" to="/contact-us">
+                Contact
               </Link>
             </Nav.Item>
           </Nav>

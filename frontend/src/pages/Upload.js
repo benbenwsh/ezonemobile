@@ -8,6 +8,8 @@ import { PORT } from "../config";
 export function Upload() {
   const [modelOptions, setModelOptions] = useState([]);
   const [sellerOptions, setSellerOptions] = useState([]);
+  const [images, setImages] = useState([])
+  const [imageOptions, setImageOptions] = useState([])
   const [formValues, setFormValues] = useState({
     model_id: "",
     seller_id: "",
@@ -26,7 +28,7 @@ export function Upload() {
 
   const fetchUploadOptions = useCallback(async () => {
     try {
-      const response = await fetch(`http://localhost:${PORT}/api/upload-options`);
+      const response = await fetch(`http://www.ezonemobile.com/api/upload-options`);
       const responseJson = await response.json();
 
       if (response.ok) {
@@ -71,13 +73,15 @@ export function Upload() {
 
       if (form.checkValidity()) {
         try {
-          console.log(formValues);
+          const formData = new FormData()
+          for (var key in formValues) {
+            formData.append(key, formValues[key])
+          }
+          formData.append("image", images[0]);
+          
           const response = await fetch("http://www.ezonemobile.com/api/upload", {
             method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(formValues),
+            body: form,
           });
 
           if (response.ok) {
@@ -109,7 +113,7 @@ export function Upload() {
         message={message}
       />
       <h2 className="my-3">What are you listing today?</h2>
-      <ImageDropZone />
+      <ImageDropZone images={images} setImages={setImages}/>
       <div className="border-bottom border-light-subtle my-3"></div>
       <h3>Item Description</h3>
       <form action="#" method="POST">

@@ -3,8 +3,7 @@ import GenericButton from "../GenericButton";
 import { useDropzone } from "react-dropzone";
 import "./ImageDropZone.css";
 
-export default function ImageDropZone() {
-  const [images, setImages] = useState([]);
+export default function ImageDropZone({images, setImages}) {
 
   function handleDrop(acceptedFiles) {
     setImages((prevImage) => [...prevImage, ...acceptedFiles]);

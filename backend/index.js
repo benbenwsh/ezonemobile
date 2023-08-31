@@ -7,7 +7,9 @@ const sql = require("mssql");
 const cors = require("cors");
 const assert = require("assert");
 const sharp = require("sharp");
+const multer = require("multer")
 const fs = require("fs");
+const upload = multer({ dest: "uploads/"})
 
 const secretKey = "mysecretkey";
 
@@ -194,7 +196,7 @@ app.get("/api/model/moreDetails", async (req, res) => {
       itemImg: itemImg.recordset,
     });
   } catch (e) {
-    console.error("Error in moreDetials", err);
+    console.error("Error in moreDetails", e);
     res.status(500).json({ error: "Internal server error" });
   }
 });
@@ -250,8 +252,10 @@ app.get("/api/upload-options", async (req, res) => {
   }
 });
 
-app.post("/api/upload", async (req, res) => {
+app.post("/api/upload", upload.single("image"), async (req, res) => {
   try {
+    const images = req.file;
+    console.log(images)
     const request = new sql.Request();
     const types = {
       model_id: sql.Int,
@@ -268,7 +272,7 @@ app.post("/api/upload", async (req, res) => {
     const params = [];
     const cond = [];
     for (const [key, value] of Object.entries(req.body)) {
-      if (value !== "") {
+      if (value !== "" && key != "images") {
         request.input(key, types[key], value);
         params.push(key);
         cond.push(`@${key}`);
@@ -277,7 +281,22 @@ app.post("/api/upload", async (req, res) => {
 
     const paramsStr = params.join(", ");
     const condStr = cond.join(", ");
-    await request.query(`INSERT INTO items (${paramsStr}) VALUES (${condStr})`);
+    const itemId = (await request.query(`
+      INSERT INTO items (${paramsStr}) OUTPUT INSERTED.item_id VALUES (${condStr});
+    `)).recordset[0].item_id;
+    request.input('item_id', sql.Int, itemId);
+
+    // const imageData = fs.readFileSync(.path);
+    request.input('imageData', sql.VarBinary, images[0]);
+    const imageId = await request.query(
+      `INSERT INTO images (image_data) VALUES (@imageData); 
+      SELECT SCOPE_IDENTITY();`
+    );
+   
+    request.input('image_id', sql.Int, imageId);
+    await request.query(
+      `INSERT INTO items_images (item_id, image_id) VALUES (@item_id, @image_Id)`
+    )
 
     res.status(200).end();
   } catch (error) {
@@ -286,6 +305,6 @@ app.post("/api/upload", async (req, res) => {
   }
 });
 
-app.listen(3005, async () => {
-  console.log("Server is running on http://localhost:3005");
+app.listen(3001, async () => {
+  console.log("Server is running on http://localhost:3001");
 });

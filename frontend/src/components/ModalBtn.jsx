@@ -23,8 +23,7 @@ export default function ForgotAcPopup(props) {
           <Modal.Title>{props.title}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <p>
-            {/* whatsapp icon */}
+          {/* <p>
             <svg
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 48 48"
@@ -59,7 +58,6 @@ export default function ForgotAcPopup(props) {
             {props.wtsNum}
           </p>
           <p>
-            {/* weChat icon */}
             <svg
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 48 48"
@@ -114,7 +112,7 @@ export default function ForgotAcPopup(props) {
               />
             </svg>{" "}
             {props.weChatNum}
-          </p>
+          </p> */}
           <p>
             {/* email icon */}
             <svg
