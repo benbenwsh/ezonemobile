@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import { Route, Routes, Navigate, redirect } from "react-router-dom";
+import { useCallback } from "react";
+import { Route, Routes, useNavigate } from "react-router-dom";
 import { SignIn } from "./pages/SignIn";
 import { Register } from "./pages/Register";
 import { Shop } from "./pages/Shop";
@@ -9,19 +9,24 @@ import { Upload } from "./pages/Upload";
 import { About } from "./pages/About/About";
 import { ContactUs } from "./pages/ContactUs";
 import { NotFound } from "./pages/NotFound/NotFound";
+import {Admin} from "./pages/Admin/Admin";
 import Footer from "./components/Footer";
 import NavigationBar from "./components/NavigationBar/NavigationBar";
 
 export default function App() {
-  const [isSignedIn, setIsSignedIn] = useState(false);
 
-  useEffect(() => {
-    // console.log("isSignedIn: " + isSignedIn);
-  }, [isSignedIn]);
+  const navigate = useNavigate()
+
+  const authenticate = useCallback(() => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      navigate("/admin/signin")
+    }
+  }, [])
 
   return (
     <>
-      <NavigationBar isSignedIn={isSignedIn} />
+      <NavigationBar />
       <Routes>
         <Route path="/" element={<Shop />} />
         {/* <Route
@@ -47,12 +52,15 @@ export default function App() {
 
         <Route path="/shop/:model_name" element={<StockList />} />
         <Route path="/shop/:model_name/:item_id" element={<MoreDetails />} />
-        <Route path="/upload" element={<Upload />} />
         <Route path="/about" element={<About />} />
         <Route path="/contact-us" element={<ContactUs />} />
+        <Route path="/admin" element={<Admin authenticate={authenticate}/>}/>
+        <Route path="/admin/upload" element={<Upload authenticate={authenticate}/>} />
+        {/* <Route path="/admin/delete" element={<Delete />} /> */}
+        <Route path="/admin/signin" element={<SignIn />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
-      <Footer />
+      <Footer/>
     </>
   );
 }

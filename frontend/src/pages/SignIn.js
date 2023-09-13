@@ -1,10 +1,11 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import ValidationRules from "../validation-rules";
 import Notification from "../components/Notification"
-import { PORT } from "../config";
+import { BACKEND_URL } from "../config";
+import { useNavigate } from "react-router-dom";
 import SignInForm from "../components/SignInForm/SignInForm";
 
-export function SignIn(props) {
+export function SignIn() {
   const [formValues, setFormValues] = useState({
     email: "",
     password: ""
@@ -12,13 +13,14 @@ export function SignIn(props) {
 
   const [error, setError] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+  const navigate = useNavigate();
 
   const loginButtonClicked = useCallback(async (e) => {
     e.preventDefault();
 
     try {
       // POST request because email and password are sensitive info
-      const response = await fetch(`http://www.ezonemobile.com/api/login`, {
+      const response = await fetch(`${BACKEND_URL}/admin/signin`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -30,7 +32,8 @@ export function SignIn(props) {
 
       if (response.ok) {
         localStorage.setItem('token', data.token);
-        props.setIsSignedIn(true);
+        navigate('/admin')
+
       } else {
         setErrorMessage(data.error);
         setError(true);
@@ -39,7 +42,7 @@ export function SignIn(props) {
     } catch (error) {
       console.error("Error occurred during sign up", error);
     }
-  }, [formValues, props]);
+  }, [formValues]);
 
   const handleInputChange = useCallback((e) => {
     const { name, value } = e.target;
@@ -50,6 +53,13 @@ export function SignIn(props) {
     ValidationRules.isEmailValid(formValues.email) &&
     ValidationRules.isPasswordValid(formValues.password)
   );
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      navigate("/admin")
+    }
+  }, [])
 
   return (
     <>

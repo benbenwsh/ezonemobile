@@ -3,13 +3,12 @@ import ImageDropZone from "../components/ImageDropZone/ImageDropZone";
 import FormInput from "../components/FormInput";
 import GenericButton from "../components/GenericButton";
 import Notification from "../components/Notification";
-import { PORT } from "../config";
+import { BACKEND_URL } from "../config";
+import axios from "axios";
 
-export function Upload() {
+export function Upload({ authenticate }) {
   const [modelOptions, setModelOptions] = useState([]);
   const [sellerOptions, setSellerOptions] = useState([]);
-  const [images, setImages] = useState([])
-  const [imageOptions, setImageOptions] = useState([])
   const [formValues, setFormValues] = useState({
     model_id: "",
     seller_id: "",
@@ -25,10 +24,17 @@ export function Upload() {
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState(false);
   const [message, setMessage] = useState("");
+  const [image, setImage] = useState()
 
   const fetchUploadOptions = useCallback(async () => {
     try {
-      const response = await fetch(`http://www.ezonemobile.com/api/upload-options`);
+      const response = await fetch(`${BACKEND_URL}/upload-options`, {
+        method: "GET",
+        headers: {
+          "Authorisation": `Bearer ${localStorage.getItem("token")}`,
+          "Content-Type": "application/json",
+        },
+      });
       const responseJson = await response.json();
 
       if (response.ok) {
@@ -43,8 +49,9 @@ export function Upload() {
   }, []);
 
   useEffect(() => {
+    authenticate()
     fetchUploadOptions();
-  }, [fetchUploadOptions]);
+  }, [authenticate, fetchUploadOptions]);
 
   const handleInputChange = useCallback((e) => {
     const { name, value } = e.target;
@@ -66,38 +73,57 @@ export function Upload() {
   //   handlePriceChange(e);
   // };
 
+  const handleFile = (e) => {
+    setImage(e.target.files[0]);
+  }
   const uploadButtonClicked = useCallback(
     async (e) => {
       e.preventDefault();
+      console.log("here")
       const form = e.target.form;
 
-      if (form.checkValidity()) {
-        try {
-          const formData = new FormData()
-          for (var key in formValues) {
-            formData.append(key, formValues[key])
-          }
-          formData.append("image", images[0]);
-          
-          const response = await fetch("http://www.ezonemobile.com/api/upload", {
-            method: "POST",
-            body: form,
-          });
+      try {
+        if (form.checkValidity()) {
+            console.log(formValues);
+            const formData = new FormData()
+            for (var key in formValues) {
+              var value = formValues[key];
+              formData.append(key, value);
+            }
 
-          if (response.ok) {
-            setMessage("Upload Success!");
-            setSuccess(true);
-          } else {
-            const responseJson = await response.json();
-            setMessage("Upload Error!");
-            setError(true);
-          }
-        } catch (error) {
-          console.error("Error occurred during upload", error);
+            if (image != null) {
+              formData.append("image", image)
+            }
+            
+            const response = await fetch(`${BACKEND_URL}/upload`, {
+              method: "POST",
+              headers: {
+                "Authorisation": `Bearer ${localStorage.getItem("token")}`,
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify(formValues),
+            });
+            console.log(response)
+            console.log(response.data)
+
+            if (response.status >= 200 && response.status < 300) {
+              setMessage("Upload Success!");
+              setSuccess(true);
+            } else {
+              console.log("fialed")
+              setMessage("Upload Error! Response Not OK!");
+              setError(true);
+            }
+        } else {
+          throw new Error("Missing fields!")
         }
+      } catch (error) {
+        setMessage(`Upload Error! ${error}`);
+        setError(true);
+        console.error("Error occurred during upload", error);
       }
     },
-    [formValues]
+    [formValues, image]
   );  
   
 
@@ -113,7 +139,7 @@ export function Upload() {
         message={message}
       />
       <h2 className="my-3">What are you listing today?</h2>
-      <ImageDropZone images={images} setImages={setImages}/>
+      <input type="file" onChange={handleFile} accept="image/jpeg"/>
       <div className="border-bottom border-light-subtle my-3"></div>
       <h3>Item Description</h3>
       <form action="#" method="POST">

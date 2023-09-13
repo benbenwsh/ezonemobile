@@ -4,19 +4,19 @@ import Item from "../components/Items/Item";
 import Breadcrumb from "../components/Breadcrumbs/Breadcrumbs";
 import Search from "../components/Search";
 import axios from "axios";
-import { PORT } from "../config";
+import { BACKEND_URL } from "../config";
 import Pagination from "../components/Pagination";
 
 export function Shop() {
   const [items, setItems] = useState([]);
   const [query, setQuery] = useState("");
-  const [currentPage, setCurrentPag] = useState(1);
+  const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(12);
   const [isLoading, setIsLoading] = useState(true);
 
   const fetchItemsData = useCallback(async () => {
     try {
-      const res = await axios.get(`http://www.ezonemobile.com/api/shop/`);
+      const res = await axios.get(`${BACKEND_URL}/shop/`);
       setItems(res.data);
       setIsLoading(false);
     } catch (error) {
@@ -37,7 +37,7 @@ export function Shop() {
   const currentItem = items.slice(indexOfFirstItem, indexOfLastItem);
 
   const paginate = (currentPage) => {
-    setCurrentPag(currentPage);
+    setCurrentPage(currentPage);
     window.scrollTo({
       top: 0,
       behavior: "smooth",

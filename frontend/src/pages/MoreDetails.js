@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import Carousel from "../components/Carousel/Carousel";
@@ -7,7 +7,8 @@ import Breadcrumb from "../components/Breadcrumbs/Breadcrumbs";
 import TechnicalDetailsTable from "../components/DisplayItemDetails/TechnicalDetailsTable";
 import ItemDescription from "../components/DisplayItemDetails/ItemDescription";
 import Spinner from "react-bootstrap/Spinner";
-import { PORT } from "../config";
+import { LazyLoadImage } from "react-lazy-load-image-component"
+import { BACKEND_URL } from "../config";
 
 export function MoreDetails() {
   const { model_name, item_id } = useParams();
@@ -19,14 +20,13 @@ export function MoreDetails() {
 
   const getModelDetails = useCallback(async () => {
     try {
-      const res = await axios.get(
-        `http://www.ezonemobile.com/api/model/moreDetails?item_id=${item_id}`
-      );
+      const responseData = (await axios.get(
+        `${BACKEND_URL}/model/moreDetails?item_id=${item_id}`
+      )).data;
 
-      res.data.model = model_name;
-      setItemInfo(res.data);
+      setItemInfo(responseData);
       setIsLoading(false);
-      if (res.data.itemImg.length > 0) {
+      if (responseData.image_data != null) {
         setHasImage(true);
       }
     } catch (error) {
@@ -34,6 +34,13 @@ export function MoreDetails() {
       console.log("ERROR fail to fetch the data", error);
     }
   }, [item_id, model_name, negative]);
+
+  const arrayBufferToBase64 = (buffer) => {
+    let binary = "";
+    let bytes = [].slice.call(new Uint8Array(buffer));
+    bytes.forEach((b) => (binary += String.fromCharCode(b)));
+    return window.btoa(binary);
+  };
 
   // Fetching data from remote MySQL database
   useEffect(() => {
@@ -51,7 +58,17 @@ export function MoreDetails() {
               {isLoading ? (
                 <Spinner animation="border" variant="warning" />
               ) : (
-                <Carousel item={itemInfo.itemImg} />
+              <div
+                className="d-flex justify-content-center align-items-center h-100"
+              >
+                <LazyLoadImage
+                  className="d-flex justify-content-center align-items-center h-100 img-fluid"
+                  src={
+                    "data:image/jpg;base64," + arrayBufferToBase64(itemInfo.image_data.data)
+                  }
+                  style={{ maxWidth: "100%", height: "260px" }}
+                />
+              </div>
               )}
             </>
           ) : (
@@ -71,7 +88,7 @@ export function MoreDetails() {
           {isLoading ? (
             <Spinner animation="border" variant="warning" />
           ) : (
-            <ItemDescription item={itemInfo.itemInfo} modelName={model_name} />
+            <ItemDescription itemInfo={itemInfo} modelName={model_name} />
           )}
         </div>
         <div col-md-1></div>
@@ -85,7 +102,7 @@ export function MoreDetails() {
             <Spinner animation="border" variant="warning" />
           ) : (
             <TechnicalDetailsTable
-              item={itemInfo.itemInfo}
+              item={itemInfo}
               modelName={model_name}
             />
           )}

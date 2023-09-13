@@ -8,7 +8,7 @@ import "../StockList/StockList.css";
 import Breadcrumb from "../../components/Breadcrumbs/Breadcrumbs";
 import fire from "./images/fire_animation.gif";
 import StockListTable from "../../components/StockListTable";
-import { PORT } from "../../config";
+import { BACKEND_URL } from "../../config";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import "react-lazy-load-image-component/src/effects/blur.css";
 
@@ -33,7 +33,7 @@ export function StockList() {
   const getModelData = useCallback(async () => {
     try {
       const res = await axios.get(
-        `http://www.ezonemobile.com/api/model?model_name=${model_name}`
+        `${BACKEND_URL}/model?model_name=${model_name}`
       );
       setModel(res.data);
       setFilterParams(`model_id=${res.data.model_id}`);
@@ -45,7 +45,7 @@ export function StockList() {
   const getModelDetails = useCallback(async () => {
     try {
       if (filterParams) {
-        const getModelDetailsUrl = `http://www.ezonemobile.com/api/model/stockDetails?${filterParams}`;
+        const getModelDetailsUrl = `${BACKEND_URL}/model/stockDetails?${filterParams}`;
         const res = await axios.get(getModelDetailsUrl);
         setStockDetails(res.data);
         setIsLoading(false);
@@ -59,7 +59,7 @@ export function StockList() {
     try {
       if (model.model_id) {
         const response = await fetch(
-          `http://www.ezonemobile.com/api/filter-options?modelId=${model.model_id}`
+          `${BACKEND_URL}/api/filter-options?modelId=${model.model_id}`
         );
         const responseJson = await response.json();
 

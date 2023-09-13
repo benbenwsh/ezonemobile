@@ -1,6 +1,6 @@
 import React, { useCallback, useState } from "react";
 import Notification from "../components/Notification";
-import { PORT } from "../config";
+import { BACKEND_URL } from "../config";
 import ValidationRules from "../validation-rules"
 import RegistrationForm from "../components/RegistrationForm/RegistrationForm";
 
@@ -26,7 +26,7 @@ export function Register(props) {
 
       const { verifyEmail, ...formValuesToSubmit } = formValues;
       console.log(formValuesToSubmit);
-      const response = await fetch(`http://www.ezonemobile.com/api/signup`, {
+      const response = await fetch(`${BACKEND_URL}/api/signup`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

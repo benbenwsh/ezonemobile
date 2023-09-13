@@ -3,7 +3,7 @@ import GenericButton from "../GenericButton";
 import ModalBtn from "../ModalBtn";
 import { EMAIL } from "../../config";
 
-export default function ItemDescription(props) {
+export default function ItemDescription({itemInfo, modelName}) {
   const formatedNumber = (price) => {
     return price.toLocaleString("en-US");
   };
@@ -17,12 +17,12 @@ export default function ItemDescription(props) {
   return (
     <>
       <h3>
-        Apple {props.modelName} - {props.item.storage}GB - {props.item.colour}
+        Apple {modelName} - {itemInfo.storage}GB - {itemInfo.colour}
       </h3>
-      <h5>From seller #{props.item.seller_id}</h5>
-      {props.item.price ? (
+      <h5>From seller #{itemInfo.seller_id}</h5>
+      {itemInfo.price ? (
         <h4 style={{ color: "#ee9b00" }}>
-          HK${formatedNumber(props.item.price)}
+          HK${formatedNumber(itemInfo.price)}
         </h4>
       ) : (
         <h4 style={{ color: "#ee9b00" }}>Need to contact</h4>

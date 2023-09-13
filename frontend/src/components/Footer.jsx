@@ -35,7 +35,7 @@ export default function Footer() {
           </li>
         </ul>
         <p className="text-center text-muted">
-          Copyright © {currentYear} Fotama, Inc
+          Copyright © {currentYear} ezonemobile Inc. All rights reserved.
         </p>
       </footer>
     </>

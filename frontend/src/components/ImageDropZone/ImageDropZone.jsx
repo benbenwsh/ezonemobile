@@ -25,7 +25,9 @@ export default function ImageDropZone({images, setImages}) {
   return (
     <>
       <div {...getRootProps({ className: "dropzone" })}>
-        <input {...getInputProps()} />
+        <input {...getInputProps({
+          name:"images"
+        })} />
         {isDragActive ? (
           <div className="img-drop-zone">
             <div className="img-drop-zone-content">

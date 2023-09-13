@@ -10,4 +10,4 @@ export const maxLengths = {
 };
 
 export const EMAIL = "ezonemobile.contact@gmail.com"
-export const PORT = 3005;
+export const BACKEND_URL = "https://www.ezonemobile.com/api";

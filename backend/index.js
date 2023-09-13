@@ -5,11 +5,21 @@ const jwt = require("jsonwebtoken");
 const path = require("path");
 const sql = require("mssql");
 const cors = require("cors");
-const assert = require("assert");
 const sharp = require("sharp");
-const multer = require("multer")
 const fs = require("fs");
-const upload = multer({ dest: "uploads/"})
+
+const multer = require("multer")
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, "images")
+  },
+  filename: (req, file, cb) => {
+    console.log(`file: ${file}`)
+    cb(null, Date.now() + path.extname(file.originalname))
+  }
+})
+
+const upload = multer({storage: storage})
 
 const secretKey = "mysecretkey";
 
@@ -30,12 +40,12 @@ const config = {
   password: "Fotama123!",
   options: {
     trustServerCertificate: true,
-  },
+  }
 };
 
 // Middleware to verify JWT token
 function verifyToken(req, res, next) {
-  const authHeader = req.headers["authorization"];
+  const authHeader = req.headers.authorisation;
   const token = authHeader && authHeader.split(" ")[1];
 
   if (!token) {
@@ -183,18 +193,18 @@ app.get("/api/model/moreDetails", async (req, res) => {
     request.input("item_id", sql.Int, req.query.item_id);
 
     // first query
-    const itemlInfo = await request.query(
-      "SELECT origin, storage, grade, quantity, colour, price, description, seller_id FROM items WHERE item_id=@item_id"
-    );
+    const itemInfo = (await request.query(`
+      SELECT origin, storage, grade, quantity, colour, price, description, seller_id, image_data
+      FROM items
+      LEFT JOIN items_images
+      ON items.item_id = items_images.item_id
+      LEFT JOIN images
+      ON items_images.image_id = images.image_id
+      WHERE items.item_id=@item_id`
+    ));
+    console.log(itemInfo)
 
-    // second query
-    const itemImg = await request.query(
-      "SELECT image_data FROM stockLogImg WHERE item_id=@item_id"
-    );
-    res.status(200).json({
-      itemInfo: itemlInfo.recordset[0],
-      itemImg: itemImg.recordset,
-    });
+    res.status(200).json(itemInfo.recordset[0]);
   } catch (e) {
     console.error("Error in moreDetails", e);
     res.status(500).json({ error: "Internal server error" });
@@ -236,7 +246,7 @@ app.get("/api/filter-options", async (req, res) => {
   }
 });
 
-app.get("/api/upload-options", async (req, res) => {
+app.get("/api/upload-options", verifyToken, async (req, res) => {
   try {
     const request = new sql.Request();
 
@@ -252,10 +262,8 @@ app.get("/api/upload-options", async (req, res) => {
   }
 });
 
-app.post("/api/upload", upload.single("image"), async (req, res) => {
+app.post("/api/upload", [verifyToken, upload.single("image")], async (req, res) => {
   try {
-    const images = req.file;
-    console.log(images)
     const request = new sql.Request();
     const types = {
       model_id: sql.Int,
@@ -272,7 +280,8 @@ app.post("/api/upload", upload.single("image"), async (req, res) => {
     const params = [];
     const cond = [];
     for (const [key, value] of Object.entries(req.body)) {
-      if (value !== "" && key != "images") {
+      if (value !== "" && key !== "images") {
+        console.log(key)
         request.input(key, types[key], value);
         params.push(key);
         cond.push(`@${key}`);
@@ -282,27 +291,114 @@ app.post("/api/upload", upload.single("image"), async (req, res) => {
     const paramsStr = params.join(", ");
     const condStr = cond.join(", ");
     const itemId = (await request.query(`
-      INSERT INTO items (${paramsStr}) OUTPUT INSERTED.item_id VALUES (${condStr});
-    `)).recordset[0].item_id;
-    request.input('item_id', sql.Int, itemId);
+      INSERT INTO items (${paramsStr}) VALUES (${condStr});
+      SELECT SCOPE_IDENTITY() AS itemId;
+    `)).recordset[0].itemId;
 
-    // const imageData = fs.readFileSync(.path);
-    request.input('imageData', sql.VarBinary, images[0]);
-    const imageId = await request.query(
-      `INSERT INTO images (image_data) VALUES (@imageData); 
-      SELECT SCOPE_IDENTITY();`
-    );
-   
-    request.input('image_id', sql.Int, imageId);
-    await request.query(
-      `INSERT INTO items_images (item_id, image_id) VALUES (@item_id, @image_Id)`
-    )
+    const image = req.file;
+
+    if (image != undefined) {
+      const compressedImageBuffer = await sharp(image.path)
+      .flatten({ background: "white" })
+      .toFormat("webp")
+      .toBuffer();
+
+      request.input('image_data', sql.VarBinary(sql.MAX), compressedImageBuffer);
+      
+      const imageId = (await request.query(`
+        INSERT INTO images (image_data) VALUES (@image_data);
+        SELECT SCOPE_IDENTITY() AS imageId;
+      `)).recordset[0].imageId;
+
+      request.input('item_id', sql.Int, itemId)
+      request.input('image_id', sql.Int, imageId)
+
+      await request.query(`
+        INSERT INTO items_images (item_id, image_id) VALUES (@item_id, @image_id);
+      `)
+
+      fs.unlink(image.path, (err) => {
+        if (err) {
+          throw new Error(err)
+        }
+      })
+    }
 
     res.status(200).end();
+    
   } catch (error) {
     console.error("Error in Upload:", error);
     res.status(500).json({ error: "Internal server error" });
   }
+});
+
+// app.post("/api/signup", async (req, res) => {
+//   try {
+//     const {
+//       fName,
+//       lName,
+//       email,
+//       password,
+//       country,
+//       city,
+//       state,
+//       address,
+//       chkTerm,
+//     } = req.body;
+
+//     // Hash the email and the password
+//     const hashedEmail = await bcrypt.hash(email, 10);
+//     const hashedPassword = await bcrypt.hash(password, 10);
+
+//     // Request
+//     const request = new sql.Request();
+//     request.input("fName", sql.VarChar, fName);
+//     request.input("lName", sql.VarChar, lName);
+//     request.input("email", sql.VarChar, email);
+//     request.input("hashedPassword", sql.VarChar, hashedPassword);
+//     request.input("country", sql.VarChar, country);
+//     request.input("city", sql.VarChar, city);
+//     request.input("state", sql.VarChar, state);
+//     request.input("address", sql.VarChar, address);
+//     request.input("chkTerm", sql.TinyInt, chkTerm);
+//     request.input("hashedEmail", sql.VarChar, hashedEmail);
+//     await request.query(`INSERT INTO users (first_name, last_name, email, password, country, city, state, address, chk_term, hash) 
+//     VALUES (@fName, @lName, @email, @hashedPassword, @country, @city, @state, @address, @chkTerm, @hashedEmail)`);
+
+//     // Generate token
+//     const token = jwt.sign({ email, hashedPassword }, secretKey);
+//     res.status(200).json({ token: token });
+//   } catch (error) {
+//     console.error("Error inserting user:", error);
+//     res.status(500).json({ error: "Failed to register user" });
+//   }
+// });
+
+app.post("/api/admin/signin", async (req, res) => {
+  try {
+    const { email, password } = req.body;
+
+    // Request
+    const request = new sql.Request();
+    request.input('email', sql.VarChar, email);
+    const response = (await request.query('SELECT is_admin, password FROM admin WHERE email = @email')).recordset[0];
+    if (response.length !== 0  && response.is_admin && bcrypt.compare(password, response.password)) {
+      // Generate a JWT token
+      const token = jwt.sign({ email, password }, secretKey);
+      res.status(200).json({ token: token });
+    } else {
+      res.status(404).json({ error: 'Incorrect email or password.' });
+    }
+  } catch (error) {
+    console.error("Error in Sign In:", error);
+    res.status(500).json({ error: "Failed to Sign In" });
+  }
+
+  // Scenarios
+  // 1. There is no one with that username
+  // 2. There is someone with that username
+  // 2a. The password matches that in the database
+  // 2b. The password does not match
 });
 
 app.listen(3001, async () => {
