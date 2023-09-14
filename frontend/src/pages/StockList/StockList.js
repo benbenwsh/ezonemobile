@@ -7,9 +7,10 @@ import FilterPanel from "../../components/FilterPanel/FilterPanel";
 import "../StockList/StockList.css";
 import Breadcrumb from "../../components/Breadcrumbs/Breadcrumbs";
 import fire from "./images/fire_animation.gif";
-import StockListTable from "../../components/StockListTable";
+import StockListTable from "./components/StockListTable";
 import { BACKEND_URL } from "../../config";
 import { LazyLoadImage } from "react-lazy-load-image-component";
+import Notification from "../../components/Notification";
 import "react-lazy-load-image-component/src/effects/blur.css";
 
 export function StockList() {
@@ -20,7 +21,8 @@ export function StockList() {
   const [stockDetails, setStockDetails] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [quantity, setQuantity] = useState(null);
-  const [minAvgPrice, setMinAvgPrice] = useState(0);
+  const [totalQuantity, setTotalQuantity] = useState(null);
+  const [minAvgPrice, setMinAvgPrice] = useState(null);
   const [filterParams, setFilterParams] = useState("");
   const [filterOptions, setFilterOptions] = useState({
     storages: [],
@@ -28,6 +30,8 @@ export function StockList() {
     colours: [],
     origins: [],
   });
+  const [error, setError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
 
   // get model data from database
   const getModelData = useCallback(async () => {
@@ -44,6 +48,7 @@ export function StockList() {
 
   const getModelDetails = useCallback(async () => {
     try {
+      console.log("getting model details")
       if (filterParams) {
         const getModelDetailsUrl = `${BACKEND_URL}/model/stockDetails?${filterParams}`;
         const res = await axios.get(getModelDetailsUrl);
@@ -53,14 +58,12 @@ export function StockList() {
     } catch (error) {
       console.error(error);
     }
-  }, [filterParams]);
+  }, [setStockDetails, setIsLoading, filterParams]);
 
   const fetchFilterOptions = useCallback(async () => {
     try {
       if (model.model_id) {
-        const response = await fetch(
-          `${BACKEND_URL}/api/filter-options?modelId=${model.model_id}`
-        );
+        const response = await fetch(`${BACKEND_URL}/filter-options?modelId=${model.model_id}`);
         const responseJson = await response.json();
 
         if (response.ok) {
@@ -70,9 +73,34 @@ export function StockList() {
         }
       }
     } catch (error) {
-      console.error("Error fetching data: ", error);
+      console.error("Error fetching filter options: ", error);
     }
   }, [model.model_id]);
+
+  const deleteItem = useCallback(async (itemId) => {
+    try{
+      const response = await fetch(`${BACKEND_URL}/admin/delete/${itemId}`, {
+        method: "DELETE",
+        headers: {
+          "Authorisation": `Bearer ${localStorage.getItem("token")}`,
+          "Content-Type": "application/json",
+        }
+      });
+      if (response.ok) {
+        // window.location.reload()
+        await getModelDetails();
+        await fetchFilterOptions();
+      } else {
+        const data = await response.json();
+        setErrorMessage(data.error)
+        setError(true)
+      }
+    } catch (error) {
+      setErrorMessage(error)
+      setError(true)
+      console.error("Error in Deletion: ", error);
+    }
+  }, [setError, setErrorMessage])
 
   const calcMinAvgPrice = useCallback(
     (data) => {
@@ -104,8 +132,8 @@ export function StockList() {
         }
       }
       setMinAvgPrice(totalQuantity === 0 ? 0 : totalPrice / totalQuantity);
-    },
-    [quantity]
+      setTotalQuantity(totalQuantity)
+    }, [quantity, setMinAvgPrice, setTotalQuantity]
   );
 
   useEffect(() => {
@@ -134,12 +162,22 @@ export function StockList() {
 
   const formatCurrency = (num) => {
     const options = { maximumFractionDigits: 1 };
-    return num.toLocaleString("en-US", options);
+    return num ? num.toLocaleString("en-US", options) : "N/A"
   };
 
   return (
     <div className="container my-3">
+      <Notification
+        success={false}
+        error={error}
+        setSuccess={null}
+        setError={setError}
+        message={errorMessage}
+      />
       <Breadcrumb navLink={model_name} />
+      <button onClick={() => {
+        console.log("clicked");
+        setError(true)}}/>
       <h1 className="display-6">{model.model_name}</h1>
       <div className="row gy-3 mt-2">
         <div className="col-md-1"></div>
@@ -168,13 +206,21 @@ export function StockList() {
             setFilterParams={setFilterParams}
             setQuantity={setQuantity}
           />
-          <div className="ms-4">
-            <h5 className="my-3 display-1 fs-5">
-              Minimum Average Price (per quantity)
-            </h5>
-            <h4>
-              <img src={fire} width={35} /> HK${formatCurrency(minAvgPrice)}
-            </h4>
+          <div className="d-flex flex-row p-3">
+            <div className="flex-fill mr-8">
+              <h5 className="my-3 display-1 fs-5">
+                Total Quantity
+              </h5>
+              <h4>{totalQuantity}</h4>
+            </div>
+            <div className="flex-fill">
+              <h5 className="my-3 display-1 fs-5">
+                Minimum Average Price (per quantity)
+              </h5>
+              <h4>
+                <img src={fire} width={35} /> HK${formatCurrency(minAvgPrice)}
+              </h4>
+            </div>
           </div>
         </div>
         <div className="col-md-1"></div>
@@ -187,6 +233,7 @@ export function StockList() {
           <StockListTable
             stockList={stockDetails}
             modelName={model.model_name}
+            deleteItem={deleteItem}
           />
         )}
       </div>

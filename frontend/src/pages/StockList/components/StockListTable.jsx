@@ -1,10 +1,11 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import GenericButton from "./GenericButton";
-import ModalBtn from "./ModalBtn"
-import { EMAIL } from "../config";
+import GenericButton from "../../../components/GenericButton";
+import { EMAIL } from "../../../config";
+import OrderButton from "./OrderButton";
+import DeleteButton from "./DeleteButton";
 
-export default function StockListTable(props) {
+export default function StockListTable({stockList, modelName, deleteItem}) {
   return (
     <div className="table-responsive w-100">
       <table className="table table-responsive">
@@ -18,20 +19,23 @@ export default function StockListTable(props) {
             <th>Price</th>
             <th>Action</th>
             <th>More info</th>
+            {localStorage.getItem("token") &&
+              <th>Delete</th>
+            }
           </tr>
         </thead>
         <tbody>
-          {props.stockList.map((stock, index) => {
+          {stockList.map((stock, index) => {
             return (
               <tr key={index}>
                 <td>{stock.origin}</td>
                 <td>{stock.storage}</td>
                 <td>{stock.grade}</td>
                 <td>{stock.quantity}</td>
-                <td>{stock.colour}</td>
-                <td>{stock.price}</td>
+                <td>{stock.colour ?? "N/A"}</td>
+                <td>{stock.price ?? "N/A"}</td>
                 <td>
-                  <ModalBtn
+                  <OrderButton
                     title="Contact us"
                     // wtsNum="(+852) xxxx-xxxx"
                     // weChatNum="(+852) xxxx-xxxx"
@@ -39,7 +43,7 @@ export default function StockListTable(props) {
                   />
                 </td>
                 <td>
-                  <Link to={`/shop/${props.modelName}/${stock.item_id}`}>
+                  <Link to={`/shop/${modelName}/${stock.item_id}`}>
                     <GenericButton
                       type="button"
                       btnName="More"
@@ -47,6 +51,11 @@ export default function StockListTable(props) {
                     />
                   </Link>
                 </td>
+                {localStorage.getItem("token") &&
+                  <td>
+                    <DeleteButton itemId={stock.item_id} deleteItem={deleteItem}/>
+                  </td>
+                }
               </tr>
             );
           })}

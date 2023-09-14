@@ -163,11 +163,11 @@ app.get("/api/model/stockDetails", async (req, res) => {
     const condStr = cond.join(" AND ");
     let result = (
       await request.query(`
-    SELECT item_id, origin, storage, grade, quantity, colour, price, seller_id \
-    FROM items WHERE ${condStr} \
-    ORDER BY \
-    CASE WHEN price IS NULL THEN 1 ELSE 0 END, \
-    price, published_time DESC`)
+        SELECT item_id, origin, storage, grade, quantity, colour, price, seller_id \
+        FROM items WHERE ${condStr} \
+        ORDER BY \
+        CASE WHEN price IS NULL THEN 1 ELSE 0 END, \
+        price, published_time DESC`)
     ).recordset;
 
     if (req.query.quantity) {
@@ -401,6 +401,33 @@ app.post("/api/admin/signin", async (req, res) => {
   // 2b. The password does not match
 });
 
+app.delete("/api/admin/delete/:itemId", verifyToken, async (req, res) => {
+  try {
+    const itemId = req.params.itemId
+    
+    // Request
+    const request = new sql.Request();
+    request.input('item_id', sql.Int, itemId);
+    const response = (await request.query(`
+      DELETE FROM items 
+      WHERE item_id = @item_id;
+    `));
+    if (response.rowsAffected[0] === 1) {
+      res.status(200).send()
+    } else {
+      throw new Error("No. of delete rows not equal 1")
+    }
+  } catch (error) {
+    console.error("Error in Deletion:", error);
+    res.status(500).json({ error: "Failed to Delete" });
+  }
+
+  // Scenarios
+  // 1. There is no one with that username
+  // 2. There is someone with that username
+  // 2a. The password matches that in the database
+  // 2b. The password does not match
+});
 app.listen(3001, async () => {
   console.log("Server is running on http://localhost:3001");
 });

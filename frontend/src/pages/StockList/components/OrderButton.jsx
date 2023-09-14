@@ -2,9 +2,9 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
-import GenericButton from "./GenericButton";
+import GenericButton from "../../../components/GenericButton";
 
-export default function ForgotAcPopup(props) {
+export default function MoreButton(props) {
   const [show, setShow] = useState(false);
 
   const handleClose = () => setShow(false);
@@ -13,9 +13,7 @@ export default function ForgotAcPopup(props) {
   return (
     <>
       <Link onClick={handleShow} className="text-decoration-none">
-        <div className={`${props.className}`}>
-          <GenericButton btnName="Order" className="btn-warning text-light" />
-        </div>
+        <GenericButton btnName="Order" className="btn-warning text-light" />
       </Link>
 
       <Modal show={show} onHide={handleClose}>

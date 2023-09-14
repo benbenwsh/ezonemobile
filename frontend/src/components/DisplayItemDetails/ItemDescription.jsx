@@ -1,6 +1,6 @@
 import React from "react";
 import GenericButton from "../GenericButton";
-import ModalBtn from "../ModalBtn";
+import ModalBtn from "../../pages/StockList/components/OrderButton";
 import { EMAIL } from "../../config";
 
 export default function ItemDescription({itemInfo, modelName}) {

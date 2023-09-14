@@ -17,6 +17,7 @@ export default function Notification(props) {
   }, [props.message]);
 
   const notifyError = useCallback(() => {
+    console.log(props.message)
     toast.error(props.message, {
       position: "top-center",
       autoClose: 5000,
@@ -30,6 +31,8 @@ export default function Notification(props) {
   }, [props.message]);
 
   useEffect(() => {
+    console.log(props.success)
+    console.log(props.error)
     if (props.success) {
       props.setSuccess(false);
       notifySuccess();
