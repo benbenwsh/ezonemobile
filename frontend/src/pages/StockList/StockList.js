@@ -52,6 +52,7 @@ export function StockList() {
       if (filterParams) {
         const getModelDetailsUrl = `${BACKEND_URL}/model/stockDetails?${filterParams}`;
         const res = await axios.get(getModelDetailsUrl);
+        console.log(res.data)
         setStockDetails(res.data);
         setIsLoading(false);
       }
@@ -86,8 +87,8 @@ export function StockList() {
           "Content-Type": "application/json",
         }
       });
+
       if (response.ok) {
-        // window.location.reload()
         await getModelDetails();
         await fetchFilterOptions();
       } else {
@@ -100,7 +101,7 @@ export function StockList() {
       setError(true)
       console.error("Error in Deletion: ", error);
     }
-  }, [setError, setErrorMessage])
+  }, [setError, setErrorMessage, fetchFilterOptions, getModelDetails, fetchFilterOptions])
 
   const calcMinAvgPrice = useCallback(
     (data) => {
@@ -218,7 +219,7 @@ export function StockList() {
                 Minimum Average Price (per quantity)
               </h5>
               <h4>
-                <img src={fire} width={35} /> HK${formatCurrency(minAvgPrice)}
+                <img src={fire} width={35} /> HK$ {formatCurrency(minAvgPrice)}
               </h4>
             </div>
           </div>

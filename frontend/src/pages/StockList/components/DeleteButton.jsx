@@ -32,7 +32,7 @@ export default function DeleteButton({ itemId, deleteItem }) {
           </p>
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="danger" onClick={deleteItemAndReload}>
+          <Button variant="danger" type="submit" onClick={deleteItemAndReload}>
             Delete
           </Button>
           <Button variant="outline-secondary" onClick={handleClose}>

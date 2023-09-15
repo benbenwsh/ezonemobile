@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import GenericButton from "../../../components/GenericButton";
-import { EMAIL } from "../../../config";
+import { EMAIL, WHATSAPP_NO } from "../../../config";
 import OrderButton from "./OrderButton";
 import DeleteButton from "./DeleteButton";
 
@@ -37,8 +37,7 @@ export default function StockListTable({stockList, modelName, deleteItem}) {
                 <td>
                   <OrderButton
                     title="Contact us"
-                    // wtsNum="(+852) xxxx-xxxx"
-                    // weChatNum="(+852) xxxx-xxxx"
+                    wtsNum={WHATSAPP_NO}
                     email={EMAIL}
                   />
                 </td>
